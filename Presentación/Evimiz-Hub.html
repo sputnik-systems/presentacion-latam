@@ -104,8 +104,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 100px 40px 60px;
-      min-height: 100vh;
+      padding: 88px 40px 40px;
       position: relative;
     }
 
@@ -146,26 +145,26 @@
 
     /* Logo */
     .hero-logo {
-      margin-bottom: 36px;
+      margin-bottom: 20px;
       opacity: 0;
       transform: translateY(-16px);
       animation: fadeDown 0.7s ease forwards;
     }
 
     .hero-logo img {
-      width: 200px;
+      width: 140px;
       height: auto;
       display: block;
     }
 
     /* Headline */
     .hero-headline {
-      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-size: clamp(1.75rem, 3.5vw, 2.6rem);
       font-weight: 900;
       text-align: center;
       line-height: 1.15;
       letter-spacing: -0.02em;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       opacity: 0;
       transform: translateY(16px);
       animation: fadeUp 0.7s ease 0.15s forwards;
@@ -176,23 +175,23 @@
     }
 
     .hero-subtitle {
-      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      font-size: clamp(0.88rem, 1.5vw, 1rem);
       color: var(--text-muted);
       text-align: center;
-      max-width: 620px;
-      line-height: 1.7;
-      margin-bottom: 20px;
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: 12px;
       opacity: 0;
       transform: translateY(16px);
       animation: fadeUp 0.7s ease 0.28s forwards;
     }
 
     .hero-directive {
-      font-size: clamp(1rem, 1.8vw, 1.1rem);
+      font-size: clamp(0.95rem, 1.5vw, 1.05rem);
       font-weight: 700;
       color: var(--text);
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       opacity: 0;
       transform: translateY(16px);
       animation: fadeUp 0.7s ease 0.36s forwards;
@@ -206,8 +205,8 @@
       background: rgba(227, 30, 36, 0.08);
       border: 1px solid rgba(227, 30, 36, 0.25);
       border-radius: 40px;
-      padding: 10px 24px;
-      margin-bottom: 36px;
+      padding: 8px 20px;
+      margin-bottom: 20px;
       font-size: 0.85rem;
       font-weight: 600;
       color: #f87171;
@@ -227,7 +226,7 @@
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
+      gap: 20px;
       width: 100%;
       opacity: 0;
       transform: translateY(24px);
@@ -238,7 +237,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 36px 28px;
+      padding: 24px 22px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -342,7 +341,7 @@
 
     /* ─── FOOTER BAR ─── */
     .footer-bar {
-      margin-top: 44px;
+      margin-top: 24px;
       padding-top: 24px;
       border-top: 1px solid var(--border);
       width: 100%;
@@ -581,27 +580,27 @@
         'footer':         '<span>1,000+ buildings</span> &nbsp;·&nbsp; <span>Millions of users</span> &nbsp;·&nbsp; <span>Proven in CIS &amp; LatAm</span>',
       },
       es: {
-        'hero-headline':  'Convierte Edificios en <span class="accent-word">Activos Digitales</span><br />que Generan Ingresos',
-        'hero-subtitle':  'La plataforma de intercomunicadores inteligentes que genera valor para desarrolladores, integradores y administradores — desde una sola infraestructura.',
-        'hero-directive': 'Selecciona tu rol — descubre cómo Evimiz te genera dinero',
-        'urgency-bar':    'Cuanto antes adoptes, mayor será tu ventaja competitiva',
+        'hero-headline':  'Convertí tus Edificios en <span class="accent-word">Activos Digitales</span><br />que Generan Ingresos',
+        'hero-subtitle':  'Una sola plataforma. Más ingresos para desarrolladores, integradores y administradores de edificios.',
+        'hero-directive': 'Elegí tu rol — mirá cómo Evimiz te genera dinero',
+        'urgency-bar':    'Las empresas que esperan pierden ingresos todos los días',
         'card1-title':    'Para Desarrolladores Inmobiliarios',
-        'card1-tagline':  'Suma $200K por proyecto. Vende más rápido.',
-        'card1-desc':     'Agrega infraestructura inteligente que aumenta el valor percibido y cierra ventas.',
+        'card1-tagline':  'Sumá hasta $200K por proyecto. Vendé más rápido.',
+        'card1-desc':     'Agregá tecnología inteligente que sube el valor percibido y ayuda a cerrar ventas.',
         'card1-metric':   '+$200K por proyecto de 100 unidades',
-        'btn1-cta':       'Suma $200K a Tu Próximo Proyecto →',
+        'btn1-cta':       'Sumá hasta $200K a tu proyecto →',
         'card2-title':    'Para Integradores CCTV',
-        'card2-tagline':  'Construye $10K/mes de ingresos recurrentes.',
-        'card2-desc':     'Cada instalación se convierte en una suscripción mensual. Los ingresos crecen solos — desde los edificios instalados.',
+        'card2-tagline':  'Generá $10K/mes de ingresos fijos desde tus edificios.',
+        'card2-desc':     'Cada instalación genera ingresos mensuales automáticos. Más edificios = más ingresos, sin esfuerzo extra.',
         'card2-metric':   '$10,000/mes a escala',
-        'btn2-cta':       'Construye Tu Modelo de $10K/mes →',
+        'btn2-cta':       'Generá $10K/mes con tus instalaciones →',
         'card3-title':    'Para Administradoras de Edificios',
-        'card3-tagline':  'Gestiona tu edificio sin dolores de cabeza.',
-        'card3-desc':     'Ahorra 10+ horas/semana. 70% menos llamadas. Reduce costos operativos un 30–50%. Resuelve problemas de forma remota.',
-        'card3-metric':   '70% menos quejas de residentes',
-        'btn3-cta':       'Elimina el 70% del Trabajo Diario →',
+        'card3-tagline':  'Manejá tu edificio sin complicaciones.',
+        'card3-desc':     'Ahorrá 10+ horas por semana. 70% menos llamadas. Controlá accesos desde el celular. Reducí costos un 30–50%.',
+        'card3-metric':   'Reducí reclamos y conflictos en un 70%',
+        'btn3-cta':       'Reducí 70% del trabajo diario →',
         'card-pricing':   'Desde $2/dispositivo/mes',
-        'footer':         '<span>1,000+ edificios</span> &nbsp;·&nbsp; <span>Millones de usuarios</span> &nbsp;·&nbsp; <span>Probado en CIS y LatAm</span>',
+        'footer':         '<span>Usado en 1,000+ edificios</span> &nbsp;·&nbsp; <span>Millones de usuarios</span> &nbsp;·&nbsp; <span>Modelo probado en LatAm</span>',
       }
     };
 
