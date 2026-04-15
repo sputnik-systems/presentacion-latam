@@ -181,10 +181,46 @@
       text-align: center;
       max-width: 620px;
       line-height: 1.7;
-      margin-bottom: 56px;
+      margin-bottom: 20px;
       opacity: 0;
       transform: translateY(16px);
       animation: fadeUp 0.7s ease 0.28s forwards;
+    }
+
+    .hero-directive {
+      font-size: clamp(1rem, 1.8vw, 1.1rem);
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease 0.36s forwards;
+    }
+
+    .urgency-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(227, 30, 36, 0.08);
+      border: 1px solid rgba(227, 30, 36, 0.25);
+      border-radius: 40px;
+      padding: 10px 24px;
+      margin-bottom: 36px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #f87171;
+      letter-spacing: 0.01em;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease 0.38s forwards;
+    }
+
+    .urgency-bar::before {
+      content: '⚡';
+      font-size: 0.9rem;
     }
 
     /* ─── CARDS GRID ─── */
@@ -271,6 +307,13 @@
       padding: 12px 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+    }
+
+    .card-pricing {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+      letter-spacing: 0.02em;
     }
 
     .btn-primary {
@@ -435,7 +478,7 @@
 
       <!-- Headline -->
       <h1 class="hero-headline" id="hero-headline">
-        Evimiz <span class="accent-word">Transforms Buildings</span><br />Into Digital Assets
+        Turn Buildings Into <span class="accent-word">Revenue-Generating</span><br />Digital Assets
       </h1>
 
       <!-- Subtitle -->
@@ -444,6 +487,16 @@
         integrators, and property managers — all from one infrastructure.
       </p>
 
+      <!-- Directive -->
+      <p class="hero-directive" id="hero-directive">
+        Select your role — see how Evimiz makes you money
+      </p>
+
+      <!-- Urgency -->
+      <div class="urgency-bar" id="urgency-bar">
+        The earlier you adopt, the bigger your competitive advantage
+      </div>
+
       <!-- Cards -->
       <div class="cards-grid">
 
@@ -451,12 +504,13 @@
         <a href="Evimiz-Developers-v3.html" class="audience-card" id="card-developers">
           <div class="card-icon">🏗️</div>
           <div class="card-title" data-i18n="card1-title">For Real Estate Developers</div>
-          <div class="card-tagline" data-i18n="card1-tagline">Sell faster. Charge more.</div>
+          <div class="card-tagline" data-i18n="card1-tagline">Add $200K per project. Sell faster.</div>
           <div class="card-description" data-i18n="card1-desc">
             Add smart infrastructure that increases perceived value and closes deals.
           </div>
           <div class="card-metric" data-i18n="card1-metric">+$200K per 100-unit project</div>
-          <span class="btn-primary" data-i18n="btn-view">View Presentation →</span>
+          <div class="card-pricing" data-i18n="card-pricing">From $2/device/month</div>
+          <span class="btn-primary" data-i18n="btn1-cta">Add $200K to Your Next Project →</span>
         </a>
 
         <!-- Card 2: Integrators -->
@@ -465,10 +519,11 @@
           <div class="card-title" data-i18n="card2-title">For CCTV Integrators</div>
           <div class="card-tagline" data-i18n="card2-tagline">Build $10K/month recurring revenue.</div>
           <div class="card-description" data-i18n="card2-desc">
-            Every install becomes a monthly subscription. Revenue grows automatically.
+            Every install becomes a monthly subscription. Revenue grows automatically — from installed buildings.
           </div>
           <div class="card-metric" data-i18n="card2-metric">$10,000/month at scale</div>
-          <span class="btn-primary" data-i18n="btn-view">View Presentation →</span>
+          <div class="card-pricing" data-i18n="card-pricing">From $2/device/month</div>
+          <span class="btn-primary" data-i18n="btn2-cta">Build Your $10K/Month Model →</span>
         </a>
 
         <!-- Card 3: Property Managers -->
@@ -477,10 +532,11 @@
           <div class="card-title" data-i18n="card3-title">For Property Managers</div>
           <div class="card-tagline" data-i18n="card3-tagline">Run your building without the headaches.</div>
           <div class="card-description" data-i18n="card3-desc">
-            Save 10+ hours/week. 70% fewer calls. Resolve issues remotely.
+            Save 10+ hours/week. 70% fewer calls. Reduce operational costs by 30–50%. Resolve issues remotely.
           </div>
           <div class="card-metric" data-i18n="card3-metric">70% fewer resident complaints</div>
-          <span class="btn-primary" data-i18n="btn-view">View Presentation →</span>
+          <div class="card-pricing" data-i18n="card-pricing">From $2/device/month</div>
+          <span class="btn-primary" data-i18n="btn3-cta">Cut 70% of Daily Work →</span>
         </a>
 
       </div>
@@ -488,9 +544,9 @@
       <!-- Footer bar -->
       <div class="footer-bar">
         <p id="footer-text">
-          <span>$2 USD/device/month</span> &nbsp;·&nbsp;
-          <span>White-label included</span> &nbsp;·&nbsp;
-          <span>Launch in 7 days</span>
+          <span>1,000+ buildings</span> &nbsp;·&nbsp;
+          <span>Millions of users</span> &nbsp;·&nbsp;
+          <span>Proven in CIS & LatAm</span>
         </p>
       </div>
 
@@ -502,40 +558,50 @@
     /* ── i18n ── */
     const translations = {
       en: {
-        'hero-headline': 'Evimiz <span class="accent-word">Transforms Buildings</span><br />Into Digital Assets',
-        'hero-subtitle': 'The smart intercom platform that generates value for developers, integrators, and property managers — all from one infrastructure.',
-        'card1-title':   'For Real Estate Developers',
-        'card1-tagline': 'Sell faster. Charge more.',
-        'card1-desc':    'Add smart infrastructure that increases perceived value and closes deals.',
-        'card1-metric':  '+$200K per 100-unit project',
-        'card2-title':   'For CCTV Integrators',
-        'card2-tagline': 'Build $10K/month recurring revenue.',
-        'card2-desc':    'Every install becomes a monthly subscription. Revenue grows automatically.',
-        'card2-metric':  '$10,000/month at scale',
-        'card3-title':   'For Property Managers',
-        'card3-tagline': 'Run your building without the headaches.',
-        'card3-desc':    'Save 10+ hours/week. 70% fewer calls. Resolve issues remotely.',
-        'card3-metric':  '70% fewer resident complaints',
-        'btn-view':      'View Presentation →',
-        'footer':        '<span>$2 USD/device/month</span> &nbsp;·&nbsp; <span>White-label included</span> &nbsp;·&nbsp; <span>Launch in 7 days</span>',
+        'hero-headline':  'Turn Buildings Into <span class="accent-word">Revenue-Generating</span><br />Digital Assets',
+        'hero-subtitle':  'The smart intercom platform that generates value for developers, integrators, and property managers — all from one infrastructure.',
+        'hero-directive': 'Select your role — see how Evimiz makes you money',
+        'urgency-bar':    'The earlier you adopt, the bigger your competitive advantage',
+        'card1-title':    'For Real Estate Developers',
+        'card1-tagline':  'Add $200K per project. Sell faster.',
+        'card1-desc':     'Add smart infrastructure that increases perceived value and closes deals.',
+        'card1-metric':   '+$200K per 100-unit project',
+        'btn1-cta':       'Add $200K to Your Next Project →',
+        'card2-title':    'For CCTV Integrators',
+        'card2-tagline':  'Build $10K/month recurring revenue.',
+        'card2-desc':     'Every install becomes a monthly subscription. Revenue grows automatically — from installed buildings.',
+        'card2-metric':   '$10,000/month at scale',
+        'btn2-cta':       'Build Your $10K/Month Model →',
+        'card3-title':    'For Property Managers',
+        'card3-tagline':  'Run your building without the headaches.',
+        'card3-desc':     'Save 10+ hours/week. 70% fewer calls. Resolve issues remotely. Cut operational costs significantly.',
+        'card3-metric':   '70% fewer resident complaints',
+        'btn3-cta':       'Cut 70% of Daily Work →',
+        'card-pricing':   'From $2/device/month',
+        'footer':         '<span>1,000+ buildings</span> &nbsp;·&nbsp; <span>Millions of users</span> &nbsp;·&nbsp; <span>Proven in CIS &amp; LatAm</span>',
       },
       es: {
-        'hero-headline': 'Evimiz <span class="accent-word">Transforma Edificios</span><br />en Activos Digitales',
-        'hero-subtitle': 'La plataforma de intercomunicadores inteligentes que genera valor para desarrolladores, integradores y administradores — desde una sola infraestructura.',
-        'card1-title':   'Para Desarrolladores Inmobiliarios',
-        'card1-tagline': 'Vende más rápido. Cobra más.',
-        'card1-desc':    'Agrega infraestructura inteligente que aumenta el valor percibido y cierra ventas.',
-        'card1-metric':  '+$200K por proyecto de 100 unidades',
-        'card2-title':   'Para Integradores CCTV',
-        'card2-tagline': 'Construye $10K/mes de ingresos recurrentes.',
-        'card2-desc':    'Cada instalación se convierte en una suscripción mensual. Los ingresos crecen solos.',
-        'card2-metric':  '$10,000/mes a escala',
-        'card3-title':   'Para Administradoras de Edificios',
-        'card3-tagline': 'Gestiona tu edificio sin dolores de cabeza.',
-        'card3-desc':    'Ahorra 10+ horas/semana. 70% menos llamadas. Resuelve problemas de forma remota.',
-        'card3-metric':  '70% menos quejas de residentes',
-        'btn-view':      'Ver Presentación →',
-        'footer':        '<span>$2 USD/dispositivo/mes</span> &nbsp;·&nbsp; <span>Marca blanca incluida</span> &nbsp;·&nbsp; <span>En marcha en 7 días</span>',
+        'hero-headline':  'Convierte Edificios en <span class="accent-word">Activos Digitales</span><br />que Generan Ingresos',
+        'hero-subtitle':  'La plataforma de intercomunicadores inteligentes que genera valor para desarrolladores, integradores y administradores — desde una sola infraestructura.',
+        'hero-directive': 'Selecciona tu rol — descubre cómo Evimiz te genera dinero',
+        'urgency-bar':    'Cuanto antes adoptes, mayor será tu ventaja competitiva',
+        'card1-title':    'Para Desarrolladores Inmobiliarios',
+        'card1-tagline':  'Suma $200K por proyecto. Vende más rápido.',
+        'card1-desc':     'Agrega infraestructura inteligente que aumenta el valor percibido y cierra ventas.',
+        'card1-metric':   '+$200K por proyecto de 100 unidades',
+        'btn1-cta':       'Suma $200K a Tu Próximo Proyecto →',
+        'card2-title':    'Para Integradores CCTV',
+        'card2-tagline':  'Construye $10K/mes de ingresos recurrentes.',
+        'card2-desc':     'Cada instalación se convierte en una suscripción mensual. Los ingresos crecen solos — desde los edificios instalados.',
+        'card2-metric':   '$10,000/mes a escala',
+        'btn2-cta':       'Construye Tu Modelo de $10K/mes →',
+        'card3-title':    'Para Administradoras de Edificios',
+        'card3-tagline':  'Gestiona tu edificio sin dolores de cabeza.',
+        'card3-desc':     'Ahorra 10+ horas/semana. 70% menos llamadas. Reduce costos operativos un 30–50%. Resuelve problemas de forma remota.',
+        'card3-metric':   '70% menos quejas de residentes',
+        'btn3-cta':       'Elimina el 70% del Trabajo Diario →',
+        'card-pricing':   'Desde $2/dispositivo/mes',
+        'footer':         '<span>1,000+ edificios</span> &nbsp;·&nbsp; <span>Millones de usuarios</span> &nbsp;·&nbsp; <span>Probado en CIS y LatAm</span>',
       }
     };
 
@@ -552,6 +618,8 @@
       /* Special elements */
       document.getElementById('hero-headline').innerHTML = t['hero-headline'];
       document.getElementById('hero-subtitle').textContent = t['hero-subtitle'];
+      document.getElementById('hero-directive').textContent = t['hero-directive'];
+      document.getElementById('urgency-bar').textContent = t['urgency-bar'];
       document.getElementById('footer-text').innerHTML = t['footer'];
 
       /* Data-i18n elements (multiple btn-view instances handled) */
