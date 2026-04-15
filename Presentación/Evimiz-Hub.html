@@ -104,7 +104,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 88px 40px 40px;
+      padding: 82px 40px 24px;
       position: relative;
     }
 
@@ -143,18 +143,9 @@
       align-items: center;
     }
 
-    /* Logo */
+    /* Logo — скрыт на десктопе, navbar уже показывает логотип */
     .hero-logo {
-      margin-bottom: 20px;
-      opacity: 0;
-      transform: translateY(-16px);
-      animation: fadeDown 0.7s ease forwards;
-    }
-
-    .hero-logo img {
-      width: 140px;
-      height: auto;
-      display: block;
+      display: none;
     }
 
     /* Headline */
@@ -237,10 +228,10 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px 22px;
+      padding: 20px 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 10px;
       text-decoration: none;
       color: var(--text);
       cursor: pointer;
@@ -299,11 +290,11 @@
     }
 
     .card-metric {
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: var(--accent);
       line-height: 1.2;
-      padding: 12px 0;
+      padding: 8px 0;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
@@ -341,7 +332,7 @@
 
     /* ─── FOOTER BAR ─── */
     .footer-bar {
-      margin-top: 24px;
+      margin-top: 16px;
       padding-top: 24px;
       border-top: 1px solid var(--border);
       width: 100%;
@@ -406,11 +397,12 @@
       }
 
       .hero-logo {
-        margin-bottom: 20px;
+        display: block;
+        margin-bottom: 16px;
       }
 
       .hero-logo img {
-        width: 130px;
+        width: 120px;
       }
 
       .hero-headline {
