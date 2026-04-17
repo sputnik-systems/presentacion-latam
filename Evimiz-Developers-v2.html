@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evimiz for Developers — Smart Intercom for Real Estate (v2)</title>
+  <meta name="description" content="Sell properties faster and at higher prices with Evimiz smart intercom infrastructure. Premium value for every unit.">
+  <style>
+    /* ========== RESET ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    /* ========== CUSTOM PROPERTIES ========== */
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-section: #111827;
+      --bg-card: #1a2035;
+      --accent: #E31E24;
+      --accent-hover: #c9191f;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #2a3348;
+      --max-width: 1200px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ========== BASE ========== */
+    body {
+      font-family: var(--font);
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* ========== LAYOUT ========== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section {
+      padding: 50px 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section:nth-child(even) {
+      background: var(--bg-section);
+    }
+
+    /* ========== TYPOGRAPHY ========== */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      margin: 16px auto 0;
+      border-radius: 2px;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    /* ========== GRID UTILITIES ========== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .cards-col .card {
+      padding: 20px 24px;
+    }
+    .cards-col .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .grid-with-image {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* ========== CARDS ========== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .card h3, .card h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .card-center { text-align: center; }
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .btn-large {
+      font-size: 1.15rem;
+      padding: 18px 48px;
+    }
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 34px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ========== STATS ========== */
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 3rem;
+    }
+
+    /* ========== FADE-IN ANIMATION ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 14, 26, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 0;
+      transition: background 0.3s ease;
+    }
+    .navbar-scrolled {
+      background: rgba(10, 14, 26, 0.95);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    img[src*="intercom.png"] {
+      border-radius: 12px;
+    }
+    img[src*="appstore.png"] {
+      mix-blend-mode: multiply;
+    }
+    img[src*="face-recognition.png"] {
+      border-radius: 16px;
+    }
+    img[src*="phone-apps.png"] {
+      clip-path: inset(1% 14% 1% 14% round 20px);
+      display: block;
+    }
+    .phone-image-wrap {
+      display: inline-block;
+    }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+    }
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .lang-toggle {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      margin-left: 8px;
+    }
+    .lang-toggle:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .nav-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 3px 10px;
+      opacity: 0.8;
+    }
+
+    /* ========== HERO ========== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1729 50%, #131b2e 100%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image img {
+      max-height: 500px;
+      filter: drop-shadow(0 20px 40px rgba(227, 30, 36, 0.15));
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hero-logo {
+      width: 200px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(227, 30, 36, 0.12);
+      border: 1px solid rgba(227, 30, 36, 0.3);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    .hero-content .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========== PRICING BANNER ========== */
+    .pricing-banner {
+      margin-top: 2.5rem;
+      background: linear-gradient(135deg, var(--accent), #b91c1c);
+      border-radius: var(--radius);
+      padding: 24px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .pricing-amount {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+    .pricing-desc {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* ========== CASO BADGE ========== */
+    .caso-badge {
+      text-align: center;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      max-width: 500px;
+      display: block;
+      margin: 0 auto 2rem;
+    }
+
+    /* ========== FEATURE ITEMS (White Label section) ========== */
+    .wl-feature {
+      margin-bottom: 28px;
+    }
+    .wl-feature h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .wl-feature p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ========== VALUE CARD ========== */
+    .value-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 40px;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .value-card img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .value-card h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .value-card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* ========== ROI SECTION ========== */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 2.5rem;
+    }
+    .roi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .roi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .roi-number {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .roi-number.accent { color: var(--accent); }
+    .roi-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ========== COMPARE SECTION ========== */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .compare-table th {
+      padding: 18px 28px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-align: left;
+      background: #0f1729;
+      border-bottom: 2px solid var(--border);
+    }
+    .compare-table th:last-child {
+      color: var(--accent);
+    }
+    .compare-table td {
+      padding: 16px 28px;
+      font-size: 0.97rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+    .compare-table td:first-child {
+      color: var(--text-muted);
+    }
+    .compare-table td:last-child {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .compare-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    /* ========== CONTACT ========== */
+    .section-contact {
+      background: linear-gradient(135deg, #0f1729 0%, var(--bg-dark) 100%);
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .contact-image img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+    .contact-tagline {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+    }
+    .contact-icon {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logo {
+      height: 36px;
+      margin: 0 auto 12px;
+      opacity: 0.7;
+    }
+    .footer p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ========== MASCOT LAYOUT ========== */
+    .mascot-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .mascot-col {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .mascot-col img {
+      max-width: 280px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .hero-content h1 { font-size: 2.4rem; }
+      .section-title { font-size: 2rem; }
+      .grid-4, .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .roi-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 60px 0; }
+      #hero { min-height: auto; padding-top: 100px; padding-bottom: 60px; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-image { order: -1; }
+      .hero-image img { max-height: 260px; }
+      .hero-content { align-items: center; }
+      .hero-cta { justify-content: center; }
+      .hero-content h1 { font-size: 2rem; }
+      .hero-badge { margin: 0 auto; }
+      .grid-2, .grid-3, .grid-with-image, .mascot-layout, .contact-layout, .value-card { grid-template-columns: 1fr; }
+      .grid-2x2 { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .roi-grid { grid-template-columns: 1fr; }
+      .contact-image { order: -1; }
+      .mascot-col img { max-width: 200px; margin: 0 auto; }
+      .value-card { padding: 24px; }
+      .compare-table th, .compare-table td { padding: 12px 16px; font-size: 0.88rem; }
+      nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 26, 0.97);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 12px;
+      }
+      .nav-links.active { display: flex; }
+      .nav-toggle { display: block; }
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 26, 0.97);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 12px;
+      }
+      .nav-links.active { display: flex; }
+      .nav-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="nav-logo">
+      <div class="nav-links">
+        <span class="nav-badge" data-i18n="nav-badge">For Developers</span>
+        <a href="#problem" data-i18n="nav-problem">Problem</a>
+        <a href="#value" data-i18n="nav-value">Value</a>
+        <a href="#roi" data-i18n="nav-roi">ROI</a>
+        <a href="#compare" data-i18n="nav-compare">Compare</a>
+        <a href="#whitelabel" data-i18n="nav-whitelabel">White Label</a>
+        <a href="#deploy" data-i18n="nav-deploy">Deploy</a>
+        <a href="#proof" data-i18n="nav-proof">Proof</a>
+        <a href="#monetize" data-i18n="nav-monetize">Monetize</a>
+        <a href="#contact" data-i18n="nav-contact">Contact</a>
+      </div>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-image fade-in">
+            <img src="assets/intercom.png" alt="Evimiz Smart Intercom">
+          </div>
+          <div class="hero-content fade-in">
+            <img src="assets/logo-evimiz.png" alt="Evimiz" class="hero-logo">
+            <div class="hero-badge" data-i18n="hero-badge">For Real Estate Developers</div>
+            <h1 data-i18n-html="hero-h1">Sell Faster.<br>Charge More.</h1>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">Smart intercom infrastructure that adds premium value to every unit</p>
+            <div class="hero-cta">
+              <a href="#contact" class="btn-primary btn-large" data-i18n="hero-cta1">Schedule a Demo</a>
+              <a href="#value" class="btn-outline" data-i18n="hero-cta2">See How It Works</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PROBLEM ========== -->
+    <section id="problem" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="problem-title">Buyers Expect Smart Buildings</h2>
+        <p class="section-subtitle" data-i18n="problem-subtitle">A standard intercom is no longer competitive</p>
+        <div class="mascot-layout">
+          <div class="cards-col">
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-icon">🏚️</div>
+              <h3 data-i18n="problem-c1-title">Outdated systems cost you sales</h3>
+              <p data-i18n="problem-c1-text">Buyers compare your project to modern competitors. A traditional intercom signals old technology.</p>
+            </div>
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-icon">💸</div>
+              <h3 data-i18n="problem-c2-title">Price concessions to close deals</h3>
+              <p data-i18n="problem-c2-text">Without smart access, you negotiate on price instead of value.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">📱</div>
+              <h3 data-i18n="problem-c3-title">No mobile experience</h3>
+              <p data-i18n="problem-c3-text">Modern buyers expect to open doors, invite guests, and manage access from their phone.</p>
+            </div>
+          </div>
+          <div class="mascot-col">
+            <img src="assets/mascot-window.png" alt="Problem mascot">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== VALUE ========== -->
+    <section id="value" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="value-title">Smart Building = Premium Price</h2>
+        <p class="section-subtitle" data-i18n="value-subtitle">Digital infrastructure is the new differentiator in real estate</p>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">+15%</div>
+            <div class="stat-label" data-i18n="value-s1">Average price increase per m²</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">3–5x</div>
+            <div class="stat-label" data-i18n="value-s2">Faster decision for smart-enabled units</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">85%+</div>
+            <div class="stat-label" data-i18n="value-s3">Resident retention in smart buildings</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">Day 1</div>
+            <div class="stat-label" data-i18n="value-s4">Revenue model active from handover</div>
+          </div>
+        </div>
+        <span class="caso-badge" data-i18n="value-source-badge">📍 Based on smart building projects in CIS region</span>
+        <div class="value-card">
+          <img src="assets/platform-ui.png" alt="Evimiz Platform UI">
+          <div>
+            <h3 data-i18n="value-card-title">Transform your building into a digital ecosystem</h3>
+            <p data-i18n="value-card-text">Evimiz transforms a building into a connected ecosystem — residents open doors with a tap, manage guests, view cameras. Your brand is everywhere.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ROI ========== -->
+    <section id="roi" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="roi-title">The Numbers That Matter</h2>
+        <p class="section-subtitle" data-i18n="roi-subtitle">Smart infrastructure pays for itself — and keeps paying</p>
+        <div class="roi-grid">
+          <div class="roi-card">
+            <div class="roi-number">100</div>
+            <div class="roi-label" data-i18n="roi-c1-label">Building size (units)</div>
+          </div>
+          <div class="roi-card">
+            <div class="roi-number">+$2,000</div>
+            <div class="roi-label" data-i18n="roi-c2-label">Perceived value per unit</div>
+          </div>
+          <div class="roi-card">
+            <div class="roi-number accent">= $200K</div>
+            <div class="roi-label" data-i18n="roi-c3-label">Additional revenue potential</div>
+          </div>
+        </div>
+        <div class="pricing-banner">
+          <span class="pricing-desc" data-i18n="roi-banner">Evimiz infrastructure cost: ~$200/mo for 100 devices — ROI from day one</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== COMPARE ========== -->
+    <section id="compare" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="compare-title">Traditional Intercom vs Smart Access</h2>
+        <p class="section-subtitle" data-i18n="compare-subtitle">See exactly what your buyers get — and what they miss</p>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th data-i18n="compare-col-old">Old System</th>
+              <th data-i18n="compare-col-new">Evimiz</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="compare-r1-old">❌ Physical keys</td>
+              <td data-i18n="compare-r1-new">✅ Mobile access</td>
+            </tr>
+            <tr>
+              <td data-i18n="compare-r2-old">❌ No visitor data</td>
+              <td data-i18n="compare-r2-new">✅ Full access history</td>
+            </tr>
+            <tr>
+              <td data-i18n="compare-r3-old">❌ No branding</td>
+              <td data-i18n="compare-r3-new">✅ Your brand app</td>
+            </tr>
+            <tr>
+              <td data-i18n="compare-r4-old">❌ One-time cost</td>
+              <td data-i18n="compare-r4-new">✅ Ongoing value asset</td>
+            </tr>
+            <tr>
+              <td data-i18n="compare-r5-old">❌ Generic product</td>
+              <td data-i18n="compare-r5-new">✅ Competitive advantage</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========== WHITE LABEL ========== -->
+    <section id="whitelabel" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="wl-title">Your Brand. Your App.</h2>
+        <p class="section-subtitle" data-i18n="wl-subtitle">Residents never see Evimiz — they only see your brand</p>
+        <div class="grid-2">
+          <div>
+            <div class="wl-feature">
+              <h4 data-i18n="wl-f1-title">🎨 Full custom branding</h4>
+              <p data-i18n="wl-f1-text">Your logo, color scheme, app name. Complete visual identity.</p>
+            </div>
+            <div class="wl-feature">
+              <h4 data-i18n="wl-f2-title">📲 Published under your account</h4>
+              <p data-i18n="wl-f2-text">App Store and Google Play under your developer account. Full autonomy.</p>
+            </div>
+            <div class="wl-feature">
+              <h4 data-i18n="wl-f3-title">🔗 Long-term buyer relationship</h4>
+              <p data-i18n="wl-f3-text">Stay connected with residents after sale. Offer upgrades, services, community.</p>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:center;">
+            <div class="phone-image-wrap">
+              <img src="assets/phone-apps.png" alt="Branded app" style="max-height: 480px; object-fit: contain;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== DEPLOY ========== -->
+    <section id="deploy" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="deploy-title">Ready Before Handover</h2>
+        <p class="section-subtitle" data-i18n="deploy-subtitle">No delays in construction. Works with standard infrastructure. Installed by local contractors.</p>
+        <div class="grid-2x2">
+          <div class="card">
+            <div class="card-icon">☁️</div>
+            <h3 data-i18n="deploy-c1-title">Cloud Platform</h3>
+            <p data-i18n="deploy-c1-text">No servers. No IT team. Fully managed infrastructure.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <h3 data-i18n="deploy-c2-title">Hardware Ready</h3>
+            <p data-i18n="deploy-c2-text">Intercoms ship pre-configured. Installed by local certified contractors — no delays to your construction timeline.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🚀</div>
+            <h3 data-i18n="deploy-c3-title">Weeks, Not Months</h3>
+            <p data-i18n="deploy-c3-text">API integration and branded app launch in under 2 weeks.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌍</div>
+            <h3 data-i18n="deploy-c4-title">Spanish-First for LatAm</h3>
+            <p data-i18n="deploy-c4-text">Platform localized for Argentina. Regional support included.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PROOF ========== -->
+    <section id="proof" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="proof-title">Proven at Scale</h2>
+        <p class="section-subtitle" data-i18n="proof-subtitle">Real numbers from our CIS Region deployment</p>
+        <div class="caso-badge" data-i18n="proof-badge">📍 Success Story: CIS Region</div>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">4.5M</div>
+            <div class="stat-label" data-i18n="proof-s1">Downloads</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">2.9M</div>
+            <div class="stat-label">MAU</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">1.2M</div>
+            <div class="stat-label">DAU</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">+11.84%</div>
+            <div class="stat-label" data-i18n="proof-s4">Monthly Growth</div>
+          </div>
+        </div>
+        <div class="pricing-banner">
+          <span class="pricing-amount">$2 USD/month</span>
+          <span class="pricing-desc" data-i18n="proof-price">per device — full platform included</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MONETIZE ========== -->
+    <section id="monetize" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="mon-title">Long-Term Value Beyond the Sale</h2>
+        <p class="section-subtitle" data-i18n="mon-subtitle">Ongoing value for your brand, your buyers, and your business</p>
+        <div class="grid-2x2" style="gap: 16px;">
+          <div class="card" style="padding: 20px;">
+            <div class="card-icon">💰</div>
+            <h3 data-i18n="mon-c1-title">Premium Feature Upsells</h3>
+            <p data-i18n="mon-c1-text">Video archive, face recognition, guest passes — residents pay for upgrades.</p>
+          </div>
+          <div class="card" style="padding: 20px;">
+            <div class="card-icon">📊</div>
+            <h3 data-i18n="mon-c2-title">Data &amp; Insights</h3>
+            <p data-i18n="mon-c2-text">Understand how residents use the building. Peak hours, visitor patterns, usage.</p>
+          </div>
+          <div class="card" style="padding: 20px;">
+            <div class="card-icon">🔄</div>
+            <h3 data-i18n="mon-c3-title">Passive Monthly Income</h3>
+            <p data-i18n="mon-c3-text">Monthly revenue from each active device in your buildings.</p>
+          </div>
+          <div class="card" style="padding: 20px;">
+            <div class="card-icon">🏢</div>
+            <h3 data-i18n="mon-c4-title">Brand Equity That Grows</h3>
+            <p data-i18n="mon-c4-text">Each smart building strengthens your brand. Repeat buyers, referrals, reputation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONTACT ========== -->
+    <section id="contact" class="section section-contact fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="contact-title">Ready to Build Premium?</h2>
+        <div class="contact-layout">
+          <div class="contact-image">
+            <img src="assets/team-expo-a.jpg" alt="Evimiz team">
+          </div>
+          <div class="contact-info">
+            <p class="contact-tagline" data-i18n="contact-tagline">Let's discuss how Evimiz fits your next project</p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <img src="assets/icon-email.png" alt="Email" class="contact-icon">
+                <span>vadbaz1357@gmail.com</span>
+              </div>
+              <div class="contact-item">
+                <span style="font-size:1.5rem;">💬</span>
+                <span>WhatsApp: +54 9 351 233 64 20</span>
+              </div>
+              <div class="contact-item">
+                <span style="font-size:1.5rem;">🌐</span>
+                <span>evimiz.ai</span>
+              </div>
+            </div>
+            <a href="https://wa.me/5493512336420" target="_blank" class="btn-primary btn-large" data-i18n="contact-btn">Schedule a Demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="footer-logo">
+      <p data-i18n="footer-copy">© 2025 Evimiz. Smart Intercom for Modern Buildings.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer — fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navLinks.classList.remove('active'); });
+    });
+
+    // ========== Keyboard slide navigation ==========
+    const sections = Array.from(document.querySelectorAll('section'));
+    let currentIndex = 0;
+    let isScrolling = false;
+
+    function goTo(index) {
+      if (isScrolling) return;
+      index = Math.max(0, Math.min(sections.length - 1, index));
+      currentIndex = index;
+      isScrolling = true;
+      const navHeight = document.querySelector('.navbar').offsetHeight;
+      const targetY = sections[index].offsetTop - navHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      setTimeout(() => { isScrolling = false; }, 900);
+    }
+
+    window.addEventListener('scroll', () => {
+      if (isScrolling) return;
+      const top = window.scrollY + 10;
+      const navHeight = document.querySelector('.navbar').offsetHeight;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop - navHeight <= top) { currentIndex = i; break; }
+      }
+    }, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      if ((e.key === ' ' && !e.shiftKey) || e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault(); goTo(currentIndex + 1);
+      } else if ((e.key === ' ' && e.shiftKey) || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault(); goTo(currentIndex - 1);
+      }
+    });
+
+    // ========== i18n ==========
+    const translations = {
+      en: {
+        'nav-badge': 'For Developers',
+        'nav-problem': 'Problem', 'nav-value': 'Value', 'nav-roi': 'ROI', 'nav-compare': 'Compare',
+        'nav-whitelabel': 'White Label', 'nav-deploy': 'Deploy', 'nav-proof': 'Proof',
+        'nav-monetize': 'Monetize', 'nav-contact': 'Contact',
+        'hero-badge': 'For Real Estate Developers',
+        'hero-h1': 'Sell Faster.<br>Charge More.',
+        'hero-subtitle': 'Smart intercom infrastructure that adds premium value to every unit',
+        'hero-cta1': 'Schedule a Demo', 'hero-cta2': 'See How It Works',
+        'problem-title': 'Buyers Expect Smart Buildings',
+        'problem-subtitle': 'A standard intercom is no longer competitive',
+        'problem-c1-title': 'Outdated systems cost you sales',
+        'problem-c1-text': 'Buyers compare your project to modern competitors. A traditional intercom signals old technology.',
+        'problem-c2-title': 'Price concessions to close deals',
+        'problem-c2-text': 'Without smart access, you negotiate on price instead of value.',
+        'problem-c3-title': 'No mobile experience',
+        'problem-c3-text': 'Modern buyers expect to open doors, invite guests, and manage access from their phone.',
+        'value-title': 'Smart Building = Premium Price',
+        'value-subtitle': 'Digital infrastructure is the new differentiator in real estate',
+        'value-s1': 'Average price increase per m²',
+        'value-s2': 'Faster decision for smart-enabled units',
+        'value-s3': 'Resident retention in smart buildings',
+        'value-s4': 'Revenue model active from handover',
+        'value-source-badge': '📍 Based on smart building projects in CIS region',
+        'value-card-title': 'Transform your building into a digital ecosystem',
+        'value-card-text': 'Evimiz transforms a building into a connected ecosystem — residents open doors with a tap, manage guests, view cameras. Your brand is everywhere.',
+        'roi-title': 'The Numbers That Matter',
+        'roi-subtitle': 'Smart infrastructure pays for itself — and keeps paying',
+        'roi-c1-label': 'Building size (units)',
+        'roi-c2-label': 'Perceived value per unit',
+        'roi-c3-label': 'Additional revenue potential',
+        'roi-banner': 'Evimiz infrastructure cost: ~$200/mo for 100 devices — ROI from day one',
+        'compare-title': 'Traditional Intercom vs Smart Access',
+        'compare-subtitle': 'See exactly what your buyers get — and what they miss',
+        'compare-col-old': 'Old System',
+        'compare-col-new': 'Evimiz',
+        'compare-r1-old': '❌ Physical keys',
+        'compare-r1-new': '✅ Mobile access',
+        'compare-r2-old': '❌ No visitor data',
+        'compare-r2-new': '✅ Full access history',
+        'compare-r3-old': '❌ No branding',
+        'compare-r3-new': '✅ Your brand app',
+        'compare-r4-old': '❌ One-time cost',
+        'compare-r4-new': '✅ Ongoing value asset',
+        'compare-r5-old': '❌ Generic product',
+        'compare-r5-new': '✅ Competitive advantage',
+        'wl-title': 'Your Brand. Your App.',
+        'wl-subtitle': 'Residents never see Evimiz — they only see your brand',
+        'wl-f1-title': '🎨 Full custom branding',
+        'wl-f1-text': 'Your logo, color scheme, app name. Complete visual identity.',
+        'wl-f2-title': '📲 Published under your account',
+        'wl-f2-text': 'App Store and Google Play under your developer account. Full autonomy.',
+        'wl-f3-title': '🔗 Long-term buyer relationship',
+        'wl-f3-text': 'Stay connected with residents after sale. Offer upgrades, services, community.',
+        'deploy-title': 'Ready Before Handover',
+        'deploy-subtitle': 'No delays in construction. Works with standard infrastructure. Installed by local contractors.',
+        'deploy-c1-title': 'Cloud Platform', 'deploy-c1-text': 'No servers. No IT team. Fully managed infrastructure.',
+        'deploy-c2-title': 'Hardware Ready', 'deploy-c2-text': 'Intercoms ship pre-configured. Installed by local certified contractors — no delays to your construction timeline.',
+        'deploy-c3-title': 'Weeks, Not Months', 'deploy-c3-text': 'API integration and branded app launch in under 2 weeks.',
+        'deploy-c4-title': 'Spanish-First for LatAm', 'deploy-c4-text': 'Platform localized for Argentina. Regional support included.',
+        'proof-title': 'Proven at Scale',
+        'proof-subtitle': 'Real numbers from our CIS Region deployment',
+        'proof-badge': '📍 Success Story: CIS Region',
+        'proof-s1': 'Downloads', 'proof-s4': 'Monthly Growth',
+        'proof-price': 'per device — full platform included',
+        'mon-title': 'Long-Term Value Beyond the Sale',
+        'mon-subtitle': 'Ongoing value for your brand, your buyers, and your business',
+        'mon-c1-title': 'Premium Feature Upsells',
+        'mon-c1-text': 'Video archive, face recognition, guest passes — residents pay for upgrades.',
+        'mon-c2-title': 'Data & Insights',
+        'mon-c2-text': 'Understand how residents use the building. Peak hours, visitor patterns, usage.',
+        'mon-c3-title': 'Passive Monthly Income',
+        'mon-c3-text': 'Monthly revenue from each active device in your buildings.',
+        'mon-c4-title': 'Brand Equity That Grows',
+        'mon-c4-text': 'Each smart building strengthens your brand. Repeat buyers, referrals, reputation.',
+        'contact-title': 'Ready to Build Premium?',
+        'contact-tagline': 'Let\'s discuss how Evimiz fits your next project',
+        'contact-btn': 'Schedule a Demo',
+        'footer-copy': '© 2025 Evimiz. Smart Intercom for Modern Buildings.'
+      },
+      es: {
+        'nav-badge': 'Para Desarrolladores',
+        'nav-problem': 'Problema', 'nav-value': 'Valor', 'nav-roi': 'ROI', 'nav-compare': 'Comparar',
+        'nav-whitelabel': 'Marca Blanca', 'nav-deploy': 'Despliegue', 'nav-proof': 'Resultados',
+        'nav-monetize': 'Monetizar', 'nav-contact': 'Contacto',
+        'hero-badge': 'Para Desarrolladores Inmobiliarios',
+        'hero-h1': 'Vende Más Rápido.<br>Cobra Más.',
+        'hero-subtitle': 'Infraestructura de acceso inteligente que agrega valor premium a cada unidad',
+        'hero-cta1': 'Agendar una Demo', 'hero-cta2': 'Ver Cómo Funciona',
+        'problem-title': 'Los Compradores Esperan Edificios Inteligentes',
+        'problem-subtitle': 'Un portero eléctrico estándar ya no es competitivo',
+        'problem-c1-title': 'Sistemas obsoletos te cuestan ventas',
+        'problem-c1-text': 'Los compradores comparan tu proyecto con la competencia moderna. Un intercomunicador tradicional señala tecnología antigua.',
+        'problem-c2-title': 'Descuentos para cerrar ventas',
+        'problem-c2-text': 'Sin acceso inteligente, negocias por precio en vez de por valor.',
+        'problem-c3-title': 'Sin experiencia móvil',
+        'problem-c3-text': 'Los compradores modernos esperan abrir puertas y gestionar acceso desde su celular.',
+        'value-title': 'Edificio Inteligente = Precio Premium',
+        'value-subtitle': 'La infraestructura digital es el nuevo diferenciador en bienes raíces',
+        'value-s1': 'Aumento promedio de precio por m²',
+        'value-s2': 'Decisión más rápida en unidades con acceso inteligente',
+        'value-s3': 'Retención de residentes en edificios inteligentes',
+        'value-s4': 'Modelo de ingresos activo desde la entrega',
+        'value-source-badge': '📍 Basado en proyectos de edificios inteligentes en la región CIS',
+        'value-card-title': 'Transforma tu edificio en un ecosistema digital',
+        'value-card-text': 'Evimiz transforma un edificio en un ecosistema conectado — los residentes abren puertas con un toque, gestionan visitas, ven cámaras. Tu marca está en todas partes.',
+        'roi-title': 'El ROI Que Importa',
+        'roi-subtitle': 'La infraestructura inteligente se paga sola — y sigue pagando',
+        'roi-c1-label': 'Tamaño del edificio (unidades)',
+        'roi-c2-label': 'Valor percibido adicional por unidad',
+        'roi-c3-label': 'Ingreso adicional potencial',
+        'roi-banner': 'Costo de infraestructura Evimiz: ~$200/mes para 100 dispositivos — ROI desde el primer día',
+        'compare-title': 'Portero Tradicional vs Acceso Inteligente',
+        'compare-subtitle': 'Ve exactamente qué obtienen tus compradores — y qué se pierden',
+        'compare-col-old': 'Sistema Antiguo',
+        'compare-col-new': 'Evimiz',
+        'compare-r1-old': '❌ Llaves físicas',
+        'compare-r1-new': '✅ Acceso móvil',
+        'compare-r2-old': '❌ Sin datos de visitas',
+        'compare-r2-new': '✅ Historial completo de acceso',
+        'compare-r3-old': '❌ Sin marca propia',
+        'compare-r3-new': '✅ App con tu marca',
+        'compare-r4-old': '❌ Costo único',
+        'compare-r4-new': '✅ Activo de valor continuo',
+        'compare-r5-old': '❌ Producto genérico',
+        'compare-r5-new': '✅ Ventaja competitiva',
+        'wl-title': 'Tu Marca. Tu App.',
+        'wl-subtitle': 'Los residentes nunca ven Evimiz — solo ven tu marca',
+        'wl-f1-title': '🎨 Marca completamente personalizada',
+        'wl-f1-text': 'Tu logo, esquema de colores, nombre de app. Identidad visual completa.',
+        'wl-f2-title': '📲 Publicada en tu cuenta',
+        'wl-f2-text': 'App Store y Google Play bajo tu cuenta de desarrollador. Autonomía total.',
+        'wl-f3-title': '🔗 Relación a largo plazo con compradores',
+        'wl-f3-text': 'Mantente conectado con residentes después de la venta. Ofrece mejoras, servicios, comunidad.',
+        'deploy-title': 'Listo Antes de la Entrega',
+        'deploy-subtitle': 'Sin demoras en la construcción. Funciona con infraestructura estándar. Instalado por contratistas locales.',
+        'deploy-c1-title': 'Plataforma en la Nube', 'deploy-c1-text': 'Sin servidores. Sin equipo de IT. Infraestructura completamente administrada.',
+        'deploy-c2-title': 'Hardware Listo', 'deploy-c2-text': 'Los intercomunicadores llegan preconfigurados. Instalados por contratistas locales certificados — sin demoras en tu obra.',
+        'deploy-c3-title': 'Semanas, No Meses', 'deploy-c3-text': 'Integración API y lanzamiento de app en menos de 2 semanas.',
+        'deploy-c4-title': 'Primero en Español para LatAm', 'deploy-c4-text': 'Plataforma localizada para Argentina. Soporte regional incluido.',
+        'proof-title': 'Probado a Gran Escala',
+        'proof-subtitle': 'Números reales de nuestro despliegue en la región CIS',
+        'proof-badge': '📍 Caso de Éxito: Región CIS',
+        'proof-s1': 'Descargas', 'proof-s4': 'Crecimiento Mensual',
+        'proof-price': 'por dispositivo — plataforma completa incluida',
+        'mon-title': 'Valor a Largo Plazo Más Allá de la Venta',
+        'mon-subtitle': 'Valor continuo para tu marca, tus compradores y tu negocio',
+        'mon-c1-title': 'Ventas adicionales premium',
+        'mon-c1-text': 'Archivo de video, reconocimiento facial, pases de invitados — los residentes pagan por mejoras.',
+        'mon-c2-title': 'Datos e Insights',
+        'mon-c2-text': 'Entiende cómo los residentes usan el edificio. Horarios pico, patrones de visitantes, uso.',
+        'mon-c3-title': 'Ingresos Mensuales Pasivos',
+        'mon-c3-text': 'Ingresos mensuales de cada dispositivo activo en tus edificios.',
+        'mon-c4-title': 'Valor de Marca Que Crece',
+        'mon-c4-text': 'Cada edificio inteligente fortalece tu marca. Compradores recurrentes, referencias, reputación.',
+        'contact-title': '¿Listo para Construir Premium?',
+        'contact-tagline': 'Hablemos sobre cómo Evimiz encaja en tu próximo proyecto',
+        'contact-btn': 'Agendar una Demo',
+        'footer-copy': '© 2025 Evimiz. Intercomunicador Inteligente para Edificios Modernos.'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+      document.documentElement.lang = lang;
+      currentLang = lang;
+    }
+
+    function toggleLang() {
+      setLanguage(currentLang === 'en' ? 'es' : 'en');
+    }
+  </script>
+</body>
+</html>

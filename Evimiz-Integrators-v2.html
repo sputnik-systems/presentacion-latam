@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Evimiz for Integrators — Recurring Revenue from Every Install (v3)</title>
+  <title>Evimiz for Integrators — Recurring Revenue from Every Install (v2)</title>
   <meta name="description" content="Add recurring monthly revenue to your CCTV and security business with Evimiz smart intercom. White-label platform for system integrators.">
   <style>
     /* ========== RESET ========== */
@@ -78,7 +78,7 @@
       color: var(--text-muted);
       font-size: 1.15rem;
       max-width: 700px;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 3rem;
     }
 
     /* ========== GRID UTILITIES ========== */
@@ -202,7 +202,7 @@
     }
     .stat-card {
       text-align: center;
-      padding: 14px 12px;
+      padding: 24px 16px;
       background: var(--bg-card);
       border-radius: var(--radius);
       border: 1px solid var(--border);
@@ -210,8 +210,8 @@
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 1rem;
+      gap: 16px;
+      margin-bottom: 1.5rem;
     }
 
     /* ========== FADE-IN ANIMATION ========== */
@@ -412,23 +412,20 @@
       font-size: 0.95rem;
     }
 
-    /* ========== MODEL SECTION OVERRIDE ========== */
-    #model { padding: 30px 0; }
-
     /* ========== MODEL CARD ========== */
     .model-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px 24px;
-      margin-top: 0.75rem;
+      padding: 20px 32px;
+      margin-top: 1rem;
       display: grid;
       grid-template-columns: 1fr 1.3fr;
-      gap: 20px;
+      gap: 28px;
       align-items: center;
     }
     .model-card img {
-      max-height: 180px;
+      max-height: 280px;
       object-fit: contain;
       filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
     }
@@ -446,7 +443,7 @@
 
     /* ========== SCALING TABLE ========== */
     .scaling-block {
-      margin-top: 1rem;
+      margin-top: 2.5rem;
     }
     .scaling-title {
       text-align: center;
@@ -467,26 +464,20 @@
       border: 1px solid var(--border);
       border-left: 4px solid var(--accent);
       border-radius: var(--radius);
-      padding: 12px 16px;
+      padding: 20px 24px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
     .scaling-row-label {
       font-size: 0.95rem;
       color: var(--text-muted);
     }
     .scaling-row-revenue {
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-weight: 800;
       color: var(--accent);
       line-height: 1.1;
-    }
-    .scaling-row-annual {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-style: italic;
-      margin-top: 2px;
     }
     .scaling-note {
       text-align: center;
@@ -771,8 +762,8 @@
           <div class="hero-content fade-in">
             <img src="assets/logo-evimiz.png" alt="Evimiz" class="hero-logo">
             <div class="hero-badge" data-i18n="hero-badge">For CCTV Integrators &amp; Security Companies</div>
-            <h1 data-i18n-html="hero-h1">Build a $10K/Month<br>Install Business</h1>
-            <p class="hero-subtitle" data-i18n="hero-subtitle">First revenue in 7 days. Every intercom you install becomes permanent monthly income — no extra sales effort.</p>
+            <h1 data-i18n-html="hero-h1">Turn Every Install<br>Into Monthly Revenue</h1>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">Stop earning once — start earning every month. Every intercom you install becomes a source of passive income.</p>
             <div class="hero-cta">
               <a href="#contact" class="btn-primary btn-large" data-i18n="hero-cta1">Become a Partner</a>
               <a href="#model" class="btn-outline" data-i18n="hero-cta2">See the Model</a>
@@ -850,17 +841,14 @@
             <div class="scaling-row">
               <div class="scaling-row-label" data-i18n="scaling-r1-label">&#127962; 1 building (100 devices)</div>
               <div class="scaling-row-revenue" data-i18n="scaling-r1-revenue">$200/month</div>
-              <div class="scaling-row-annual" data-i18n="scaling-r1-annual">= $2,400/year</div>
             </div>
             <div class="scaling-row">
               <div class="scaling-row-label" data-i18n="scaling-r2-label">&#127962;&#127962;&#127962; 10 buildings (1,000 devices)</div>
               <div class="scaling-row-revenue" data-i18n="scaling-r2-revenue">$2,000/month</div>
-              <div class="scaling-row-annual" data-i18n="scaling-r2-annual">= $24,000/year</div>
             </div>
             <div class="scaling-row">
               <div class="scaling-row-label" data-i18n="scaling-r3-label">&#127962;&#215;50 &nbsp;50 buildings (5,000 devices)</div>
               <div class="scaling-row-revenue" data-i18n="scaling-r3-revenue">$10,000/month</div>
-              <div class="scaling-row-annual" data-i18n="scaling-r3-annual">= $120,000/year</div>
             </div>
           </div>
           <p class="scaling-note" data-i18n="scaling-note">Revenue grows automatically. No extra sales effort per building.</p>
@@ -881,20 +869,16 @@
             </div>
             <div class="ltv-stat-card">
               <div class="ltv-stat-number" data-i18n="ltv-s2-num">$7,200+</div>
-              <div class="ltv-stat-label" data-i18n="ltv-s2-label">$7,200/year per building</div>
+              <div class="ltv-stat-label" data-i18n="ltv-s2-label">LTV per building (100 devices × $6/mo × 12 × 10 yrs)</div>
             </div>
             <div class="ltv-stat-card">
               <div class="ltv-stat-number" data-i18n="ltv-s3-num">0 extra sales</div>
               <div class="ltv-stat-label" data-i18n="ltv-s3-label">Once installed, revenue is passive</div>
             </div>
-            <div class="ltv-stat-card">
-              <div class="ltv-stat-number" data-i18n="ltv-s4-num">$72K</div>
-              <div class="ltv-stat-label" data-i18n="ltv-s4-label">annual income with 10 buildings</div>
-            </div>
           </div>
           <div class="ltv-desc-card">
             <h3 data-i18n="ltv-desc-title">One Install. Years of Income.</h3>
-            <p data-i18n="ltv-desc-text">Each building generates $600/month. That's $7,200/year. With just 10 buildings — $72,000 annually. From installs you've already done.</p>
+            <p data-i18n="ltv-desc-text">A 100-unit building at $6/month generates over $7,000 in the first year alone. With 10 buildings, you're looking at $72,000+ annually — from installs you've already done.</p>
           </div>
         </div>
       </div>
@@ -1178,8 +1162,8 @@
         'nav-whitelabel': 'White Label',
         'nav-upsell': 'Upsell', 'nav-install': 'Install', 'nav-bundle': 'Bundle', 'nav-contact': 'Contact',
         'hero-badge': 'For CCTV Integrators & Security Companies',
-        'hero-h1': 'Build a $10K/Month<br>Install Business',
-        'hero-subtitle': 'First revenue in 7 days. Every intercom you install becomes permanent monthly income — no extra sales effort.',
+        'hero-h1': 'Turn Every Install<br>Into Monthly Revenue',
+        'hero-subtitle': 'Stop earning once — start earning every month. Every intercom you install becomes a source of passive income.',
         'hero-cta1': 'Become a Partner', 'hero-cta2': 'See the Model',
         'problem-title': 'The One-Time Payment Trap',
         'problem-subtitle': "Project-based revenue is unpredictable. There's a better way.",
@@ -1200,26 +1184,21 @@
         'scaling-title': 'See How Revenue Grows With Your Install Base',
         'scaling-r1-label': '🏢 1 building (100 devices)',
         'scaling-r1-revenue': '$200/month',
-        'scaling-r1-annual': '= $2,400/year',
         'scaling-r2-label': '🏢🏢🏢 10 buildings (1,000 devices)',
         'scaling-r2-revenue': '$2,000/month',
-        'scaling-r2-annual': '= $24,000/year',
         'scaling-r3-label': '🏢×50  50 buildings (5,000 devices)',
         'scaling-r3-revenue': '$10,000/month',
-        'scaling-r3-annual': '= $120,000/year',
         'scaling-note': 'Revenue grows automatically. No extra sales effort per building.',
         'ltv-title': 'Each Building Is a Long-Term Asset',
         'ltv-subtitle': 'Think beyond the install — think lifetime value',
         'ltv-s1-num': '3–5 years',
         'ltv-s1-label': 'Average client relationship',
         'ltv-s2-num': '$7,200+',
-        'ltv-s2-label': '$7,200/year per building',
+        'ltv-s2-label': 'LTV per building (100 devices × $6/mo × 12 × 10 yrs)',
         'ltv-s3-num': '0 extra sales',
         'ltv-s3-label': 'Once installed, revenue is passive',
-        'ltv-s4-num': '$72K',
-        'ltv-s4-label': 'annual income with 10 buildings',
         'ltv-desc-title': 'One Install. Years of Income.',
-        'ltv-desc-text': "Each building generates $600/month. That's $7,200/year. With just 10 buildings — $72,000 annually. From installs you've already done.",
+        'ltv-desc-text': "A 100-unit building at $6/month generates over $7,000 in the first year alone. With 10 buildings, you're looking at $72,000+ annually — from installs you've already done.",
         'compare-title': 'Old Model vs Evimiz Model',
         'compare-subtitle': 'The difference between one-time and recurring revenue',
         'compare-h1': 'Traditional Install',
@@ -1286,8 +1265,8 @@
         'nav-whitelabel': 'Marca Blanca',
         'nav-upsell': 'Upsell', 'nav-install': 'Instalación', 'nav-bundle': 'Bundle', 'nav-contact': 'Contacto',
         'hero-badge': 'Para Integradores CCTV y Empresas de Seguridad',
-        'hero-h1': 'Construye un Negocio de<br>$10K/Mes con Instalaciones',
-        'hero-subtitle': 'Primeros ingresos en 7 días. Cada intercomunicador que instales se convierte en ingreso mensual permanente — sin esfuerzo de ventas adicional.',
+        'hero-h1': 'Convierte Cada Instalación<br>en Ingreso Mensual',
+        'hero-subtitle': 'Deja de ganar una vez — empieza a ganar cada mes. Cada intercomunicador que instales se convierte en una fuente de ingreso pasivo.',
         'hero-cta1': 'Ser Socio', 'hero-cta2': 'Ver el Modelo',
         'problem-title': 'La Trampa del Pago Único',
         'problem-subtitle': 'Los ingresos por proyecto son impredecibles. Hay una mejor manera.',
@@ -1297,37 +1276,32 @@
         'problem-c2-text': 'La competencia en hardware baja los precios. Menos ganancias por proyecto.',
         'problem-c3-title': 'Siempre buscando el próximo proyecto',
         'problem-c3-text': 'Los ingresos son impredecibles. Cada mes empieza en cero.',
-        'model-title': 'Construí Ingresos Mensuales Predecibles',
+        'model-title': 'Construye Ingresos Mensuales Predecibles',
         'model-subtitle': '$2 USD por dispositivo por mes — tu margen encima',
         'model-s1': 'por dispositivo, base',
-        'model-s2-num': 'Tu+', 'model-s2': 'vos ponés el precio',
+        'model-s2-num': 'Tu+', 'model-s2': 'tú pones el precio',
         'model-s3': '= $200+/mes mínimo',
         'model-s4': 'crece con cada instalación nueva',
         'model-card-title': 'Cuanto Más Instales, Más Ganas',
         'model-card-text': 'Cada intercomunicador conectado se convierte en una suscripción mensual. Tus ingresos crecen automáticamente a medida que tu base de instalaciones crece — sin esfuerzo de ventas adicional.',
-        'scaling-title': 'Mirá Cómo Crecen los Ingresos Con Tu Base de Instalaciones',
+        'scaling-title': 'Mira Cómo Crecen los Ingresos Con Tu Base de Instalaciones',
         'scaling-r1-label': '🏢 1 edificio (100 dispositivos)',
         'scaling-r1-revenue': '$200/mes',
-        'scaling-r1-annual': '= $2.400/año',
         'scaling-r2-label': '🏢🏢🏢 10 edificios (1.000 dispositivos)',
         'scaling-r2-revenue': '$2.000/mes',
-        'scaling-r2-annual': '= $24.000/año',
         'scaling-r3-label': '🏢×50  50 edificios (5.000 dispositivos)',
         'scaling-r3-revenue': '$10.000/mes',
-        'scaling-r3-annual': '= $120.000/año',
         'scaling-note': 'Los ingresos crecen automáticamente. Sin esfuerzo de ventas adicional por edificio.',
         'ltv-title': 'Cada Edificio Es un Activo a Largo Plazo',
-        'ltv-subtitle': 'Pensá más allá de la instalación — pensá en el valor de vida',
+        'ltv-subtitle': 'Piensa más allá de la instalación — piensa en el valor de vida',
         'ltv-s1-num': '3–5 años',
         'ltv-s1-label': 'Relación promedio con el cliente',
         'ltv-s2-num': '$7.200+',
-        'ltv-s2-label': '$7.200/año por edificio',
+        'ltv-s2-label': 'LTV por edificio (100 dispositivos × $6/mes × 12 × 10 años)',
         'ltv-s3-num': '0 ventas extra',
         'ltv-s3-label': 'Una vez instalado, el ingreso es pasivo',
-        'ltv-s4-num': '$72K',
-        'ltv-s4-label': 'ingresos anuales con 10 edificios',
         'ltv-desc-title': 'Una Instalación. Años de Ingresos.',
-        'ltv-desc-text': 'Cada edificio genera $600/mes. Eso es $7.200/año. Con solo 10 edificios — $72.000 anuales. De instalaciones que ya realizaste.',
+        'ltv-desc-text': 'Un edificio de 100 unidades a $6/mes genera más de $7.000 en el primer año. Con 10 edificios, estás mirando $72.000+ anuales — de instalaciones que ya hiciste.',
         'compare-title': 'Modelo Tradicional vs Modelo Evimiz',
         'compare-subtitle': 'La diferencia entre ingresos únicos e ingresos recurrentes',
         'compare-h1': 'Instalación Tradicional',
@@ -1342,36 +1316,36 @@
         'compare-r4-right': 'Relación a largo plazo',
         'compare-r5-left': 'Los ingresos se reinician cada mes',
         'compare-r5-right': 'Los ingresos se acumulan',
-        'noheadaches-title': 'Vos Instalás. Nosotros Manejamos Todo Lo Demás.',
+        'noheadaches-title': 'Tú Instalas. Nosotros Manejamos Todo Lo Demás.',
         'noheadaches-subtitle': 'Sin servidores, sin tickets de soporte, sin desarrollo',
         'noheadaches-c1-title': 'Sin servidores que administrar',
         'noheadaches-c1-text': 'Completamente en la nube. Cero infraestructura de tu parte.',
         'noheadaches-c2-title': 'Sin carga de soporte técnico',
-        'noheadaches-c2-text': 'Nosotros manejamos el soporte de la plataforma. Vos te enfocás en las instalaciones.',
+        'noheadaches-c2-text': 'Nosotros manejamos el soporte de la plataforma. Tú te enfocas en las instalaciones.',
         'noheadaches-c3-title': 'Sin desarrollo necesario',
-        'noheadaches-c3-text': 'Plataforma white-label lista para usar. Empezá a ganar en 7 días.',
-        'noheadaches-banner': '⚡ Empezá a ganar en 7 días. Primer edificio → primer ingreso inmediato.',
+        'noheadaches-c3-text': 'Solución white-label lista para desplegar. Empieza a ganar en 7 días.',
+        'noheadaches-banner': '⚡ Empieza a ganar en 7 días. Primer edificio → primer ingreso inmediato.',
         'wl-title': 'Tu Marca. Su Lealtad a Ti.',
         'wl-subtitle': 'Los clientes se suscriben a tu producto, no a Evimiz',
         'wl-f1-title': '🏷️ Plataforma completamente white-label',
         'wl-f1-text': 'Tu nombre, tu logo, tu app en el App Store.',
         'wl-f2-title': '🔒 Los clientes no saben que es Evimiz',
         'wl-f2-text': 'Independencia total. Si cambias de proveedor, tu marca permanece.',
-        'wl-f3-title': '📈 Construí tu propio producto SaaS',
+        'wl-f3-title': '📈 Construye tu propio producto SaaS',
         'wl-f3-text': 'No eres revendedor — eres una empresa de producto.',
         'upsell-title': 'Tus Mejores Clientes Ya Son Tuyos',
-        'upsell-subtitle': 'Cada cliente de CCTV que tenés es un lead caliente para acceso inteligente',
+        'upsell-subtitle': 'Cada cliente de CCTV que tienes es un lead caliente para acceso inteligente',
         'upsell-c1-title': 'Sin costo de adquisición nuevo',
-        'upsell-c1-text': 'Vendé a clientes que ya confían en vos. Sin prospección en frío.',
+        'upsell-c1-text': 'Vende a clientes que ya confían en ti. Sin prospección en frío.',
         'upsell-c2-title': 'Combina con cámaras existentes',
         'upsell-c2-text': 'Agrega intercomunicador a instalaciones de cámaras. Un proyecto, dos fuentes de ingresos.',
         'upsell-c3-title': 'Actualiza intercomunicadores viejos',
-        'upsell-c3-text': 'Cada intercomunicador viejo es una oportunidad de actualización. Llegá con la respuesta.',
+        'upsell-c3-text': 'Cada intercomunicador viejo es una oportunidad de actualización. Llega con una solución.',
         'install-title': 'Plug & Play. Sin Servidores.',
-        'install-subtitle': 'Vos te enfocás en la instalación. Nosotros manejamos la nube.',
-        'install-c1-title': '100% en la nube', 'install-c1-text': 'Sin servidores locales que administrar. Cero sobrecarga de IT para vos o tu cliente.',
+        'install-subtitle': 'Tú te enfocas en la instalación. Nosotros manejamos la nube.',
+        'install-c1-title': '100% en la nube', 'install-c1-text': 'Sin servidores locales que administrar. Cero sobrecarga de IT para ti o tu cliente.',
         'install-c2-title': 'Hardware preconfigurado', 'install-c2-text': 'Los dispositivos llegan listos para conectar. La activación toma minutos.',
-        'install-c3-title': 'Control remoto', 'install-c3-text': 'Monitoreá y manejá todas las instalaciones desde un panel.',
+        'install-c3-title': 'Gestión remota', 'install-c3-text': 'Monitorea y gestiona todas las instalaciones desde un panel.',
         'install-c4-title': 'Soporte técnico incluido', 'install-c4-text': 'Te apoyamos para que puedas apoyar a tus clientes.',
         'bundle-title': 'Cámaras + Acceso + App = 3× el Negocio',
         'bundle-subtitle': 'Combina múltiples productos en una oferta de edificio inteligente',

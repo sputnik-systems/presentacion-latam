@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Evimiz for Property Managers — Run Your Building Without Headaches (v3)</title>
+  <title>Evimiz for Property Managers — Run Your Building Without Headaches</title>
   <meta name="description" content="One app to manage access, monitor cameras, and handle resident requests — from anywhere. Evimiz for property management companies.">
   <style>
     /* ========== RESET ========== */
@@ -506,104 +506,6 @@
       filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
     }
 
-    /* ========== RESULTS (Before/After) ========== */
-    .results-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-    .results-card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      padding: 28px 32px;
-    }
-    .results-card.before {
-      border: 1px solid rgba(227, 30, 36, 0.45);
-    }
-    .results-card.after {
-      border: 1px solid rgba(34, 197, 94, 0.45);
-    }
-    .results-card-header {
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .results-card.before .results-card-header {
-      color: #f87171;
-    }
-    .results-card.after .results-card-header {
-      color: #4ade80;
-    }
-    .results-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .results-item {
-      font-size: 1rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* ========== SAVINGS SECTION ========== */
-    .savings-big-number {
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 10px;
-    }
-    .savings-label {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    .savings-sublabel {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-    .pricing-banner {
-      background: linear-gradient(135deg, rgba(227, 30, 36, 0.12) 0%, rgba(227, 30, 36, 0.05) 100%);
-      border: 1px solid rgba(227, 30, 36, 0.35);
-      border-radius: var(--radius);
-      padding: 20px 32px;
-      text-align: center;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-top: 32px;
-    }
-
-    /* ========== CASO BADGE ========== */
-    .caso-badge {
-      display: inline-block;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      border-radius: var(--radius-sm);
-      padding: 12px 20px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #4ade80;
-      margin-bottom: 20px;
-    }
-
-    /* ========== BUSINESS VALUE ========== */
-    #business .card {
-      text-align: center;
-      padding: 28px 24px;
-    }
-    #business .card-icon {
-      font-size: 2.8rem;
-      margin-bottom: 16px;
-    }
-    #business .card h3 {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-
     /* ========== CONTACT ========== */
     .section-contact {
       background: linear-gradient(135deg, #0f1729 0%, var(--bg-dark) 100%);
@@ -676,8 +578,7 @@
       .hero-content h1 { font-size: 2rem; }
       .hero-badge { margin: 0 auto; }
       .grid-2, .grid-3, .grid-with-image, .mascot-layout, .contact-layout,
-      .transparency-card, .security-layout, .cost-layout, .easy-layout,
-      .results-grid { grid-template-columns: 1fr; }
+      .transparency-card, .security-layout, .cost-layout, .easy-layout { grid-template-columns: 1fr; }
       .grid-2x2 { grid-template-columns: 1fr; }
       .contact-image { order: -1; }
       .mascot-col img { max-width: 200px; margin: 0 auto; }
@@ -709,9 +610,6 @@
         <a href="#problem" data-i18n="nav-problem">Problem</a>
         <a href="#transparency" data-i18n="nav-transparency">History</a>
         <a href="#remote" data-i18n="nav-remote">Remote</a>
-        <a href="#results" data-i18n="nav-results">Results</a>
-        <a href="#savings" data-i18n="nav-savings">Savings</a>
-        <a href="#business" data-i18n="nav-business">Business</a>
         <a href="#security" data-i18n="nav-security">Security</a>
         <a href="#easy" data-i18n="nav-easy">App</a>
         <a href="#cost" data-i18n="nav-cost">Cost</a>
@@ -748,7 +646,7 @@
     <!-- ========== PROBLEM ========== -->
     <section id="problem" class="section fade-in">
       <div class="container">
-        <h2 class="section-title" data-i18n="problem-title">Daily Building Management Is Inefficient and Stressful</h2>
+        <h2 class="section-title" data-i18n="problem-title">Daily Building Management Is Broken</h2>
         <p class="section-subtitle" data-i18n="problem-subtitle">Every day brings the same frustrations — lost keys, angry residents, and emergency site visits.</p>
         <div class="mascot-layout">
           <div class="cards-col">
@@ -778,7 +676,7 @@
     <!-- ========== TRANSPARENCY ========== -->
     <section id="transparency" class="section fade-in">
       <div class="container">
-        <h2 class="section-title" data-i18n="trans-title">Every Visit Is Recorded — No More Disputes</h2>
+        <h2 class="section-title" data-i18n="trans-title">Every Visit. Full History. No Disputes.</h2>
         <p class="section-subtitle" data-i18n="trans-subtitle">Replace 'he said, she said' with data</p>
         <div class="transparency-card">
           <div>
@@ -834,95 +732,11 @@
       </div>
     </section>
 
-    <!-- ========== RESULTS (Before / After) ========== -->
-    <section id="results" class="section fade-in">
-      <div class="container">
-        <h2 class="section-title" data-i18n="results-title">Your Day. Before and After Evimiz.</h2>
-        <p class="section-subtitle" data-i18n="results-subtitle">Real impact on time, calls, and on-site visits</p>
-        <div class="results-grid">
-          <div class="results-card before">
-            <div class="results-card-header" data-i18n="results-before-header">Before Evimiz</div>
-            <div class="results-list">
-              <div class="results-item" data-i18n="results-before-1">📞 20+ resident calls/day about access</div>
-              <div class="results-item" data-i18n="results-before-2">🚗 3–5 on-site visits per week for access issues</div>
-              <div class="results-item" data-i18n="results-before-3">📋 Hours of manual log checking</div>
-              <div class="results-item" data-i18n="results-before-4">❌ Arguments with no data to resolve them</div>
-            </div>
-          </div>
-          <div class="results-card after">
-            <div class="results-card-header" data-i18n="results-after-header">After Evimiz</div>
-            <div class="results-list">
-              <div class="results-item" data-i18n="results-after-1">📱 70% fewer access-related calls</div>
-              <div class="results-item" data-i18n="results-after-2">🏠 Resolve most issues remotely</div>
-              <div class="results-item" data-i18n="results-after-3">⚡ Instant log search — any incident in seconds</div>
-              <div class="results-item" data-i18n="results-after-4">✅ Data-backed dispute resolution</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== SAVINGS ========== -->
-    <section id="savings" class="section fade-in">
-      <div class="container">
-        <h2 class="section-title" data-i18n="savings-title">What This Saves You Every Month</h2>
-        <p class="section-subtitle" data-i18n="savings-subtitle">Real numbers. Real time. Real money.</p>
-        <div class="grid-3">
-          <div class="card card-center">
-            <div class="savings-big-number" data-i18n="savings-n1">10+</div>
-            <div class="savings-label" data-i18n="savings-l1">hours saved per week on access issues</div>
-            <div class="savings-sublabel" data-i18n="savings-sub1">That's 40+ hours/month back to your team</div>
-          </div>
-          <div class="card card-center">
-            <div class="savings-big-number" data-i18n="savings-n2">70%</div>
-            <div class="savings-label" data-i18n="savings-l2">fewer resident calls about access</div>
-            <div class="savings-sublabel" data-i18n="savings-sub2">Less interruption. More productive days.</div>
-          </div>
-          <div class="card card-center">
-            <div class="savings-big-number" data-i18n="savings-n3">$0</div>
-            <div class="savings-label" data-i18n="savings-l3">cost per remote door open</div>
-            <div class="savings-sublabel" data-i18n="savings-sub3">vs. driving to the building every time</div>
-          </div>
-        </div>
-        <div class="pricing-banner" data-i18n="savings-banner">
-          💰 At $2/device/month — a 100-unit building costs less than a single on-site visit
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== BUSINESS VALUE ========== -->
-    <section id="business" class="section fade-in">
-      <div class="container">
-        <h2 class="section-title" data-i18n="biz-title">Better Service. More Buildings.</h2>
-        <p class="section-subtitle" data-i18n="biz-subtitle">Evimiz isn't just an operational tool — it's your competitive advantage</p>
-        <div class="grid-3">
-          <div class="card card-center">
-            <div class="card-icon">🏆</div>
-            <h3 data-i18n="biz-c1-title">Win new contracts</h3>
-            <p data-i18n="biz-c1-text">Offer smart access as a service. Differentiate from competitors who still use traditional systems.</p>
-          </div>
-          <div class="card card-center">
-            <div class="card-icon">🔄</div>
-            <h3 data-i18n="biz-c2-title">Retain existing buildings</h3>
-            <p data-i18n="biz-c2-text">Residents are happier. Owners see results. Your contract gets renewed.</p>
-          </div>
-          <div class="card card-center">
-            <div class="card-icon">📈</div>
-            <h3 data-i18n="biz-c3-title">Grow your portfolio</h3>
-            <p data-i18n="biz-c3-text">One platform, unlimited buildings. The same system scales without extra overhead.</p>
-          </div>
-        </div>
-        <div class="pricing-banner" data-i18n="biz-banner">
-          📈 Buildings with Evimiz report 40% fewer complaints and higher owner satisfaction scores
-        </div>
-      </div>
-    </section>
-
     <!-- ========== SECURITY ========== -->
     <section id="security" class="section fade-in">
       <div class="container">
         <h2 class="section-title" data-i18n="sec-title">24/7 Video. Full Archive.</h2>
-        <p class="section-subtitle" data-i18n="sec-subtitle">Find incidents fast. Resolve complaints with video proof.</p>
+        <p class="section-subtitle" data-i18n="sec-subtitle">Know exactly what happened, when, and who was there</p>
         <div class="security-layout">
           <div class="security-features">
             <div class="security-item">
@@ -942,8 +756,8 @@
             <div class="security-item">
               <div class="security-item-icon">🛡️</div>
               <div>
-                <h4 data-i18n="sec-f3-title">Built for reliability</h4>
-                <p data-i18n="sec-f3-text">Designed for real-world conditions. Low maintenance, long lifespan.</p>
+                <h4 data-i18n="sec-f3-title">Vandal-resistant hardware</h4>
+                <p data-i18n="sec-f3-text">IK11+ and IP66 rated. Built to last in any environment.</p>
               </div>
             </div>
             <div class="security-item">
@@ -964,7 +778,7 @@
     <!-- ========== EASY ========== -->
     <section id="easy" class="section fade-in">
       <div class="container">
-        <h2 class="section-title" data-i18n="easy-title">Residents Use It Daily Without Training</h2>
+        <h2 class="section-title" data-i18n="easy-title">Residents Actually Use It</h2>
         <p class="section-subtitle" data-i18n="easy-subtitle">Simple enough for everyone — from tech-savvy to seniors</p>
         <div class="easy-layout">
           <div class="grid-3" style="grid-template-columns: 1fr;">
@@ -995,7 +809,7 @@
     <!-- ========== COST ========== -->
     <section id="cost" class="section fade-in">
       <div class="container">
-        <h2 class="section-title" data-i18n="cost-title">Upgrade Your Building Without Replacing Existing Systems</h2>
+        <h2 class="section-title" data-i18n="cost-title">No Need to Replace Everything</h2>
         <p class="section-subtitle" data-i18n="cost-subtitle">Start small. Scale as you grow.</p>
         <div class="cost-layout">
           <div class="cost-features">
@@ -1014,13 +828,6 @@
             <div class="cost-item">
               <h4 data-i18n="cost-f4-title">🤝 We handle installation</h4>
               <p data-i18n="cost-f4-text">Local certified installers. No burden on your team.</p>
-            </div>
-            <div class="cost-item">
-              <h4 data-i18n="cost-f5-title">📋 No disruption to residents</h4>
-              <p data-i18n="cost-f5-text">Installed without downtime. Training included. Residents are up and running in minutes.</p>
-            </div>
-            <div class="caso-badge" data-i18n="cost-time-value">
-              ⚡ Up and running in under 2 weeks. No construction. No downtime.
             </div>
           </div>
           <div class="cost-image">
@@ -1132,13 +939,12 @@
       en: {
         'nav-badge': 'For Admins',
         'nav-problem': 'Problem', 'nav-transparency': 'History', 'nav-remote': 'Remote',
-        'nav-results': 'Results', 'nav-savings': 'Savings', 'nav-business': 'Business',
         'nav-security': 'Security', 'nav-easy': 'App', 'nav-cost': 'Cost', 'nav-contact': 'Contact',
         'hero-badge': 'For Property Managers',
         'hero-h1': 'Run Your Building<br>Without the Headaches',
         'hero-subtitle': 'One app to manage access, monitor cameras, and handle resident requests — from anywhere.',
         'hero-cta1': 'See a Demo', 'hero-cta2': 'How It Works',
-        'problem-title': 'Daily Building Management Is Inefficient and Stressful',
+        'problem-title': 'Daily Building Management Is Broken',
         'problem-subtitle': 'Every day brings the same frustrations — lost keys, angry residents, and emergency site visits.',
         'problem-c1-title': 'Lost keys, forgotten codes',
         'problem-c1-text': 'Residents lose keys. Codes get shared. You spend hours on access issues.',
@@ -1146,7 +952,7 @@
         'problem-c2-text': 'No visibility into who entered, when, or why. No data to resolve disputes.',
         'problem-c3-title': 'Always on-site, even when you shouldn\'t be',
         'problem-c3-text': 'Every access issue requires your physical presence. No remote control.',
-        'trans-title': 'Every Visit Is Recorded — No More Disputes',
+        'trans-title': 'Every Visit. Full History. No Disputes.',
         'trans-subtitle': 'Replace \'he said, she said\' with data',
         'trans-card-title': 'Complete Access Log For Every Door',
         'trans-card-text': 'See who entered, when, and through which door. Residents can check their own history. Disputes resolved in seconds with data — not arguments.',
@@ -1163,50 +969,17 @@
         'remote-c3-text': 'Get alerted for every entry event. Always know what\'s happening.',
         'remote-c4-title': 'Resident app included',
         'remote-c4-text': 'Residents manage their own access. Fewer calls to you.',
-        'results-title': 'Your Day. Before and After Evimiz.',
-        'results-subtitle': 'Real impact on time, calls, and on-site visits',
-        'results-before-header': 'Before Evimiz',
-        'results-before-1': '📞 20+ resident calls/day about access',
-        'results-before-2': '🚗 3–5 on-site visits per week for access issues',
-        'results-before-3': '📋 Hours of manual log checking',
-        'results-before-4': '❌ Arguments with no data to resolve them',
-        'results-after-header': 'After Evimiz',
-        'results-after-1': '📱 70% fewer access-related calls',
-        'results-after-2': '🏠 Resolve most issues remotely',
-        'results-after-3': '⚡ Instant log search — any incident in seconds',
-        'results-after-4': '✅ Data-backed dispute resolution',
-        'savings-title': 'What This Saves You Every Month',
-        'savings-subtitle': 'Real numbers. Real time. Real money.',
-        'savings-n1': '10+',
-        'savings-l1': 'hours saved per week on access issues',
-        'savings-sub1': 'That\'s 40+ hours/month back to your team',
-        'savings-n2': '70%',
-        'savings-l2': 'fewer resident calls about access',
-        'savings-sub2': 'Less interruption. More productive days.',
-        'savings-n3': '$0',
-        'savings-l3': 'cost per remote door open',
-        'savings-sub3': 'vs. driving to the building every time',
-        'savings-banner': '💰 At $2/device/month — a 100-unit building costs less than a single on-site visit',
-        'biz-title': 'Better Service. More Buildings.',
-        'biz-subtitle': 'Evimiz isn\'t just an operational tool — it\'s your competitive advantage',
-        'biz-c1-title': 'Win new contracts',
-        'biz-c1-text': 'Offer smart access as a service. Differentiate from competitors who still use traditional systems.',
-        'biz-c2-title': 'Retain existing buildings',
-        'biz-c2-text': 'Residents are happier. Owners see results. Your contract gets renewed.',
-        'biz-c3-title': 'Grow your portfolio',
-        'biz-c3-text': 'One platform, unlimited buildings. The same system scales without extra overhead.',
-        'biz-banner': '📈 Buildings with Evimiz report 40% fewer complaints and higher owner satisfaction scores',
         'sec-title': '24/7 Video. Full Archive.',
-        'sec-subtitle': 'Find incidents fast. Resolve complaints with video proof.',
+        'sec-subtitle': 'Know exactly what happened, when, and who was there',
         'sec-f1-title': 'HD cameras, day and night',
         'sec-f1-text': '2/5 MP cameras with IR night vision up to 18m.',
         'sec-f2-title': 'Cloud video archive',
         'sec-f2-text': 'Footage stored securely in the cloud. Access from anywhere.',
-        'sec-f3-title': 'Built for reliability',
-        'sec-f3-text': 'Designed for real-world conditions. Low maintenance, long lifespan.',
+        'sec-f3-title': 'Vandal-resistant hardware',
+        'sec-f3-text': 'IK11+ and IP66 rated. Built to last in any environment.',
         'sec-f4-title': 'Search by time or event',
         'sec-f4-text': 'Find any incident in seconds. Filter by date, time, door, or resident.',
-        'easy-title': 'Residents Use It Daily Without Training',
+        'easy-title': 'Residents Actually Use It',
         'easy-subtitle': 'Simple enough for everyone — from tech-savvy to seniors',
         'easy-c1-title': 'One app for everything',
         'easy-c1-text': 'Open doors, call the intercom, check cameras, manage guests — one tap.',
@@ -1214,7 +987,7 @@
         'easy-c2-text': 'Residents never miss a visitor. Video call straight to their phone.',
         'easy-c3-title': 'Available in Spanish',
         'easy-c3-text': 'Full Spanish interface. No language barrier for residents.',
-        'cost-title': 'Upgrade Your Building Without Replacing Existing Systems',
+        'cost-title': 'No Need to Replace Everything',
         'cost-subtitle': 'Start small. Scale as you grow.',
         'cost-f1-title': '💡 Works with existing infrastructure',
         'cost-f1-text': 'Evimiz installs alongside or replaces legacy systems — your choice.',
@@ -1224,9 +997,6 @@
         'cost-f3-text': 'No large upfront investment. Predictable monthly cost.',
         'cost-f4-title': '🤝 We handle installation',
         'cost-f4-text': 'Local certified installers. No burden on your team.',
-        'cost-f5-title': '📋 No disruption to residents',
-        'cost-f5-text': 'Installed without downtime. Training included. Residents are up and running in minutes.',
-        'cost-time-value': '⚡ Up and running in under 2 weeks. No construction. No downtime.',
         'contact-title': 'Ready to Simplify Your Building?',
         'contact-tagline': 'Let\'s show you how Evimiz works for property managers in Argentina.',
         'contact-btn': 'Book a Demo',
@@ -1235,13 +1005,12 @@
       es: {
         'nav-badge': 'Para Administradoras',
         'nav-problem': 'Problema', 'nav-transparency': 'Historial', 'nav-remote': 'Remoto',
-        'nav-results': 'Resultados', 'nav-savings': 'Ahorros', 'nav-business': 'Negocio',
         'nav-security': 'Seguridad', 'nav-easy': 'App', 'nav-cost': 'Costo', 'nav-contact': 'Contacto',
         'hero-badge': 'Para Administradoras de Propiedades',
         'hero-h1': 'Administra tu Edificio<br>Sin los Dolores de Cabeza',
-        'hero-subtitle': 'Una app para manejar accesos, monitorear cámaras y atender reclamos — desde cualquier lugar.',
+        'hero-subtitle': 'Una app para gestionar acceso, monitorear cámaras y atender solicitudes — desde cualquier lugar.',
         'hero-cta1': 'Ver una Demo', 'hero-cta2': 'Cómo Funciona',
-        'problem-title': 'La Administración Diaria del Edificio Es Ineficiente y Estresante',
+        'problem-title': 'La Administración Diaria del Edificio Está Rota',
         'problem-subtitle': 'Cada día trae las mismas frustraciones — llaves perdidas, residentes enojados y visitas de emergencia.',
         'problem-c1-title': 'Llaves perdidas, códigos olvidados',
         'problem-c1-text': 'Los residentes pierden llaves. Los códigos se comparten. Pasas horas en problemas de acceso.',
@@ -1249,7 +1018,7 @@
         'problem-c2-text': 'Sin visibilidad de quién entró, cuándo ni por qué. Sin datos para resolver disputas.',
         'problem-c3-title': 'Siempre presencial, incluso cuando no deberías',
         'problem-c3-text': 'Cada problema de acceso requiere tu presencia física. Sin control remoto.',
-        'trans-title': 'Cada Visita Queda Registrada — Sin Más Conflictos',
+        'trans-title': 'Cada Visita. Historial Completo. Sin Conflictos.',
         'trans-subtitle': 'Reemplaza las suposiciones con datos',
         'trans-card-title': 'Registro Completo de Acceso en Cada Puerta',
         'trans-card-text': 'Ve quién entró, cuándo y por qué puerta. Los residentes pueden ver su propio historial. Conflictos resueltos en segundos con datos — no con argumentos.',
@@ -1265,71 +1034,35 @@
         'remote-c3-title': 'Notificaciones push instantáneas',
         'remote-c3-text': 'Recibe alertas de cada evento de entrada. Siempre sabe qué está pasando.',
         'remote-c4-title': 'App para residentes incluida',
-        'remote-c4-text': 'Los residentes manejan su propio acceso. Menos llamadas para vos.',
-        'results-title': 'Tu Día. Antes y Después de Evimiz.',
-        'results-subtitle': 'Impacto real en tiempo, llamadas y visitas',
-        'results-before-header': 'Antes de Evimiz',
-        'results-before-1': '📞 Más de 20 llamadas de residentes al día sobre acceso',
-        'results-before-2': '🚗 3–5 visitas presenciales por semana por problemas de acceso',
-        'results-before-3': '📋 Horas revisando registros manualmente',
-        'results-before-4': '❌ Discusiones sin datos para resolverlas',
-        'results-after-header': 'Después de Evimiz',
-        'results-after-1': '📱 70% menos llamadas relacionadas con acceso',
-        'results-after-2': '🏠 Resuelve la mayoría de los problemas de forma remota',
-        'results-after-3': '⚡ Búsqueda instantánea en registros — cualquier incidente en segundos',
-        'results-after-4': '✅ Resolución de disputas respaldada por datos',
-        'savings-title': 'Lo Que Esto Te Ahorra Cada Mes',
-        'savings-subtitle': 'Números reales. Tiempo real. Dinero real.',
-        'savings-n1': '10+',
-        'savings-l1': 'horas ahorradas por semana en problemas de acceso',
-        'savings-sub1': '40+ horas/mes de vuelta a tu equipo',
-        'savings-n2': '70%',
-        'savings-l2': 'menos llamadas de residentes sobre acceso',
-        'savings-sub2': 'Menos interrupciones. Más días productivos.',
-        'savings-n3': '$0',
-        'savings-l3': 'costo por apertura remota de puerta',
-        'savings-sub3': 'vs. ir al edificio cada vez',
-        'savings-banner': '💰 A $2/dispositivo/mes — un edificio de 100 unidades cuesta menos que una sola visita presencial',
-        'biz-title': 'Mejor Servicio. Más Edificios.',
-        'biz-subtitle': 'Evimiz no es solo una herramienta operacional — es tu ventaja competitiva',
-        'biz-c1-title': 'Gana nuevos contratos',
-        'biz-c1-text': 'Ofrece acceso inteligente como servicio. Diferénciate de competidores que aún usan sistemas tradicionales.',
-        'biz-c2-title': 'Retén los edificios actuales',
-        'biz-c2-text': 'Los residentes están más contentos. Los propietarios ven resultados. Tu contrato se renueva.',
-        'biz-c3-title': 'Crece tu cartera',
-        'biz-c3-text': 'Una plataforma, edificios ilimitados. El mismo sistema escala sin costos adicionales.',
-        'biz-banner': '📈 Los edificios con Evimiz reportan 40% menos quejas y mayor satisfacción de propietarios',
+        'remote-c4-text': 'Los residentes gestionan su propio acceso. Menos llamadas a ti.',
         'sec-title': 'Video 24/7. Archivo Completo.',
-        'sec-subtitle': 'Encuentra incidentes rápido. Resuelve quejas con prueba en video.',
+        'sec-subtitle': 'Sabe exactamente qué pasó, cuándo y quién estaba',
         'sec-f1-title': 'Cámaras HD, día y noche',
         'sec-f1-text': 'Cámaras 2/5 MP con visión nocturna IR hasta 18m.',
         'sec-f2-title': 'Archivo de video en la nube',
         'sec-f2-text': 'Grabación almacenada de forma segura en la nube. Acceso desde cualquier lugar.',
-        'sec-f3-title': 'Diseñado para la confiabilidad',
-        'sec-f3-text': 'Pensado para condiciones reales. Bajo mantenimiento, larga vida útil.',
+        'sec-f3-title': 'Hardware antivandalismo',
+        'sec-f3-text': 'Clasificación IK11+ e IP66. Diseñado para durar en cualquier entorno.',
         'sec-f4-title': 'Buscar por tiempo o evento',
         'sec-f4-text': 'Encuentra cualquier incidente en segundos. Filtra por fecha, hora, puerta o residente.',
-        'easy-title': 'Los Residentes Lo Usan a Diario Sin Capacitación',
+        'easy-title': 'Los Residentes Realmente Lo Usan',
         'easy-subtitle': 'Suficientemente simple para todos — desde los más tecnológicos hasta los adultos mayores',
         'easy-c1-title': 'Una app para todo',
-        'easy-c1-text': 'Abrir puertas, llamar al portero, ver cámaras, manejar invitados — un toque.',
+        'easy-c1-text': 'Abrir puertas, llamar al portero, ver cámaras, gestionar invitados — un toque.',
         'easy-c2-title': 'Notificaciones de llamada instantáneas',
         'easy-c2-text': 'Los residentes nunca se pierden una visita. Videollamada directo a su teléfono.',
         'easy-c3-title': 'Disponible en Español',
         'easy-c3-text': 'Interfaz completamente en español. Sin barrera de idioma para los residentes.',
-        'cost-title': 'Moderniza tu Edificio Sin Reemplazar los Sistemas Existentes',
-        'cost-subtitle': 'Empezá pequeño. Escalá a medida que crecés.',
+        'cost-title': 'No Es Necesario Reemplazar Todo',
+        'cost-subtitle': 'Empieza pequeño. Escala a medida que creces.',
         'cost-f1-title': '💡 Funciona con la infraestructura existente',
-        'cost-f1-text': 'Evimiz se instala junto a o reemplaza los sistemas existentes — vos elegís.',
+        'cost-f1-text': 'Evimiz se instala junto a o reemplaza los sistemas existentes — tú eliges.',
         'cost-f2-title': '📅 Implementación edificio por edificio',
-        'cost-f2-text': 'Empezá con un edificio. Agregá más cuando estés listo.',
+        'cost-f2-text': 'Empieza con un edificio. Agrega más cuando estés listo.',
         'cost-f3-title': '💰 $2 USD/dispositivo/mes',
         'cost-f3-text': 'Sin gran inversión inicial. Costo mensual predecible.',
         'cost-f4-title': '🤝 Nosotros manejamos la instalación',
         'cost-f4-text': 'Instaladores locales certificados. Sin carga para tu equipo.',
-        'cost-f5-title': '📋 Sin interrupción para los residentes',
-        'cost-f5-text': 'Se instala sin tiempo de inactividad. Capacitación incluida. Los residentes están funcionando en minutos.',
-        'cost-time-value': '⚡ En funcionamiento en menos de 2 semanas. Sin obras. Sin tiempo de inactividad.',
         'contact-title': '¿Listo para Simplificar tu Edificio?',
         'contact-tagline': 'Te mostramos cómo funciona Evimiz para administradoras en Argentina.',
         'contact-btn': 'Reservar Demo',
