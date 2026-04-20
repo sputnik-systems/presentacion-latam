@@ -363,51 +363,62 @@ h2{
   </div>
 
   <!-- ── SLIDE 2: THE PROBLEM ── -->
-  <div class="slide">
-    <div style="text-align:center;margin-bottom:30px;max-width:880px;width:100%;">
-      <span class="tag">
-        <span class="lang-en">The Problem</span>
-        <span class="lang-es">El problema</span>
-      </span>
-      <h2>
-        <span class="lang-en">Your building deserves better <span class="grad">than this</span></span>
-        <span class="lang-es">Tu edificio merece algo mejor <span class="grad">que esto</span></span>
-      </h2>
+  <div class="slide" style="position:relative;padding:0;">
+    <!-- Background: real photo of both devices -->
+    <div style="position:absolute;inset:0;
+      background-image:url('assets/evimiz-vs-old.jpg');
+      background-size:cover;background-position:center center;
+      filter:brightness(0.38) saturate(0.7);">
     </div>
-    <div class="vs-row">
-      <div class="vs-card old">
-        <span class="vs-badge old">
-          <span class="lang-en">Old intercom</span>
-          <span class="lang-es">Portero viejo</span>
+    <!-- Content overlay -->
+    <div style="position:relative;z-index:1;
+      display:flex;flex-direction:column;align-items:center;
+      width:100%;padding:56px 80px 70px;">
+      <div style="text-align:center;margin-bottom:32px;">
+        <span class="tag">
+          <span class="lang-en">The Problem</span>
+          <span class="lang-es">El problema</span>
         </span>
-        <span class="vs-icon">📟</span>
-        <h3 style="font-size:1.05rem;margin-bottom:4px;">
-          <span class="lang-en">Analog System</span>
-          <span class="lang-es">Sistema analógico</span>
-        </h3>
-        <ul class="vs-list">
-          <li><span class="lang-en">No mobile app</span><span class="lang-es">Sin aplicación móvil</span></li>
-          <li><span class="lang-en">No video history</span><span class="lang-es">Sin historial de video</span></li>
-          <li><span class="lang-en">No remote access</span><span class="lang-es">Sin acceso remoto</span></li>
-          <li><span class="lang-en">Physical keys only</span><span class="lang-es">Solo llaves físicas</span></li>
-          <li><span class="lang-en">No camera integration</span><span class="lang-es">Sin integración con cámaras</span></li>
-        </ul>
+        <h2>
+          <span class="lang-en">Your building deserves better <span class="grad">than this</span></span>
+          <span class="lang-es">Tu edificio merece algo mejor <span class="grad">que esto</span></span>
+        </h2>
       </div>
-      <div class="vs-divider">VS</div>
-      <div class="vs-card new">
-        <span class="vs-badge new">Evimiz Smart</span>
-        <span class="vs-icon">🏢</span>
-        <h3 style="font-size:1.05rem;margin-bottom:4px;">
-          <span class="lang-en">Smart System</span>
-          <span class="lang-es">Sistema inteligente</span>
-        </h3>
-        <ul class="vs-list">
-          <li><span class="lang-en">Mobile app for residents</span><span class="lang-es">App móvil para residentes</span></li>
-          <li><span class="lang-en">Cloud video recording</span><span class="lang-es">Grabación en nube</span></li>
-          <li><span class="lang-en">Open door from anywhere</span><span class="lang-es">Abrí la puerta desde donde estés</span></li>
-          <li><span class="lang-en">NFC / BLE / PIN access</span><span class="lang-es">Acceso por NFC / BLE / PIN</span></li>
-          <li><span class="lang-en">Cameras + AI analytics</span><span class="lang-es">Cámaras + analítica con IA</span></li>
-        </ul>
+      <div class="vs-row">
+        <div class="vs-card old" style="background:rgba(0,0,0,0.55);backdrop-filter:blur(12px);">
+          <span class="vs-badge old">
+            <span class="lang-en">Old intercom</span>
+            <span class="lang-es">Portero viejo</span>
+          </span>
+          <span class="vs-icon">📟</span>
+          <h3 style="font-size:1.05rem;margin-bottom:4px;">
+            <span class="lang-en">Analog System</span>
+            <span class="lang-es">Sistema analógico</span>
+          </h3>
+          <ul class="vs-list">
+            <li><span class="lang-en">No mobile app</span><span class="lang-es">Sin aplicación móvil</span></li>
+            <li><span class="lang-en">No video history</span><span class="lang-es">Sin historial de video</span></li>
+            <li><span class="lang-en">No remote access</span><span class="lang-es">Sin acceso remoto</span></li>
+            <li><span class="lang-en">Physical keys only</span><span class="lang-es">Solo llaves físicas</span></li>
+            <li><span class="lang-en">No camera integration</span><span class="lang-es">Sin integración con cámaras</span></li>
+          </ul>
+        </div>
+        <div class="vs-divider" style="color:#fff;font-size:2rem;text-shadow:0 0 20px rgba(124,111,255,0.8);">VS</div>
+        <div class="vs-card new" style="background:rgba(124,111,255,0.18);backdrop-filter:blur(12px);">
+          <span class="vs-badge new">Evimiz Smart</span>
+          <span class="vs-icon">✨</span>
+          <h3 style="font-size:1.05rem;margin-bottom:4px;">
+            <span class="lang-en">Smart System</span>
+            <span class="lang-es">Sistema inteligente</span>
+          </h3>
+          <ul class="vs-list">
+            <li><span class="lang-en">Mobile app for residents</span><span class="lang-es">App móvil para residentes</span></li>
+            <li><span class="lang-en">Cloud video recording</span><span class="lang-es">Grabación en nube</span></li>
+            <li><span class="lang-en">Open door from anywhere</span><span class="lang-es">Abrí la puerta desde donde estés</span></li>
+            <li><span class="lang-en">NFC / BLE / PIN access</span><span class="lang-es">Acceso por NFC / BLE / PIN</span></li>
+            <li><span class="lang-en">Cameras + AI analytics</span><span class="lang-es">Cámaras + analítica con IA</span></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
