@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evimiz for Property Managers — Run Your Building Without Headaches (v3)</title>
+  <meta name="description" content="One app to manage access, monitor cameras, and handle resident requests — from anywhere. Evimiz for property management companies.">
+  <style>
+    /* ========== RESET ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    /* ========== CUSTOM PROPERTIES ========== */
+    :root {
+      --bg-dark: #080818;
+      --bg-section: #0d0d22;
+      --bg-card: #14143a;
+      --accent: #7C6FFF;
+      --accent2: #4FC3F7;
+      --accent-hover: #6558ee;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: rgba(124,111,255,0.2);
+      --max-width: 1200px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ========== BASE ========== */
+    body {
+      font-family: var(--font);
+      background: radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.12) 0%, transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(79,195,247,0.07) 0%, transparent 50%), #080818;
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* ========== LAYOUT ========== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section {
+      padding: 50px 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section:nth-child(even) {
+      background: var(--bg-section);
+    }
+
+    /* ========== TYPOGRAPHY ========== */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #7C6FFF, #4FC3F7);
+      margin: 16px auto 0;
+      border-radius: 2px;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    /* ========== GRID UTILITIES ========== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .cards-col .card {
+      padding: 20px 24px;
+    }
+    .cards-col .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .grid-with-image {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* ========== CARDS ========== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(124,111,255,0.2);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .card h3, .card h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .card-center { text-align: center; }
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      display: inline-block;
+      background: linear-gradient(135deg, #7C6FFF, #4FC3F7);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .btn-large {
+      font-size: 1.15rem;
+      padding: 18px 48px;
+    }
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 34px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ========== STATS ========== */
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ========== FADE-IN ANIMATION ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 14, 26, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 0;
+      transition: background 0.3s ease;
+    }
+    .navbar-scrolled {
+      background: rgba(10, 14, 26, 0.95);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    img[src*="intercom.png"] {
+      border-radius: 12px;
+    }
+    img[src*="appstore.png"] {
+      mix-blend-mode: multiply;
+    }
+    img[src*="face-recognition.png"] {
+      border-radius: 16px;
+    }
+    img[src*="phone-apps.png"] {
+      clip-path: inset(1% 14% 1% 14% round 20px);
+      display: block;
+    }
+    .phone-image-wrap {
+      display: inline-block;
+    }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+    }
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .lang-toggle {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      margin-left: 8px;
+    }
+    .lang-toggle:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .nav-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 3px 10px;
+      opacity: 0.8;
+    }
+
+    /* ========== HERO ========== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      background: radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.18) 0%, transparent 55%), radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.10) 0%, transparent 50%), #080818;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image img {
+      max-height: 500px;
+      filter: drop-shadow(0 20px 40px rgba(124,111,255,0.15));
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hero-logo {
+      width: 200px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(124,111,255,0.12);
+      border: 1px solid rgba(124,111,255,0.3);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    .hero-content .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========== MASCOT LAYOUT ========== */
+    .mascot-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .mascot-col {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .mascot-col img {
+      max-width: 280px;
+    }
+
+    /* ========== TRANSPARENCY SECTION ========== */
+    .transparency-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(124,111,255,0.2);
+      border-radius: var(--radius);
+      padding: 28px 36px;
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 0;
+    }
+    .transparency-card h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .transparency-card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .transparency-card img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      max-height: 50vh;
+      width: auto;
+      object-fit: contain;
+    }
+    .check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 1rem;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* ========== SECURITY / IMAGE RIGHT ========== */
+    .security-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .security-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .security-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .security-item-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .security-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .security-item p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .security-image img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+
+    /* ========== EASY SECTION ========== */
+    .easy-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .appstore-img {
+      max-width: 160px;
+      margin-top: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* ========== COST / INTERCOM IMAGE ========== */
+    .cost-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .cost-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .cost-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .cost-item p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .cost-image {
+      display: flex;
+      justify-content: center;
+    }
+    .cost-image img {
+      max-height: 420px;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+    }
+
+    /* ========== RESULTS (Before/After) ========== */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .results-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+    }
+    .results-card.before {
+      border: 1px solid rgba(124,111,255,0.45);
+    }
+    .results-card.after {
+      border: 1px solid rgba(34, 197, 94, 0.45);
+    }
+    .results-card-header {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .results-card.before .results-card-header {
+      color: #f87171;
+    }
+    .results-card.after .results-card-header {
+      color: #4ade80;
+    }
+    .results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .results-item {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ========== SAVINGS SECTION ========== */
+    .savings-big-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .savings-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .savings-sublabel {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .pricing-banner {
+      background: linear-gradient(135deg, rgba(124,111,255,0.12) 0%, rgba(124,111,255,0.05) 100%);
+      border: 1px solid rgba(124,111,255,0.35);
+      border-radius: var(--radius);
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 32px;
+    }
+
+    /* ========== CASO BADGE ========== */
+    .caso-badge {
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #4ade80;
+      margin-bottom: 20px;
+    }
+
+    /* ========== BUSINESS VALUE ========== */
+    #business .card {
+      text-align: center;
+      padding: 28px 24px;
+    }
+    #business .card-icon {
+      font-size: 2.8rem;
+      margin-bottom: 16px;
+    }
+    #business .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    /* ========== CONTACT ========== */
+    .section-contact {
+      background: linear-gradient(135deg, #0d0d22 0%, #080818 100%);
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .contact-image img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+    .contact-tagline {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+    }
+    .contact-icon {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logo {
+      height: 36px;
+      margin: 0 auto 12px;
+      opacity: 0.7;
+    }
+    .footer p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .hero-content h1 { font-size: 2.4rem; }
+      .section-title { font-size: 2rem; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 60px 0; }
+      #hero { min-height: auto; padding-top: 100px; padding-bottom: 60px; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-image { order: -1; }
+      .hero-image img { max-height: 260px; }
+      .hero-content { align-items: center; }
+      .hero-cta { justify-content: center; }
+      .hero-content h1 { font-size: 2rem; }
+      .hero-badge { margin: 0 auto; }
+      .grid-2, .grid-3, .grid-with-image, .mascot-layout, .contact-layout,
+      .transparency-card, .security-layout, .cost-layout, .easy-layout,
+      .results-grid { grid-template-columns: 1fr; }
+      .grid-2x2 { grid-template-columns: 1fr; }
+      .contact-image { order: -1; }
+      .mascot-col img { max-width: 200px; margin: 0 auto; }
+      .transparency-card { padding: 24px; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 26, 0.97);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 12px;
+      }
+      .nav-links.active { display: flex; }
+      .nav-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="nav-logo">
+      <div class="nav-links">
+        <span class="nav-badge" data-i18n="nav-badge">For Admins</span>
+        <a href="#problem" data-i18n="nav-problem">Problem</a>
+        <a href="#transparency" data-i18n="nav-transparency">History</a>
+        <a href="#remote" data-i18n="nav-remote">Remote</a>
+        <a href="#results" data-i18n="nav-results">Results</a>
+        <a href="#savings" data-i18n="nav-savings">Savings</a>
+        <a href="#business" data-i18n="nav-business">Business</a>
+        <a href="#security" data-i18n="nav-security">Security</a>
+        <a href="#easy" data-i18n="nav-easy">App</a>
+        <a href="#cost" data-i18n="nav-cost">Cost</a>
+        <a href="#contact" data-i18n="nav-contact">Contact</a>
+      </div>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-image fade-in">
+            <img src="assets/intercom.png" alt="Evimiz Smart Intercom">
+          </div>
+          <div class="hero-content fade-in">
+            <img src="assets/logo-evimiz.png" alt="Evimiz" class="hero-logo">
+            <div class="hero-badge" data-i18n="hero-badge">For Property Managers</div>
+            <h1 data-i18n-html="hero-h1">Run Your Building<br>Without the Headaches</h1>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">One app to manage access, monitor cameras, and handle resident requests — from anywhere.</p>
+            <div class="hero-cta">
+              <a href="#contact" class="btn-primary btn-large" data-i18n="hero-cta1">See a Demo</a>
+              <a href="#transparency" class="btn-outline" data-i18n="hero-cta2">How It Works</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PROBLEM ========== -->
+    <section id="problem" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="problem-title">Daily Building Management Is Inefficient and Stressful</h2>
+        <p class="section-subtitle" data-i18n="problem-subtitle">Every day brings the same frustrations — lost keys, angry residents, and emergency site visits.</p>
+        <div class="mascot-layout">
+          <div class="cards-col">
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-icon">🔑</div>
+              <h3 data-i18n="problem-c1-title">Lost keys, forgotten codes</h3>
+              <p data-i18n="problem-c1-text">Residents lose keys. Codes get shared. You spend hours on access issues.</p>
+            </div>
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-icon">📢</div>
+              <h3 data-i18n="problem-c2-title">Constant resident complaints</h3>
+              <p data-i18n="problem-c2-text">No visibility into who entered, when, or why. No data to resolve disputes.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🏃</div>
+              <h3 data-i18n="problem-c3-title">Always on-site, even when you shouldn't be</h3>
+              <p data-i18n="problem-c3-text">Every access issue requires your physical presence. No remote control.</p>
+            </div>
+          </div>
+          <div class="mascot-col">
+            <img src="assets/mascot-window.png" alt="Problem mascot">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== TRANSPARENCY ========== -->
+    <section id="transparency" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="trans-title">Every Visit Is Recorded — No More Disputes</h2>
+        <p class="section-subtitle" data-i18n="trans-subtitle">Replace 'he said, she said' with data</p>
+        <div class="transparency-card">
+          <div>
+            <h3 data-i18n="trans-card-title">Complete Access Log For Every Door</h3>
+            <p data-i18n="trans-card-text">See who entered, when, and through which door. Residents can check their own history. Disputes resolved in seconds with data — not arguments.</p>
+            <div class="check-list" style="margin-top: 20px;">
+              <div class="check-item">
+                <span style="color: var(--accent);">✅</span>
+                <span data-i18n="trans-check1">Timestamped entry logs</span>
+              </div>
+              <div class="check-item">
+                <span style="color: var(--accent);">✅</span>
+                <span data-i18n="trans-check2">Resident self-service history</span>
+              </div>
+              <div class="check-item">
+                <span style="color: var(--accent);">✅</span>
+                <span data-i18n="trans-check3">Export reports on demand</span>
+              </div>
+            </div>
+          </div>
+          <img src="assets/face-recognition.png" alt="Access history on app">
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== REMOTE ========== -->
+    <section id="remote" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="remote-title">Open Doors Without Being There</h2>
+        <p class="section-subtitle" data-i18n="remote-subtitle">Manage your building from your phone, 24/7</p>
+        <div class="grid-2x2">
+          <div class="card">
+            <div class="card-icon">📱</div>
+            <h3 data-i18n="remote-c1-title">Remote door unlock</h3>
+            <p data-i18n="remote-c1-text">Open any building door from anywhere. Approve deliveries, let in service workers.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎫</div>
+            <h3 data-i18n="remote-c2-title">Digital guest passes</h3>
+            <p data-i18n="remote-c2-text">Issue temporary access codes for guests, deliveries, contractors — no key needed.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔔</div>
+            <h3 data-i18n="remote-c3-title">Instant push notifications</h3>
+            <p data-i18n="remote-c3-text">Get alerted for every entry event. Always know what's happening.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">👥</div>
+            <h3 data-i18n="remote-c4-title">Resident app included</h3>
+            <p data-i18n="remote-c4-text">Residents manage their own access. Fewer calls to you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== RESULTS (Before / After) ========== -->
+    <section id="results" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="results-title">Your Day. Before and After Evimiz.</h2>
+        <p class="section-subtitle" data-i18n="results-subtitle">Real impact on time, calls, and on-site visits</p>
+        <div class="results-grid">
+          <div class="results-card before">
+            <div class="results-card-header" data-i18n="results-before-header">Before Evimiz</div>
+            <div class="results-list">
+              <div class="results-item" data-i18n="results-before-1">📞 20+ resident calls/day about access</div>
+              <div class="results-item" data-i18n="results-before-2">🚗 3–5 on-site visits per week for access issues</div>
+              <div class="results-item" data-i18n="results-before-3">📋 Hours of manual log checking</div>
+              <div class="results-item" data-i18n="results-before-4">❌ Arguments with no data to resolve them</div>
+            </div>
+          </div>
+          <div class="results-card after">
+            <div class="results-card-header" data-i18n="results-after-header">After Evimiz</div>
+            <div class="results-list">
+              <div class="results-item" data-i18n="results-after-1">📱 70% fewer access-related calls</div>
+              <div class="results-item" data-i18n="results-after-2">🏠 Resolve most issues remotely</div>
+              <div class="results-item" data-i18n="results-after-3">⚡ Instant log search — any incident in seconds</div>
+              <div class="results-item" data-i18n="results-after-4">✅ Data-backed dispute resolution</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SAVINGS ========== -->
+    <section id="savings" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="savings-title">What This Saves You Every Month</h2>
+        <p class="section-subtitle" data-i18n="savings-subtitle">Real numbers. Real time. Real money.</p>
+        <div class="grid-3">
+          <div class="card card-center">
+            <div class="savings-big-number" data-i18n="savings-n1">10+</div>
+            <div class="savings-label" data-i18n="savings-l1">hours saved per week on access issues</div>
+            <div class="savings-sublabel" data-i18n="savings-sub1">That's 40+ hours/month back to your team</div>
+          </div>
+          <div class="card card-center">
+            <div class="savings-big-number" data-i18n="savings-n2">70%</div>
+            <div class="savings-label" data-i18n="savings-l2">fewer resident calls about access</div>
+            <div class="savings-sublabel" data-i18n="savings-sub2">Less interruption. More productive days.</div>
+          </div>
+          <div class="card card-center">
+            <div class="savings-big-number" data-i18n="savings-n3">$0</div>
+            <div class="savings-label" data-i18n="savings-l3">cost per remote door open</div>
+            <div class="savings-sublabel" data-i18n="savings-sub3">vs. driving to the building every time</div>
+          </div>
+        </div>
+        <div class="pricing-banner" data-i18n="savings-banner">
+          💰 At $2/device/month — a 100-unit building costs less than a single on-site visit
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== BUSINESS VALUE ========== -->
+    <section id="business" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="biz-title">Better Service. More Buildings.</h2>
+        <p class="section-subtitle" data-i18n="biz-subtitle">Evimiz isn't just an operational tool — it's your competitive advantage</p>
+        <div class="grid-3">
+          <div class="card card-center">
+            <div class="card-icon">🏆</div>
+            <h3 data-i18n="biz-c1-title">Win new contracts</h3>
+            <p data-i18n="biz-c1-text">Offer smart access as a service. Differentiate from competitors who still use traditional systems.</p>
+          </div>
+          <div class="card card-center">
+            <div class="card-icon">🔄</div>
+            <h3 data-i18n="biz-c2-title">Retain existing buildings</h3>
+            <p data-i18n="biz-c2-text">Residents are happier. Owners see results. Your contract gets renewed.</p>
+          </div>
+          <div class="card card-center">
+            <div class="card-icon">📈</div>
+            <h3 data-i18n="biz-c3-title">Grow your portfolio</h3>
+            <p data-i18n="biz-c3-text">One platform, unlimited buildings. The same system scales without extra overhead.</p>
+          </div>
+        </div>
+        <div class="pricing-banner" data-i18n="biz-banner">
+          📈 Buildings with Evimiz report 40% fewer complaints and higher owner satisfaction scores
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== SECURITY ========== -->
+    <section id="security" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="sec-title">24/7 Video. Full Archive.</h2>
+        <p class="section-subtitle" data-i18n="sec-subtitle">Find incidents fast. Resolve complaints with video proof.</p>
+        <div class="security-layout">
+          <div class="security-features">
+            <div class="security-item">
+              <div class="security-item-icon">📹</div>
+              <div>
+                <h4 data-i18n="sec-f1-title">HD cameras, day and night</h4>
+                <p data-i18n="sec-f1-text">2/5 MP cameras with IR night vision up to 18m.</p>
+              </div>
+            </div>
+            <div class="security-item">
+              <div class="security-item-icon">☁️</div>
+              <div>
+                <h4 data-i18n="sec-f2-title">Cloud video archive</h4>
+                <p data-i18n="sec-f2-text">Footage stored securely in the cloud. Access from anywhere.</p>
+              </div>
+            </div>
+            <div class="security-item">
+              <div class="security-item-icon">🛡️</div>
+              <div>
+                <h4 data-i18n="sec-f3-title">Built for reliability</h4>
+                <p data-i18n="sec-f3-text">Designed for real-world conditions. Low maintenance, long lifespan.</p>
+              </div>
+            </div>
+            <div class="security-item">
+              <div class="security-item-icon">🔍</div>
+              <div>
+                <h4 data-i18n="sec-f4-title">Search by time or event</h4>
+                <p data-i18n="sec-f4-text">Find any incident in seconds. Filter by date, time, door, or resident.</p>
+              </div>
+            </div>
+          </div>
+          <div class="security-image">
+            <img src="assets/camera-bullet.jpg" alt="IZI CCTV Camera">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== EASY ========== -->
+    <section id="easy" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="easy-title">Residents Use It Daily Without Training</h2>
+        <p class="section-subtitle" data-i18n="easy-subtitle">Simple enough for everyone — from tech-savvy to seniors</p>
+        <div class="easy-layout">
+          <div class="grid-3" style="grid-template-columns: 1fr;">
+            <!-- Stack 3 cards vertically on left -->
+          </div>
+          <div></div>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">📲</div>
+            <h3 data-i18n="easy-c1-title">One app for everything</h3>
+            <p data-i18n="easy-c1-text">Open doors, call the intercom, check cameras, manage guests — one tap.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔔</div>
+            <h3 data-i18n="easy-c2-title">Instant call notifications</h3>
+            <p data-i18n="easy-c2-text">Residents never miss a visitor. Video call straight to their phone.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌍</div>
+            <h3 data-i18n="easy-c3-title">Available in Spanish</h3>
+            <p data-i18n="easy-c3-text">Full Spanish interface. No language barrier for residents.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== COST ========== -->
+    <section id="cost" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="cost-title">Upgrade Your Building Without Replacing Existing Systems</h2>
+        <p class="section-subtitle" data-i18n="cost-subtitle">Start small. Scale as you grow.</p>
+        <div class="cost-layout">
+          <div class="cost-features">
+            <div class="cost-item">
+              <h4 data-i18n="cost-f1-title">💡 Works with existing infrastructure</h4>
+              <p data-i18n="cost-f1-text">Evimiz installs alongside or replaces legacy systems — your choice.</p>
+            </div>
+            <div class="cost-item">
+              <h4 data-i18n="cost-f2-title">📅 Building-by-building rollout</h4>
+              <p data-i18n="cost-f2-text">Start with one building. Add more when you're ready.</p>
+            </div>
+            <div class="cost-item">
+              <h4 data-i18n="cost-f3-title">💰 $2 USD/device/month</h4>
+              <p data-i18n="cost-f3-text">No large upfront investment. Predictable monthly cost.</p>
+            </div>
+            <div class="cost-item">
+              <h4 data-i18n="cost-f4-title">🤝 We handle installation</h4>
+              <p data-i18n="cost-f4-text">Local certified installers. No burden on your team.</p>
+            </div>
+            <div class="cost-item">
+              <h4 data-i18n="cost-f5-title">📋 No disruption to residents</h4>
+              <p data-i18n="cost-f5-text">Installed without downtime. Training included. Residents are up and running in minutes.</p>
+            </div>
+            <div class="caso-badge" data-i18n="cost-time-value">
+              ⚡ Up and running in under 2 weeks. No construction. No downtime.
+            </div>
+          </div>
+          <div class="cost-image">
+            <img src="assets/intercom.png" alt="Evimiz Smart Intercom">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONTACT ========== -->
+    <section id="contact" class="section section-contact fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="contact-title">Ready to Simplify Your Building?</h2>
+        <div class="contact-layout">
+          <div class="contact-image">
+            <img src="assets/team-expo-a.jpg" alt="Evimiz team">
+          </div>
+          <div class="contact-info">
+            <p class="contact-tagline" data-i18n="contact-tagline">Let's show you how Evimiz works for property managers in Argentina.</p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <img src="assets/icon-email.png" alt="Email" class="contact-icon">
+                <span>vadbaz1357@gmail.com</span>
+              </div>
+              <div class="contact-item">
+                <span style="font-size:1.5rem;">💬</span>
+                <span>WhatsApp: +54 9 351 233 64 20</span>
+              </div>
+              <div class="contact-item">
+                <span style="font-size:1.5rem;">🌐</span>
+                <span>evimiz.ai</span>
+              </div>
+            </div>
+            <a href="https://wa.me/5493512336420" target="_blank" class="btn-primary btn-large" data-i18n="contact-btn">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="footer-logo">
+      <p data-i18n="footer-copy">© 2025 Evimiz. Smart Intercom for Modern Buildings.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer — fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navLinks.classList.remove('active'); });
+    });
+
+    // ========== Keyboard slide navigation ==========
+    const sections = Array.from(document.querySelectorAll('section'));
+    let currentIndex = 0;
+    let isScrolling = false;
+
+    function goTo(index) {
+      if (isScrolling) return;
+      index = Math.max(0, Math.min(sections.length - 1, index));
+      currentIndex = index;
+      isScrolling = true;
+      const navHeight = document.querySelector('.navbar').offsetHeight;
+      const targetY = sections[index].offsetTop - navHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      setTimeout(() => { isScrolling = false; }, 900);
+    }
+
+    window.addEventListener('scroll', () => {
+      if (isScrolling) return;
+      const top = window.scrollY + 10;
+      const navHeight = document.querySelector('.navbar').offsetHeight;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop - navHeight <= top) { currentIndex = i; break; }
+      }
+    }, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      if ((e.key === ' ' && !e.shiftKey) || e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault(); goTo(currentIndex + 1);
+      } else if ((e.key === ' ' && e.shiftKey) || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault(); goTo(currentIndex - 1);
+      }
+    });
+
+    // ========== i18n ==========
+    const translations = {
+      en: {
+        'nav-badge': 'For Admins',
+        'nav-problem': 'Problem', 'nav-transparency': 'History', 'nav-remote': 'Remote',
+        'nav-results': 'Results', 'nav-savings': 'Savings', 'nav-business': 'Business',
+        'nav-security': 'Security', 'nav-easy': 'App', 'nav-cost': 'Cost', 'nav-contact': 'Contact',
+        'hero-badge': 'For Property Managers',
+        'hero-h1': 'Run Your Building<br>Without the Headaches',
+        'hero-subtitle': 'One app to manage access, monitor cameras, and handle resident requests — from anywhere.',
+        'hero-cta1': 'See a Demo', 'hero-cta2': 'How It Works',
+        'problem-title': 'Daily Building Management Is Inefficient and Stressful',
+        'problem-subtitle': 'Every day brings the same frustrations — lost keys, angry residents, and emergency site visits.',
+        'problem-c1-title': 'Lost keys, forgotten codes',
+        'problem-c1-text': 'Residents lose keys. Codes get shared. You spend hours on access issues.',
+        'problem-c2-title': 'Constant resident complaints',
+        'problem-c2-text': 'No visibility into who entered, when, or why. No data to resolve disputes.',
+        'problem-c3-title': 'Always on-site, even when you shouldn\'t be',
+        'problem-c3-text': 'Every access issue requires your physical presence. No remote control.',
+        'trans-title': 'Every Visit Is Recorded — No More Disputes',
+        'trans-subtitle': 'Replace \'he said, she said\' with data',
+        'trans-card-title': 'Complete Access Log For Every Door',
+        'trans-card-text': 'See who entered, when, and through which door. Residents can check their own history. Disputes resolved in seconds with data — not arguments.',
+        'trans-check1': 'Timestamped entry logs',
+        'trans-check2': 'Resident self-service history',
+        'trans-check3': 'Export reports on demand',
+        'remote-title': 'Open Doors Without Being There',
+        'remote-subtitle': 'Manage your building from your phone, 24/7',
+        'remote-c1-title': 'Remote door unlock',
+        'remote-c1-text': 'Open any building door from anywhere. Approve deliveries, let in service workers.',
+        'remote-c2-title': 'Digital guest passes',
+        'remote-c2-text': 'Issue temporary access codes for guests, deliveries, contractors — no key needed.',
+        'remote-c3-title': 'Instant push notifications',
+        'remote-c3-text': 'Get alerted for every entry event. Always know what\'s happening.',
+        'remote-c4-title': 'Resident app included',
+        'remote-c4-text': 'Residents manage their own access. Fewer calls to you.',
+        'results-title': 'Your Day. Before and After Evimiz.',
+        'results-subtitle': 'Real impact on time, calls, and on-site visits',
+        'results-before-header': 'Before Evimiz',
+        'results-before-1': '📞 20+ resident calls/day about access',
+        'results-before-2': '🚗 3–5 on-site visits per week for access issues',
+        'results-before-3': '📋 Hours of manual log checking',
+        'results-before-4': '❌ Arguments with no data to resolve them',
+        'results-after-header': 'After Evimiz',
+        'results-after-1': '📱 70% fewer access-related calls',
+        'results-after-2': '🏠 Resolve most issues remotely',
+        'results-after-3': '⚡ Instant log search — any incident in seconds',
+        'results-after-4': '✅ Data-backed dispute resolution',
+        'savings-title': 'What This Saves You Every Month',
+        'savings-subtitle': 'Real numbers. Real time. Real money.',
+        'savings-n1': '10+',
+        'savings-l1': 'hours saved per week on access issues',
+        'savings-sub1': 'That\'s 40+ hours/month back to your team',
+        'savings-n2': '70%',
+        'savings-l2': 'fewer resident calls about access',
+        'savings-sub2': 'Less interruption. More productive days.',
+        'savings-n3': '$0',
+        'savings-l3': 'cost per remote door open',
+        'savings-sub3': 'vs. driving to the building every time',
+        'savings-banner': '💰 At $2/device/month — a 100-unit building costs less than a single on-site visit',
+        'biz-title': 'Better Service. More Buildings.',
+        'biz-subtitle': 'Evimiz isn\'t just an operational tool — it\'s your competitive advantage',
+        'biz-c1-title': 'Win new contracts',
+        'biz-c1-text': 'Offer smart access as a service. Differentiate from competitors who still use traditional systems.',
+        'biz-c2-title': 'Retain existing buildings',
+        'biz-c2-text': 'Residents are happier. Owners see results. Your contract gets renewed.',
+        'biz-c3-title': 'Grow your portfolio',
+        'biz-c3-text': 'One platform, unlimited buildings. The same system scales without extra overhead.',
+        'biz-banner': '📈 Buildings with Evimiz report 40% fewer complaints and higher owner satisfaction scores',
+        'sec-title': '24/7 Video. Full Archive.',
+        'sec-subtitle': 'Find incidents fast. Resolve complaints with video proof.',
+        'sec-f1-title': 'HD cameras, day and night',
+        'sec-f1-text': '2/5 MP cameras with IR night vision up to 18m.',
+        'sec-f2-title': 'Cloud video archive',
+        'sec-f2-text': 'Footage stored securely in the cloud. Access from anywhere.',
+        'sec-f3-title': 'Built for reliability',
+        'sec-f3-text': 'Designed for real-world conditions. Low maintenance, long lifespan.',
+        'sec-f4-title': 'Search by time or event',
+        'sec-f4-text': 'Find any incident in seconds. Filter by date, time, door, or resident.',
+        'easy-title': 'Residents Use It Daily Without Training',
+        'easy-subtitle': 'Simple enough for everyone — from tech-savvy to seniors',
+        'easy-c1-title': 'One app for everything',
+        'easy-c1-text': 'Open doors, call the intercom, check cameras, manage guests — one tap.',
+        'easy-c2-title': 'Instant call notifications',
+        'easy-c2-text': 'Residents never miss a visitor. Video call straight to their phone.',
+        'easy-c3-title': 'Available in Spanish',
+        'easy-c3-text': 'Full Spanish interface. No language barrier for residents.',
+        'cost-title': 'Upgrade Your Building Without Replacing Existing Systems',
+        'cost-subtitle': 'Start small. Scale as you grow.',
+        'cost-f1-title': '💡 Works with existing infrastructure',
+        'cost-f1-text': 'Evimiz installs alongside or replaces legacy systems — your choice.',
+        'cost-f2-title': '📅 Building-by-building rollout',
+        'cost-f2-text': 'Start with one building. Add more when you\'re ready.',
+        'cost-f3-title': '💰 $2 USD/device/month',
+        'cost-f3-text': 'No large upfront investment. Predictable monthly cost.',
+        'cost-f4-title': '🤝 We handle installation',
+        'cost-f4-text': 'Local certified installers. No burden on your team.',
+        'cost-f5-title': '📋 No disruption to residents',
+        'cost-f5-text': 'Installed without downtime. Training included. Residents are up and running in minutes.',
+        'cost-time-value': '⚡ Up and running in under 2 weeks. No construction. No downtime.',
+        'contact-title': 'Ready to Simplify Your Building?',
+        'contact-tagline': 'Let\'s show you how Evimiz works for property managers in Argentina.',
+        'contact-btn': 'Book a Demo',
+        'footer-copy': '© 2025 Evimiz. Smart Intercom for Modern Buildings.'
+      },
+      es: {
+        'nav-badge': 'Para Administradoras',
+        'nav-problem': 'Problema', 'nav-transparency': 'Historial', 'nav-remote': 'Remoto',
+        'nav-results': 'Resultados', 'nav-savings': 'Ahorros', 'nav-business': 'Negocio',
+        'nav-security': 'Seguridad', 'nav-easy': 'App', 'nav-cost': 'Costo', 'nav-contact': 'Contacto',
+        'hero-badge': 'Para Administradoras de Propiedades',
+        'hero-h1': 'Administra tu Edificio<br>Sin los Dolores de Cabeza',
+        'hero-subtitle': 'Una app para manejar accesos, monitorear cámaras y atender reclamos — desde cualquier lugar.',
+        'hero-cta1': 'Ver una Demo', 'hero-cta2': 'Cómo Funciona',
+        'problem-title': 'La Administración Diaria del Edificio Es Ineficiente y Estresante',
+        'problem-subtitle': 'Cada día trae las mismas frustraciones — llaves perdidas, residentes enojados y visitas de emergencia.',
+        'problem-c1-title': 'Llaves perdidas, códigos olvidados',
+        'problem-c1-text': 'Los residentes pierden llaves. Los códigos se comparten. Pasas horas en problemas de acceso.',
+        'problem-c2-title': 'Quejas constantes de residentes',
+        'problem-c2-text': 'Sin visibilidad de quién entró, cuándo ni por qué. Sin datos para resolver disputas.',
+        'problem-c3-title': 'Siempre presencial, incluso cuando no deberías',
+        'problem-c3-text': 'Cada problema de acceso requiere tu presencia física. Sin control remoto.',
+        'trans-title': 'Cada Visita Queda Registrada — Sin Más Conflictos',
+        'trans-subtitle': 'Reemplaza las suposiciones con datos',
+        'trans-card-title': 'Registro Completo de Acceso en Cada Puerta',
+        'trans-card-text': 'Ve quién entró, cuándo y por qué puerta. Los residentes pueden ver su propio historial. Conflictos resueltos en segundos con datos — no con argumentos.',
+        'trans-check1': 'Registros de entrada con marca de tiempo',
+        'trans-check2': 'Historial de autoservicio para residentes',
+        'trans-check3': 'Exportar reportes bajo demanda',
+        'remote-title': 'Abre Puertas Sin Estar Presente',
+        'remote-subtitle': 'Gestiona tu edificio desde tu teléfono, las 24 horas',
+        'remote-c1-title': 'Apertura remota de puertas',
+        'remote-c1-text': 'Abre cualquier puerta del edificio desde cualquier lugar. Aprueba entregas, deja entrar personal de servicio.',
+        'remote-c2-title': 'Pases digitales para invitados',
+        'remote-c2-text': 'Emite códigos de acceso temporales para visitas, entregas y contratistas — sin llave.',
+        'remote-c3-title': 'Notificaciones push instantáneas',
+        'remote-c3-text': 'Recibe alertas de cada evento de entrada. Siempre sabe qué está pasando.',
+        'remote-c4-title': 'App para residentes incluida',
+        'remote-c4-text': 'Los residentes manejan su propio acceso. Menos llamadas para vos.',
+        'results-title': 'Tu Día. Antes y Después de Evimiz.',
+        'results-subtitle': 'Impacto real en tiempo, llamadas y visitas',
+        'results-before-header': 'Antes de Evimiz',
+        'results-before-1': '📞 Más de 20 llamadas de residentes al día sobre acceso',
+        'results-before-2': '🚗 3–5 visitas presenciales por semana por problemas de acceso',
+        'results-before-3': '📋 Horas revisando registros manualmente',
+        'results-before-4': '❌ Discusiones sin datos para resolverlas',
+        'results-after-header': 'Después de Evimiz',
+        'results-after-1': '📱 70% menos llamadas relacionadas con acceso',
+        'results-after-2': '🏠 Resuelve la mayoría de los problemas de forma remota',
+        'results-after-3': '⚡ Búsqueda instantánea en registros — cualquier incidente en segundos',
+        'results-after-4': '✅ Resolución de disputas respaldada por datos',
+        'savings-title': 'Lo Que Esto Te Ahorra Cada Mes',
+        'savings-subtitle': 'Números reales. Tiempo real. Dinero real.',
+        'savings-n1': '10+',
+        'savings-l1': 'horas ahorradas por semana en problemas de acceso',
+        'savings-sub1': '40+ horas/mes de vuelta a tu equipo',
+        'savings-n2': '70%',
+        'savings-l2': 'menos llamadas de residentes sobre acceso',
+        'savings-sub2': 'Menos interrupciones. Más días productivos.',
+        'savings-n3': '$0',
+        'savings-l3': 'costo por apertura remota de puerta',
+        'savings-sub3': 'vs. ir al edificio cada vez',
+        'savings-banner': '💰 A $2/dispositivo/mes — un edificio de 100 unidades cuesta menos que una sola visita presencial',
+        'biz-title': 'Mejor Servicio. Más Edificios.',
+        'biz-subtitle': 'Evimiz no es solo una herramienta operacional — es tu ventaja competitiva',
+        'biz-c1-title': 'Gana nuevos contratos',
+        'biz-c1-text': 'Ofrece acceso inteligente como servicio. Diferénciate de competidores que aún usan sistemas tradicionales.',
+        'biz-c2-title': 'Retén los edificios actuales',
+        'biz-c2-text': 'Los residentes están más contentos. Los propietarios ven resultados. Tu contrato se renueva.',
+        'biz-c3-title': 'Crece tu cartera',
+        'biz-c3-text': 'Una plataforma, edificios ilimitados. El mismo sistema escala sin costos adicionales.',
+        'biz-banner': '📈 Los edificios con Evimiz reportan 40% menos quejas y mayor satisfacción de propietarios',
+        'sec-title': 'Video 24/7. Archivo Completo.',
+        'sec-subtitle': 'Encuentra incidentes rápido. Resuelve quejas con prueba en video.',
+        'sec-f1-title': 'Cámaras HD, día y noche',
+        'sec-f1-text': 'Cámaras 2/5 MP con visión nocturna IR hasta 18m.',
+        'sec-f2-title': 'Archivo de video en la nube',
+        'sec-f2-text': 'Grabación almacenada de forma segura en la nube. Acceso desde cualquier lugar.',
+        'sec-f3-title': 'Diseñado para la confiabilidad',
+        'sec-f3-text': 'Pensado para condiciones reales. Bajo mantenimiento, larga vida útil.',
+        'sec-f4-title': 'Buscar por tiempo o evento',
+        'sec-f4-text': 'Encuentra cualquier incidente en segundos. Filtra por fecha, hora, puerta o residente.',
+        'easy-title': 'Los Residentes Lo Usan a Diario Sin Capacitación',
+        'easy-subtitle': 'Suficientemente simple para todos — desde los más tecnológicos hasta los adultos mayores',
+        'easy-c1-title': 'Una app para todo',
+        'easy-c1-text': 'Abrir puertas, llamar al portero, ver cámaras, manejar invitados — un toque.',
+        'easy-c2-title': 'Notificaciones de llamada instantáneas',
+        'easy-c2-text': 'Los residentes nunca se pierden una visita. Videollamada directo a su teléfono.',
+        'easy-c3-title': 'Disponible en Español',
+        'easy-c3-text': 'Interfaz completamente en español. Sin barrera de idioma para los residentes.',
+        'cost-title': 'Moderniza tu Edificio Sin Reemplazar los Sistemas Existentes',
+        'cost-subtitle': 'Empezá pequeño. Escalá a medida que crecés.',
+        'cost-f1-title': '💡 Funciona con la infraestructura existente',
+        'cost-f1-text': 'Evimiz se instala junto a o reemplaza los sistemas existentes — vos elegís.',
+        'cost-f2-title': '📅 Implementación edificio por edificio',
+        'cost-f2-text': 'Empezá con un edificio. Agregá más cuando estés listo.',
+        'cost-f3-title': '💰 $2 USD/dispositivo/mes',
+        'cost-f3-text': 'Sin gran inversión inicial. Costo mensual predecible.',
+        'cost-f4-title': '🤝 Nosotros manejamos la instalación',
+        'cost-f4-text': 'Instaladores locales certificados. Sin carga para tu equipo.',
+        'cost-f5-title': '📋 Sin interrupción para los residentes',
+        'cost-f5-text': 'Se instala sin tiempo de inactividad. Capacitación incluida. Los residentes están funcionando en minutos.',
+        'cost-time-value': '⚡ En funcionamiento en menos de 2 semanas. Sin obras. Sin tiempo de inactividad.',
+        'contact-title': '¿Listo para Simplificar tu Edificio?',
+        'contact-tagline': 'Te mostramos cómo funciona Evimiz para administradoras en Argentina.',
+        'contact-btn': 'Reservar Demo',
+        'footer-copy': '© 2025 Evimiz. Intercomunicador Inteligente para Edificios Modernos.'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+      document.documentElement.lang = lang;
+      currentLang = lang;
+    }
+
+    function toggleLang() {
+      setLanguage(currentLang === 'en' ? 'es' : 'en');
+    }
+  </script>
+</body>
+</html>
