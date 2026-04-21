@@ -307,13 +307,10 @@ h2{
   background:radial-gradient(ellipse at 50% 55%, rgba(124,111,255,0.22) 0%, transparent 65%), #080818;
 }
 
-/* Cam header gradients */
-.grad-blue{background:linear-gradient(135deg, rgba(79,195,247,0.15) 0%, rgba(124,111,255,0.1) 100%)}
-.grad-night{background:linear-gradient(135deg, rgba(20,20,60,0.8) 0%, rgba(79,195,247,0.12) 100%)}
-.grad-red{background:linear-gradient(135deg, rgba(220,60,60,0.18) 0%, rgba(124,111,255,0.1) 100%)}
-.grad-zoom{background:linear-gradient(135deg, rgba(124,111,255,0.18) 0%, rgba(79,195,247,0.12) 100%)}
-.grad-ptz{background:linear-gradient(135deg, rgba(79,195,247,0.18) 0%, rgba(124,111,255,0.12) 100%)}
-.grad-ir{background:linear-gradient(135deg, rgba(255,180,40,0.1) 0%, rgba(124,111,255,0.12) 100%)}
+/* Cam header gradients — light neutral so product PNGs look clean */
+.grad-blue,.grad-night,.grad-red,.grad-zoom,.grad-ptz,.grad-ir{
+  background:linear-gradient(160deg,#e8ecf4 0%,#f5f7fb 100%);
+}
 
 /* Section heading above grid */
 .section-head{text-align:center;margin-bottom:28px;width:100%;max-width:1040px}
@@ -362,64 +359,98 @@ h2{
     </div>
   </div>
 
-  <!-- ── SLIDE 2: THE PROBLEM ── -->
-  <div class="slide" style="position:relative;padding:0;">
-    <!-- Background: real photo of both devices -->
-    <div style="position:absolute;inset:0;
-      background-image:url('assets/evimiz-vs-old.jpg');
-      background-size:cover;background-position:center center;
-      filter:brightness(0.38) saturate(0.7);">
+  <!-- ── SLIDE 2: VS BANNER + SALES POINTS ── -->
+  <div class="slide" style="padding:0;justify-content:flex-start;overflow:hidden;">
+
+    <!-- Banner image — switches with language -->
+    <div style="position:absolute;top:0;left:0;right:0;bottom:90px;
+                background:#0d0d1a;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+      <img id="vs-banner"
+        src="assets/vs-banner-en.jpg"
+        data-img-en="assets/vs-banner-en.jpg"
+        data-img-es="assets/vs-banner-es.jpg"
+        alt="Evimiz vs Old Intercom"
+        style="max-width:100%;max-height:100%;width:auto;height:auto;display:block;">
     </div>
-    <!-- Content overlay -->
-    <div style="position:relative;z-index:1;
-      display:flex;flex-direction:column;align-items:center;
-      width:100%;padding:56px 80px 70px;">
-      <div style="text-align:center;margin-bottom:32px;">
-        <span class="tag">
-          <span class="lang-en">The Problem</span>
-          <span class="lang-es">El problema</span>
-        </span>
-        <h2>
-          <span class="lang-en">Your building deserves better <span class="grad">than this</span></span>
-          <span class="lang-es">Tu edificio merece algo mejor <span class="grad">que esto</span></span>
-        </h2>
-      </div>
-      <div class="vs-row">
-        <div class="vs-card old" style="background:rgba(0,0,0,0.55);backdrop-filter:blur(12px);">
-          <span class="vs-badge old">
-            <span class="lang-en">Old intercom</span>
-            <span class="lang-es">Portero viejo</span>
-          </span>
-          <span class="vs-icon">📟</span>
-          <h3 style="font-size:1.05rem;margin-bottom:4px;">
-            <span class="lang-en">Analog System</span>
-            <span class="lang-es">Sistema analógico</span>
-          </h3>
-          <ul class="vs-list">
-            <li><span class="lang-en">No mobile app</span><span class="lang-es">Sin aplicación móvil</span></li>
-            <li><span class="lang-en">No video history</span><span class="lang-es">Sin historial de video</span></li>
-            <li><span class="lang-en">No remote access</span><span class="lang-es">Sin acceso remoto</span></li>
-            <li><span class="lang-en">Physical keys only</span><span class="lang-es">Solo llaves físicas</span></li>
-            <li><span class="lang-en">No camera integration</span><span class="lang-es">Sin integración con cámaras</span></li>
-          </ul>
-        </div>
-        <div class="vs-divider" style="color:#fff;font-size:2rem;text-shadow:0 0 20px rgba(124,111,255,0.8);">VS</div>
-        <div class="vs-card new" style="background:rgba(124,111,255,0.18);backdrop-filter:blur(12px);">
-          <span class="vs-badge new">Evimiz Smart</span>
-          <span class="vs-icon">✨</span>
-          <h3 style="font-size:1.05rem;margin-bottom:4px;">
-            <span class="lang-en">Smart System</span>
-            <span class="lang-es">Sistema inteligente</span>
-          </h3>
-          <ul class="vs-list">
-            <li><span class="lang-en">Mobile app for residents</span><span class="lang-es">App móvil para residentes</span></li>
-            <li><span class="lang-en">Cloud video recording</span><span class="lang-es">Grabación en nube</span></li>
-            <li><span class="lang-en">Open door from anywhere</span><span class="lang-es">Abrí la puerta desde donde estés</span></li>
-            <li><span class="lang-en">NFC / BLE / PIN access</span><span class="lang-es">Acceso por NFC / BLE / PIN</span></li>
-            <li><span class="lang-en">Cameras + AI analytics</span><span class="lang-es">Cámaras + analítica con IA</span></li>
-          </ul>
+
+    <!-- Sales points bar -->
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:90px;
+      background:rgba(8,8,24,0.95);
+      backdrop-filter:blur(16px);
+      border-top:1px solid rgba(124,111,255,0.2);
+      padding:18px 60px;
+      display:flex;align-items:center;justify-content:space-around;gap:12px;">
+
+      <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center;">
+        <span style="font-size:1.5rem;">📱</span>
+        <div>
+          <div style="font-size:0.82rem;font-weight:700;color:#fff;">
+            <span class="lang-en">Mobile App</span>
+            <span class="lang-es">App móvil</span>
+          </div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);">
+            <span class="lang-en">iOS & Android</span>
+            <span class="lang-es">iOS y Android</span>
+          </div>
         </div>
       </div>
+
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.1);flex-shrink:0;"></div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center;">
+        <span style="font-size:1.5rem;">🔑</span>
+        <div>
+          <div style="font-size:0.82rem;font-weight:700;color:#fff;">NFC · BLE · PIN</div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);">
+            <span class="lang-en">Multiple access methods</span>
+            <span class="lang-es">Múltiples métodos de acceso</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.1);flex-shrink:0;"></div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center;">
+        <span style="font-size:1.5rem;">📹</span>
+        <div>
+          <div style="font-size:0.82rem;font-weight:700;color:#fff;">Full HD</div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);">
+            <span class="lang-en">Infrared night vision</span>
+            <span class="lang-es">Visión nocturna infrarroja</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.1);flex-shrink:0;"></div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center;">
+        <span style="font-size:1.5rem;">☁️</span>
+        <div>
+          <div style="font-size:0.82rem;font-weight:700;color:#fff;">
+            <span class="lang-en">Cloud Recording</span>
+            <span class="lang-es">Grabación en nube</span>
+          </div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);">
+            <span class="lang-en">24/7 archive</span>
+            <span class="lang-es">Archivo 24/7</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.1);flex-shrink:0;"></div>
+
+      <div style="display:flex;align-items:center;gap:10px;flex:1;justify-content:center;">
+        <span style="font-size:1.5rem;">🛡️</span>
+        <div>
+          <div style="font-size:0.82rem;font-weight:700;color:#fff;">IK08 · IP64</div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.45);">
+            <span class="lang-en">Vandal & weatherproof</span>
+            <span class="lang-es">Antivandalismo e intemperie</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -851,6 +882,10 @@ function setLang(lang) {
   document.body.classList.toggle('show-es', lang === 'es');
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  // Switch language-specific images
+  document.querySelectorAll('img[data-img-en]').forEach(img => {
+    img.src = lang === 'en' ? img.dataset.imgEn : img.dataset.imgEs;
+  });
 }
 
 // Auto-hide UI
