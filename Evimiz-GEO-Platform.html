@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evimiz GEO Platform — Product Overview</title>
+<style>
+  :root {
+    --accent: #7C6FFF;
+    --accent2: #4FC3F7;
+    --bg: #080818;
+    --bg2: #10102a;
+    --card: #14143a;
+    --white: #ffffff;
+    --muted: #9090b8;
+    --green: #4CAF50;
+    --gold: #FFD700;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Slide container */
+  #slides {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateX(40px);
+    padding: 60px 80px 80px;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  /* Navigation */
+  #nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+    background: rgba(20,20,58,0.8);
+    border: 1px solid rgba(124,111,255,0.3);
+    border-radius: 50px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    padding: 10px 24px;
+    backdrop-filter: blur(12px);
+  }
+
+  #nav button {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px 10px;
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+
+  #nav button:hover:not(:disabled) { color: var(--white); background: rgba(124,111,255,0.2); }
+  #nav button:disabled { opacity: 0.3; cursor: default; }
+
+  #slide-counter {
+    font-size: 13px;
+    color: var(--muted);
+    min-width: 60px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  /* Dots */
+  #dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dot.active { background: var(--accent); width: 18px; border-radius: 3px; }
+
+  /* Logo badge */
+  .logo-badge {
+    position: fixed;
+    top: 20px;
+    left: 28px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-badge .e { color: #e84040; }
+  .logo-badge .rest { color: var(--white); }
+
+  /* ── SLIDE STYLES ── */
+
+  /* Cover */
+  .slide-cover {
+    background: radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.15) 0%, transparent 50%),
+                var(--bg);
+    text-align: center;
+  }
+
+  .slide-cover .tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    border: 1px solid rgba(124,111,255,0.4);
+    padding: 6px 16px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  .slide-cover h1 {
+    font-size: 62px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 0%, #c8c0ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .slide-cover .sub {
+    font-size: 20px;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+  }
+
+  .cover-stats {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin-top: 16px;
+  }
+
+  .cover-stat {
+    text-align: center;
+  }
+
+  .cover-stat .val {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .cover-stat .lbl {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Section header reuse */
+  .slide-header {
+    margin-bottom: 36px;
+    text-align: center;
+  }
+
+  .slide-header .section-tag {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .slide-header h2 {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .slide-header p {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Two-column layout */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .two-col.right-heavy {
+    grid-template-columns: 1fr 1.6fr;
+  }
+
+  .two-col.left-heavy {
+    grid-template-columns: 1.6fr 1fr;
+  }
+
+  /* Screenshot frame */
+  .screen-frame {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(124,111,255,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(124,111,255,0.1);
+    position: relative;
+    background: #0d0d1f;
+  }
+
+  .screen-frame .bar {
+    background: #1a1a3a;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .screen-frame .bar .dot-r { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; }
+  .screen-frame .bar .dot-y { width: 10px; height: 10px; border-radius: 50%; background: #febc2e; }
+  .screen-frame .bar .dot-g { width: 10px; height: 10px; border-radius: 50%; background: #28c840; }
+  .screen-frame .bar .url {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: 8px;
+  }
+
+  .screen-frame img {
+    width: 100%;
+    display: block;
+    max-height: 420px;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  /* Feature list */
+  .feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #d0d0f0;
+  }
+
+  .feature-list li .icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(124,111,255,0.15);
+    border: 1px solid rgba(124,111,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .feature-list li strong { color: var(--white); }
+
+  /* Cards row */
+  .cards-row {
+    display: grid;
+    gap: 16px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .cards-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cards-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .cards-row.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid rgba(124,111,255,0.2);
+    border-radius: 14px;
+    padding: 22px 20px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: rgba(124,111,255,0.5); }
+
+  .card .card-icon {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .card .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--white);
+  }
+
+  .card .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .card .card-metric {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  /* Segment cards slide */
+  .segment-card {
+    background: var(--card);
+    border: 1px solid rgba(124,111,255,0.2);
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .segment-card .seg-icon { font-size: 32px; }
+  .segment-card .seg-title { font-size: 18px; font-weight: 800; }
+  .segment-card .seg-value { font-size: 26px; font-weight: 800; color: var(--accent); }
+  .segment-card .seg-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .segment-card .seg-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .segment-card .seg-list li { font-size: 13px; color: #c0c0e0; }
+  .segment-card .seg-list li::before { content: "✓  "; color: var(--accent); font-weight: 700; }
+
+  /* Screenshots grid */
+  .screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .screenshots-grid .screen-frame img {
+    max-height: 220px;
+  }
+
+  .screenshot-label {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  /* CTA slide */
+  .slide-cta {
+    background: radial-gradient(ellipse at 50% 30%, rgba(124,111,255,0.3) 0%, transparent 60%),
+                var(--bg);
+    text-align: center;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 16px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    margin-top: 32px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Accent line */
+  .accent-line {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin: 16px auto 0;
+  }
+
+  /* Step flow */
+  .steps-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 8px;
+  }
+
+  .step-box {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid rgba(124,111,255,0.2);
+    border-radius: 12px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+  }
+
+  .step-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .step-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+  .step-arrow {
+    font-size: 18px;
+    color: rgba(124,111,255,0.5);
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  /* Keyboard hint */
+  .key-hint {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    font-size: 11px;
+    color: rgba(144,144,184,0.5);
+    z-index: 100;
+  }
+
+  .key-hint kbd {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+  }
+
+  /* ─── LANG TOGGLE ─── */
+  body.show-en .lang-es { display: none; }
+  body.show-es .lang-en { display: none; }
+  .lang-toggle-bar {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    display: flex;
+    gap: 4px;
+    background: rgba(8,8,24,0.85);
+    border: 1px solid rgba(124,111,255,0.3);
+    border-radius: 24px;
+    padding: 4px;
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .lang-btn {
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: rgba(144,144,184,0.8);
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .lang-btn.active {
+    background: linear-gradient(135deg, #7C6FFF, #4FC3F7);
+    color: #fff;
+  }
+</style>
+</head>
+<body class="show-en">
+
+<div id="progress-bar"></div>
+
+<div class="logo-badge">
+  <span class="e">E</span><span class="rest">vimiz</span>
+</div>
+
+
+<div class="lang-toggle-bar">
+  <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+</div>
+<div class="key-hint"><kbd>←</kbd> <kbd>→</kbd> to navigate</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 1 — COVER
+════════════════════════════════════════════ -->
+<div id="slides">
+
+<div class="slide slide-cover active" data-index="0">
+  <div class="tag"><span class="lang-en">Product Overview · 2025</span><span class="lang-es">Descripción del Producto · 2025</span></div>
+  <h1>Evimiz GEO<br>Platform</h1>
+  <p class="sub"><span class="lang-en">The complete management platform for smart intercom infrastructure — built for everyone who installs, manages, or lives in smart buildings.</span><span class="lang-es">La plataforma completa de gestión para infraestructura de intercomunicación inteligente — diseñada para quienes instalan, administran o viven en edificios inteligentes.</span></p>
+  <div class="cover-stats">
+    <div class="cover-stat"><div class="val">1,000+</div><div class="lbl"><span class="lang-en">Buildings</span><span class="lang-es">Edificios</span></div></div>
+    <div class="cover-stat"><div class="val">5,600+</div><div class="lbl"><span class="lang-en">Keys Managed</span><span class="lang-es">Llaves Gestionadas</span></div></div>
+    <div class="cover-stat"><div class="val">64+</div><div class="lbl"><span class="lang-en">Flats per Point</span><span class="lang-es">Aptos por Punto</span></div></div>
+    <div class="cover-stat"><div class="val">$2/mo</div><div class="lbl"><span class="lang-en">per device</span><span class="lang-es">por dispositivo</span></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 2 — WHO IS IT FOR
+════════════════════════════════════════════ -->
+<div class="slide" data-index="1">
+  <div class="slide-header">
+    <div class="section-tag"><span class="lang-en">Platform</span><span class="lang-es">Plataforma</span></div>
+    <h2><span class="lang-en">One platform. Three beneficiaries.</span><span class="lang-es">Una plataforma. Tres beneficiarios.</span></h2>
+    <p><span class="lang-en">Evimiz GEO gives every stakeholder exactly what they need — from one unified cloud interface.</span><span class="lang-es">Evimiz GEO ofrece a cada actor exactamente lo que necesita — desde una interfaz unificada en la nube.</span></p>
+    <div class="accent-line"></div>
+  </div>
+  <div class="cards-row cols-3">
+    <div class="segment-card">
+      <div class="seg-icon">🏗️</div>
+      <div class="seg-title"><span class="lang-en">Developers</span><span class="lang-es">Desarrolladores</span></div>
+      <div class="seg-value">+$200K</div>
+      <div class="seg-desc"><span class="lang-en">Add smart infrastructure that increases project value and closes deals faster.</span><span class="lang-es">Agrega infraestructura inteligente que aumenta el valor del proyecto y cierra ventas más rápido.</span></div>
+      <ul class="seg-list">
+        <li><span class="lang-en">Branded resident app</span><span class="lang-es">App de residentes con su marca</span></li>
+        <li><span class="lang-en">Cloud-ready from day one</span><span class="lang-es">Lista en la nube desde el primer día</span></li>
+        <li><span class="lang-en">Attracts premium buyers</span><span class="lang-es">Atrae compradores premium</span></li>
+      </ul>
+    </div>
+    <div class="segment-card">
+      <div class="seg-icon">🔌</div>
+      <div class="seg-title"><span class="lang-en">Integrators</span><span class="lang-es">Integradores</span></div>
+      <div class="seg-value">$10K/mo</div>
+      <div class="seg-desc"><span class="lang-en">Turn every install into a monthly recurring subscription. Revenue grows automatically.</span><span class="lang-es">Convierte cada instalación en una suscripción mensual recurrente. Los ingresos crecen automáticamente.</span></div>
+      <ul class="seg-list">
+        <li><span class="lang-en">White-label platform</span><span class="lang-es">Plataforma white-label</span></li>
+        <li><span class="lang-en">Remote device management</span><span class="lang-es">Gestión remota de dispositivos</span></li>
+        <li><span class="lang-en">Automated billing</span><span class="lang-es">Facturación automatizada</span></li>
+      </ul>
+    </div>
+    <div class="segment-card">
+      <div class="seg-icon">🏢</div>
+      <div class="seg-title"><span class="lang-en">Property Managers</span><span class="lang-es">Administradores</span></div>
+      <div class="seg-value">-70%</div>
+      <div class="seg-desc"><span class="lang-en">Save 10+ hours/week. Fewer complaints. Lower operational costs by 30–50%.</span><span class="lang-es">Ahorra 10+ horas/semana. Menos reclamos. Costos operativos reducidos en un 30–50%.</span></div>
+      <ul class="seg-list">
+        <li><span class="lang-en">Remote door control</span><span class="lang-es">Control remoto de puertas</span></li>
+        <li><span class="lang-en">Resident self-service</span><span class="lang-es">Autoservicio para residentes</span></li>
+        <li><span class="lang-en">Debt-based access rules</span><span class="lang-es">Reglas de acceso por deuda</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 3 — DASHBOARD
+════════════════════════════════════════════ -->
+<div class="slide" data-index="2">
+  <div class="two-col right-heavy" style="max-width:1200px;width:100%">
+    <div>
+      <div class="section-tag" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Dashboard</div>
+      <h2 style="font-size:36px;font-weight:800;margin-bottom:16px"><span class="lang-en">Your platform at a glance</span><span class="lang-es">Todo tu sistema en un solo vistazo</span></h2>
+      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:28px"><span class="lang-en">The Dashboard gives a real-time overview of your entire intercom infrastructure — devices, installations, residents and activity — all in one place.</span><span class="lang-es">El Panel ofrece una visión en tiempo real de toda tu infraestructura — dispositivos, instalaciones, residentes y actividad — todo en un lugar.</span></p>
+      <ul class="feature-list">
+        <li><span class="icon">📱</span><div><strong><span class="lang-en">Devices</span><span class="lang-es">Dispositivos</span></strong> — <span class="lang-en">total count with online/offline status</span><span class="lang-es">total con estado online/offline</span></div></li>
+        <li><span class="icon">📍</span><div><strong><span class="lang-en">Installation Points</span><span class="lang-es">Puntos de Instalación</span></strong> — <span class="lang-en">all your managed locations</span><span class="lang-es">todas tus ubicaciones gestionadas</span></div></li>
+        <li><span class="icon">🏠</span><div><strong><span class="lang-en">Flats, Keys &amp; Codes</span><span class="lang-es">Aptos, Llaves y Códigos</span></strong> — <span class="lang-en">full statistics instantly</span><span class="lang-es">estadísticas completas al instante</span></div></li>
+        <li><span class="icon">⚡</span><div><strong><span class="lang-en">Recent Activity</span><span class="lang-es">Actividad Reciente</span></strong> — <span class="lang-en">real-time action log</span><span class="lang-es">registro de acciones en tiempo real</span></div></li>
+        <li><span class="icon">🚀</span><div><strong><span class="lang-en">Quick Actions</span><span class="lang-es">Acciones Rápidas</span></strong> — <span class="lang-en">add points, invite residents fast</span><span class="lang-es">agrega puntos, invita residentes rápidamente</span></div></li>
+      </ul>
+    </div>
+    <div class="screen-frame">
+      <div class="bar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="url">geo.evimiz.ai/geo</div>
+      </div>
+      <img src="12-english-dashboard.png" alt="Dashboard" data-img-en="12-english-dashboard.png" data-img-es="es-dashboard.png">
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 4 — INSTALLATION POINTS LIST
+════════════════════════════════════════════ -->
+<div class="slide" data-index="3">
+  <div class="two-col left-heavy" style="max-width:1200px;width:100%">
+    <div class="screen-frame">
+      <div class="bar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="url">geo.evimiz.ai/geo/infrastructure</div>
+      </div>
+      <img src="14-installation-points-tab.png" alt="Installation Points" data-img-en="14-installation-points-tab.png" data-img-es="es-installation-points.png">
+    </div>
+    <div>
+      <div class="section-tag" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Installation Points</div>
+      <h2 style="font-size:36px;font-weight:800;margin-bottom:16px"><span class="lang-en">Manage all your locations</span><span class="lang-es">Gestiona todas tus ubicaciones</span></h2>
+      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:28px"><span class="lang-en">Each building or entrance is an Installation Point. Connect devices, manage flats, residents and access — all from a single address card.</span><span class="lang-es">Cada edificio o entrada es un Punto de Instalación. Conecta dispositivos, gestiona apartamentos, residentes y accesos — todo desde una tarjeta de dirección.</span></p>
+      <ul class="feature-list">
+        <li><span class="icon">📡</span><div><strong><span class="lang-en">Available Devices</span><span class="lang-es">Dispositivos Disponibles</span></strong> — <span class="lang-en">see all hardware with online/offline status</span><span class="lang-es">ve todo el hardware con estado online/offline</span></div></li>
+        <li><span class="icon">🗺️</span><div><strong><span class="lang-en">My Installation Points</span><span class="lang-es">Mis Puntos de Instalación</span></strong> — <span class="lang-en">your linked locations with address and device count</span><span class="lang-es">tus ubicaciones vinculadas con dirección y conteo de dispositivos</span></div></li>
+        <li><span class="icon">📂</span><div><strong><span class="lang-en">Groups</span><span class="lang-es">Grupos</span></strong> — <span class="lang-en">combine multiple points for bulk management</span><span class="lang-es">combina varios puntos para gestión masiva</span></div></li>
+        <li><span class="icon">☁️</span><div><strong><span class="lang-en">Cloud Sync</span><span class="lang-es">Sincronización en la Nube</span></strong> — <span class="lang-en">devices auto-sync with the cloud</span><span class="lang-es">los dispositivos se sincronizan automáticamente</span></div></li>
+        <li><span class="icon">+</span><div><strong><span class="lang-en">Create Point</span><span class="lang-es">Crear Punto</span></strong> — <span class="lang-en">add a new address in seconds</span><span class="lang-es">agrega una nueva dirección en segundos</span></div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 5 — INSTALLATION POINT DETAIL
+════════════════════════════════════════════ -->
+<div class="slide" data-index="4">
+  <div class="slide-header" style="margin-bottom:24px">
+    <div class="section-tag"><span class="lang-en">Installation Point Detail</span><span class="lang-es">Detalle del Punto de Instalación</span></div>
+    <h2><span class="lang-en">Everything about one building</span><span class="lang-es">Todo sobre tu edificio</span></h2>
+    <p><span class="lang-en">Click any point to open its full passport — cameras, flats, keys, faces, residents and events all in one view.</span><span class="lang-es">Haz clic en cualquier punto para abrir su pasaporte completo — cámaras, apartamentos, llaves, rostros, residentes y eventos en una sola vista.</span></p>
+    <div class="accent-line"></div>
+  </div>
+  <div style="display:flex;gap:20px;width:100%;max-width:1200px;align-items:flex-start">
+    <div class="screen-frame" style="flex:1.4">
+      <div class="bar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="url">geo.evimiz.ai/geo/infrastructure/point/…</div>
+      </div>
+      <img src="15-pro-house-detail.png" alt="Point Detail" style="max-height:380px;object-fit:cover;object-position:top" data-img-en="15-pro-house-detail.png" data-img-es="es-point-detail.png">
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+      <div class="card">
+        <div class="card-icon">📹</div>
+        <div class="card-title"><span class="lang-en">Camera Streams</span><span class="lang-es">Cámaras en vivo</span></div>
+        <div class="card-desc"><span class="lang-en">Live video from intercom cameras. View feed, monitor entrance activity.</span><span class="lang-es">Video en vivo de las cámaras del intercomunicador. Monitorea la actividad de la entrada.</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <div class="card-title"><span class="lang-en">Flats (18)</span><span class="lang-es">Apartamentos (18)</span></div>
+        <div class="card-desc"><span class="lang-en">All apartments with resident count, SIP number, access control and active status.</span><span class="lang-es">Todos los apartamentos con conteo de residentes, número SIP, control de acceso y estado activo.</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔑</div>
+        <div class="card-title"><span class="lang-en">Keys (2,805)</span><span class="lang-es">Llaves (2.805)</span></div>
+        <div class="card-desc"><span class="lang-en">Physical and digital keys — bound to flats or unbound. Export and manage in bulk.</span><span class="lang-es">Llaves físicas y digitales — vinculadas o no vinculadas. Exporta y gestiona en masa.</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📍</div>
+        <div class="card-title"><span class="lang-en">Map + Device Panel</span><span class="lang-es">Mapa + Panel de Dispositivos</span></div>
+        <div class="card-desc"><span class="lang-en">Geo-location of the building with linked device serial numbers and uptime status.</span><span class="lang-es">Geolocalización del edificio con números de serie de dispositivos vinculados y estado de uptime.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 6 — RESIDENTS
+════════════════════════════════════════════ -->
+<div class="slide" data-index="5">
+  <div class="two-col right-heavy" style="max-width:1200px;width:100%">
+    <div>
+      <div class="section-tag" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Residents</div>
+      <h2 style="font-size:36px;font-weight:800;margin-bottom:16px"><span class="lang-en">Invite, manage &amp; control access</span><span class="lang-es">Invita, gestiona y controla el acceso</span></h2>
+      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:28px"><span class="lang-en">Manage every resident across all your installation points from a single screen. Invite via SMS or link, block access instantly, track status in real time.</span><span class="lang-es">Gestiona cada residente en todos tus puntos de instalación desde una sola pantalla. Invita por SMS o enlace, bloquea el acceso al instante, rastrea el estado en tiempo real.</span></p>
+      <ul class="feature-list">
+        <li><span class="icon">✉️</span><div><strong><span class="lang-en">Invite Resident</span><span class="lang-es">Invitar residente</span></strong> — <span class="lang-en">send invite by phone, email or link</span><span class="lang-es">envía invitación por teléfono, email o enlace</span></div></li>
+        <li><span class="icon">✅</span><div><strong><span class="lang-en">Active</span><span class="lang-es">Activo</span></strong> — <span class="lang-en">residents with confirmed app access</span><span class="lang-es">residentes con acceso confirmado a la app</span></div></li>
+        <li><span class="icon">⏳</span><div><strong><span class="lang-en">Pending</span><span class="lang-es">Pendiente</span></strong> — <span class="lang-en">invited but not yet onboarded</span><span class="lang-es">invitado pero no registrado aún</span></div></li>
+        <li><span class="icon">🚫</span><div><strong><span class="lang-en">Blocked</span><span class="lang-es">Bloqueado</span></strong> — <span class="lang-en">access suspended (e.g. debt-based rule)</span><span class="lang-es">acceso suspendido (por deuda u otra regla)</span></div></li>
+        <li><span class="icon">🔍</span><div><strong><span class="lang-en">Search</span><span class="lang-es">Buscar</span></strong> — <span class="lang-en">find anyone by name, phone or flat</span><span class="lang-es">encuentra a cualquiera por nombre, teléfono o apartamento</span></div></li>
+      </ul>
+    </div>
+    <div class="screen-frame">
+      <div class="bar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="url">geo.evimiz.ai/geo/residents</div>
+      </div>
+      <img src="05-residents-en.png" alt="Residents" data-img-en="05-residents-en.png" data-img-es="es-residents.png">
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 7 — MOBILE APP: BRANDING & CONTENT
+════════════════════════════════════════════ -->
+<div class="slide" data-index="6">
+  <div class="slide-header" style="margin-bottom:24px">
+    <div class="section-tag"><span class="lang-en">Mobile App · Part 1 of 2</span><span class="lang-es">App Móvil · Parte 1 de 2</span></div>
+    <h2><span class="lang-en">Your brand. Your app.</span><span class="lang-es">Tu marca. Tu app.</span></h2>
+    <p><span class="lang-en">The resident app is a white-label product. Customize branding and content — all from the web cabinet, no code required.</span><span class="lang-es">La app de residentes es un producto white-label. Personaliza la marca y el contenido — todo desde el panel web, sin código.</span></p>
+    <div class="accent-line"></div>
+  </div>
+  <div style="display:flex;gap:24px;width:100%;max-width:1100px">
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+      <div class="screen-frame">
+        <div class="bar">
+          <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+          <div class="url">Mobile App → Branding</div>
+        </div>
+        <img src="07-mobile-branding-en.png" alt="Branding" style="max-height:260px" data-img-en="07-mobile-branding-en.png" data-img-es="es-mobile-branding.png">
+      </div>
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <div class="card-title"><span class="lang-en">Branding</span><span class="lang-es">Marca</span></div>
+        <div class="card-desc"><span class="lang-en">Upload app icon, splash screen, set app name. Changes reflect live in the resident app.</span><span class="lang-es">Sube el ícono, la pantalla de inicio y el nombre de la app. Los cambios se reflejan en vivo en la app de residentes.</span></div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+      <div class="screen-frame">
+        <div class="bar">
+          <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+          <div class="url">Mobile App → Stories</div>
+        </div>
+        <img src="08-mobile-stories-en.png" alt="Stories" style="max-height:260px" data-img-en="08-mobile-stories-en.png" data-img-es="es-mobile-stories.png">
+      </div>
+      <div class="card">
+        <div class="card-icon">📖</div>
+        <div class="card-title"><span class="lang-en">Stories</span><span class="lang-es">Historias</span></div>
+        <div class="card-desc"><span class="lang-en">Publish news, announcements and promotions directly to residents' home screen.</span><span class="lang-es">Publica noticias, anuncios y promociones directamente en la pantalla de inicio de los residentes.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 8 — MOBILE APP: ENGAGEMENT & REVENUE
+════════════════════════════════════════════ -->
+<div class="slide" data-index="7">
+  <div class="slide-header" style="margin-bottom:24px">
+    <div class="section-tag"><span class="lang-en">Mobile App · Part 2 of 2</span><span class="lang-es">App Móvil · Parte 2 de 2</span></div>
+    <h2><span class="lang-en">Engage residents. Generate revenue.</span><span class="lang-es">Conecta residentes. Genera ingresos.</span></h2>
+    <p><span class="lang-en">Send targeted push notifications and sell directly inside the resident app — your new monetization channel.</span><span class="lang-es">Envía notificaciones push segmentadas y vende directamente en la app de residentes — tu nuevo canal de monetización.</span></p>
+    <div class="accent-line"></div>
+  </div>
+  <div style="display:flex;gap:24px;width:100%;max-width:1100px">
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+      <div class="screen-frame">
+        <div class="bar">
+          <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+          <div class="url">Mobile App → Push</div>
+        </div>
+        <img src="09-mobile-push-en.png" alt="Push" style="max-height:260px" data-img-en="09-mobile-push-en.png" data-img-es="es-mobile-push.png">
+      </div>
+      <div class="card">
+        <div class="card-icon">🔔</div>
+        <div class="card-title"><span class="lang-en">Push Notifications</span><span class="lang-es">Notificaciones Push</span></div>
+        <div class="card-desc"><span class="lang-en">Send targeted messages to all residents or selected groups. Full delivery log.</span><span class="lang-es">Envía mensajes segmentados a todos los residentes o grupos seleccionados. Registro completo de envíos.</span></div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px">
+      <div class="screen-frame">
+        <div class="bar">
+          <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+          <div class="url">Mobile App → Market</div>
+        </div>
+        <img src="10-mobile-market-en.png" alt="Market" style="max-height:260px" data-img-en="10-mobile-market-en.png" data-img-es="es-mobile-market.png">
+      </div>
+      <div class="card">
+        <div class="card-icon">🛒</div>
+        <div class="card-title"><span class="lang-en">Marketplace</span><span class="lang-es">Marketplace</span></div>
+        <div class="card-desc"><span class="lang-en">Sell goods and services directly to residents inside the app. Add items in one click.</span><span class="lang-es">Vende productos y servicios directamente a los residentes en la app. Agrega artículos con un clic.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 9 — CALL QUALITY
+════════════════════════════════════════════ -->
+<div class="slide" data-index="8">
+  <div class="two-col left-heavy" style="max-width:1200px;width:100%">
+    <div class="screen-frame">
+      <div class="bar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="url">geo.evimiz.ai/geo/call-quality</div>
+      </div>
+      <img src="13-call-quality.png" alt="Call Quality" data-img-en="13-call-quality.png" data-img-es="es-call-quality.png">
+    </div>
+    <div>
+      <div class="section-tag" style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Call Quality Monitor</div>
+      <h2 style="font-size:36px;font-weight:800;margin-bottom:16px"><span class="lang-en">Real-time call diagnostics</span><span class="lang-es">Diagnóstico de llamadas en tiempo real</span></h2>
+      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:28px"><span class="lang-en">Track every intercom call with full RTP telemetry. Instantly spot degraded connections before residents complain.</span><span class="lang-es">Monitorea cada llamada del intercomunicador con telemetría RTP completa. Detectá conexiones degradadas antes de que los residentes se quejen.</span></p>
+      <ul class="feature-list">
+        <li><span class="icon">📊</span><div><strong>RTP Bridge Telemetry</strong> — <span class="lang-en">per-call data in real time</span><span class="lang-es">datos por llamada en tiempo real</span></div></li>
+        <li><span class="icon">📡</span><div><strong>SIP in/out</strong> — <span class="lang-en">packet loss and jitter metrics</span><span class="lang-es">métricas de pérdida de paquetes y jitter</span></div></li>
+        <li><span class="icon">🌐</span><div><strong>WebRTC in</strong> — <span class="lang-en">browser-side call quality</span><span class="lang-es">calidad de llamada del lado del navegador</span></div></li>
+        <li><span class="icon">🔴</span><div><strong><span class="lang-en">Threshold Alerts</span><span class="lang-es">Alertas de Umbral</span></strong> — <span class="lang-en">red cells flag loss &gt;5%, jitter &gt;50ms</span><span class="lang-es">celdas rojas indican pérdida &gt;5%, jitter &gt;50ms</span></div></li>
+        <li><span class="icon">🏠</span><div><strong><span class="lang-en">Per Flat &amp; Point</span><span class="lang-es">Por apartamento y punto</span></strong> — <span class="lang-en">drill down to exact location</span><span class="lang-es">profundiza hasta la ubicación exacta</span></div></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 10 — SETUP FLOW
+════════════════════════════════════════════ -->
+<div class="slide" data-index="9">
+  <div class="slide-header" style="margin-bottom:32px">
+    <div class="section-tag">Getting Started</div>
+    <h2><span class="lang-en">Up and running in 6 steps</span><span class="lang-es">En funcionamiento en 6 pasos</span></h2>
+    <p><span class="lang-en">From zero to fully managed smart building — the platform guides you through every step.</span><span class="lang-es">De cero a edificio inteligente completamente gestionado — la plataforma te guía en cada paso.</span></p>
+    <div class="accent-line"></div>
+  </div>
+  <div class="steps-flow">
+    <div class="step-box">
+      <div class="step-num">1</div>
+      <div class="step-title"><span class="lang-en">Create Installation Point</span><span class="lang-es">Crear Punto de Instalación</span></div>
+      <div class="step-desc"><span class="lang-en">Add building address and location on the map</span><span class="lang-es">Agrega la dirección del edificio en el mapa</span></div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-box">
+      <div class="step-num">2</div>
+      <div class="step-title"><span class="lang-en">Bind Device</span><span class="lang-es">Vincular Dispositivo</span></div>
+      <div class="step-desc"><span class="lang-en">Connect intercom hardware via serial number</span><span class="lang-es">Conecta el hardware del intercomunicador por número de serie</span></div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-box">
+      <div class="step-num">3</div>
+      <div class="step-title"><span class="lang-en">Add Flats</span><span class="lang-es">Agregar Apartamentos</span></div>
+      <div class="step-desc"><span class="lang-en">Create flat registry with SIP numbers</span><span class="lang-es">Crea el registro de apartamentos con números SIP</span></div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-box">
+      <div class="step-num">4</div>
+      <div class="step-title"><span class="lang-en">Load Keys</span><span class="lang-es">Cargar Llaves</span></div>
+      <div class="step-desc"><span class="lang-en">Upload physical or digital keys in bulk</span><span class="lang-es">Sube llaves físicas o digitales de forma masiva</span></div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-box">
+      <div class="step-num">5</div>
+      <div class="step-title"><span class="lang-en">Invite Residents</span><span class="lang-es">Invitar Residentes</span></div>
+      <div class="step-desc"><span class="lang-en">Send app invites by phone or link</span><span class="lang-es">Envía invitaciones por teléfono o enlace</span></div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-box">
+      <div class="step-num">6</div>
+      <div class="step-title"><span class="lang-en">Configure App</span><span class="lang-es">Configurar la app</span></div>
+      <div class="step-desc"><span class="lang-en">Set branding, stories, notifications</span><span class="lang-es">Configura marca, historias y notificaciones</span></div>
+    </div>
+  </div>
+  <div style="margin-top:32px;display:flex;gap:48px;justify-content:center">
+    <div style="text-align:center">
+      <div style="font-size:28px;font-weight:800;color:var(--accent)">~15 min</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px"><span class="lang-en">Average setup time</span><span class="lang-es">Tiempo promedio de configuración</span></div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:28px;font-weight:800;color:var(--accent)">$2/mo</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px"><span class="lang-en">Per device</span><span class="lang-es">por mes / dispositivo</span></div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:28px;font-weight:800;color:var(--accent)">10+</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px"><span class="lang-en">Languages supported</span><span class="lang-es">Idiomas soportados</span></div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-size:28px;font-weight:800;color:var(--accent)">24/7</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px"><span class="lang-en">Cloud uptime</span><span class="lang-es">Disponibilidad en la nube</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 11 — CTA
+════════════════════════════════════════════ -->
+<div class="slide slide-cta" data-index="10">
+  <div class="tag" style="font-size:12px;font-weight:600;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:20px;border:1px solid rgba(124,111,255,0.4);padding:6px 16px;border-radius:20px;display:inline-block"><span class="lang-en">Ready to start?</span><span class="lang-es">¿Listo para empezar?</span></div>
+  <h1 style="font-size:58px;font-weight:800;line-height:1.1;margin-bottom:24px;background:linear-gradient(135deg,#fff 0%,#c8c0ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center"><span class="lang-en">Join 1,000+ buildings<br>on Evimiz GEO</span><span class="lang-es">Sumate a más de 1.000<br>edificios en Evimiz GEO</span></h1>
+  <p style="font-size:18px;color:var(--muted);max-width:520px;text-align:center;line-height:1.6;margin:0 auto"><span class="lang-en">One platform. Full control. From device binding to resident app — everything in one place, from $2/device/month.</span><span class="lang-es">Una plataforma. Control total. Desde la vinculación de dispositivos hasta la app de residentes — todo en un lugar, desde $2/dispositivo/mes.</span></p>
+  <a href="https://geo.evimiz.ai" class="cta-btn"><span class="lang-en">Open GEO Platform →</span><span class="lang-es">Entrar a la plataforma →</span></a>
+  <div style="margin-top:48px;display:flex;gap:40px;justify-content:center">
+    <div style="text-align:center">
+      <div style="font-size:13px;color:var(--muted)">Website</div>
+      <div style="font-size:15px;font-weight:600;margin-top:4px">evimiz.ai</div>
+    </div>
+    <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+    <div style="text-align:center">
+      <div style="font-size:13px;color:var(--muted)">Support</div>
+      <div style="font-size:15px;font-weight:600;margin-top:4px">support@evimiz.ai</div>
+    </div>
+    <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+    <div style="text-align:center">
+      <div style="font-size:13px;color:var(--muted)">Platform</div>
+      <div style="font-size:15px;font-weight:600;margin-top:4px">geo.evimiz.ai</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /#slides -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button id="btn-prev" onclick="go(-1)" disabled>←</button>
+  <div id="dots"></div>
+  <div id="slide-counter">1 / 11</div>
+  <button id="btn-next" onclick="go(1)">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  // Build dots
+  const dotsEl = document.getElementById('dots');
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= total) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit-left');
+    setTimeout(() => slides[current - (idx > current ? 0 : 0)].classList.remove('exit-left'), 500);
+
+    const prev = current;
+    current = idx;
+
+    slides[prev].classList.remove('active');
+    setTimeout(() => slides[prev].classList.remove('exit-left'), 500);
+    slides[prev].style.transform = idx > prev ? 'translateX(-40px)' : 'translateX(40px)';
+    slides[prev].style.opacity = '0';
+    slides[prev].style.pointerEvents = 'none';
+
+    slides[current].style.transform = idx > prev ? 'translateX(40px)' : 'translateX(-40px)';
+    slides[current].style.opacity = '0';
+    slides[current].style.pointerEvents = 'all';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        slides[current].style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+        slides[current].style.transform = 'translateX(0)';
+        slides[current].style.opacity = '1';
+      });
+    });
+
+    setTimeout(() => {
+      slides[prev].style.transition = '';
+      slides[prev].style.transform = '';
+      slides[prev].style.opacity = '';
+    }, 500);
+
+    // Update UI
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+    document.getElementById('progress-bar').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function go(dir) { goTo(current + dir); }
+
+  // ─── Language toggle ───
+  function setLang(lang) {
+    document.body.classList.toggle('show-en', lang === 'en');
+    document.body.classList.toggle('show-es', lang === 'es');
+    document.querySelectorAll('img[data-img-en]').forEach(img => {
+      img.src = lang === 'en' ? img.dataset.imgEn : img.dataset.imgEs;
+    });
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  }
+
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+    showUI();
+  });
+
+  // ─── Auto-hide nav + lang toggle ───
+  const nav = document.getElementById('nav');
+  const langBar = document.querySelector('.lang-toggle-bar');
+  let hideTimer;
+
+  function showUI() {
+    nav.style.opacity = '1';
+    langBar.style.opacity = '1';
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      nav.style.opacity = '0';
+      langBar.style.opacity = '0';
+    }, 2500);
+  }
+
+  function keepUI() {
+    nav.style.opacity = '1';
+    langBar.style.opacity = '1';
+    clearTimeout(hideTimer);
+  }
+
+  document.addEventListener('mousemove', showUI);
+  document.addEventListener('touchstart', showUI);
+  nav.addEventListener('mouseenter', keepUI);
+  nav.addEventListener('mouseleave', showUI);
+  langBar.addEventListener('mouseenter', keepUI);
+  langBar.addEventListener('mouseleave', showUI);
+
+  // Show briefly on load
+  showUI();
+
+  // Init progress bar
+  document.getElementById('progress-bar').style.width = (1 / total * 100) + '%';
+</script>
+</body>
+</html>
