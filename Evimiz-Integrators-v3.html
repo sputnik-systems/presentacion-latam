@@ -1433,45 +1433,33 @@
       setLanguage(currentLang === 'en' ? 'es' : 'en');
     }
 
-    const sections = ['hero','problem','model','ltv','compare','noheadaches','whitelabel','upsell','install','bundle','contact'];
-    let currentSection = 0;
+    // Slide nav — integrates with existing sections[] and goTo()
+    const sectionIds = sections.map(s => s.id);
 
-    function initSlideNav() {
-      const dotsEl = document.getElementById('slideDots');
-      sections.forEach((id, i) => {
-        const dot = document.createElement('span');
-        dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
-        dot.addEventListener('click', () => scrollToSection(i));
-        dotsEl.appendChild(dot);
-      });
-      document.getElementById('prevBtn').addEventListener('click', () => scrollToSection(currentSection - 1));
-      document.getElementById('nextBtn').addEventListener('click', () => scrollToSection(currentSection + 1));
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) updateNav(sections.indexOf(entry.target.id));
-        });
-      }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
-      sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
-      document.addEventListener('keydown', e => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') scrollToSection(currentSection + 1);
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') scrollToSection(currentSection - 1);
-      });
-    }
-
-    function scrollToSection(idx) {
-      if (idx < 0 || idx >= sections.length) return;
-      const el = document.getElementById(sections[idx]);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function updateNav(idx) {
-      if (idx < 0) return;
-      currentSection = idx;
+    function updateSlideNav(idx) {
       document.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
       document.getElementById('slideCounter').textContent = (idx + 1) + ' / ' + sections.length;
       document.querySelectorAll('.nav-links a').forEach(a => {
-        a.classList.toggle('nav-active', a.getAttribute('href') === '#' + sections[idx]);
+        a.classList.toggle('nav-active', a.getAttribute('href') === '#' + sectionIds[idx]);
       });
+    }
+
+    function initSlideNav() {
+      const dotsEl = document.getElementById('slideDots');
+      sections.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(dot);
+      });
+      document.getElementById('prevBtn').addEventListener('click', () => goTo(currentIndex - 1));
+      document.getElementById('nextBtn').addEventListener('click', () => goTo(currentIndex + 1));
+      const navObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { currentIndex = sectionIds.indexOf(entry.target.id); updateSlideNav(currentIndex); }
+        });
+      }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+      sections.forEach(el => navObs.observe(el));
     }
 
     document.addEventListener('DOMContentLoaded', () => { setLanguage('en'); initSlideNav(); });
