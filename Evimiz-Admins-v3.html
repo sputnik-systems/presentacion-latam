@@ -720,6 +720,8 @@
     }
     .slide-dot.active { background: var(--accent); width: 20px; border-radius: 4px; }
     .slide-nav-counter { color: var(--text-muted); font-size: 0.82rem; min-width: 38px; text-align: center; }
+    .slide-nav { transition: opacity 0.4s ease; }
+    .slide-nav.hidden { opacity: 0; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -1411,7 +1413,18 @@
       sections.forEach(el => navObs.observe(el));
     }
 
-    document.addEventListener('DOMContentLoaded', () => { setLanguage('en'); initSlideNav(); });
+    let hideNavTimer;
+    function showNav() {
+      const el = document.querySelector('.slide-nav');
+      if (el) el.classList.remove('hidden');
+      clearTimeout(hideNavTimer);
+      hideNavTimer = setTimeout(() => { const el2 = document.querySelector('.slide-nav'); if (el2) el2.classList.add('hidden'); }, 2500);
+    }
+    document.addEventListener('mousemove', showNav);
+    document.addEventListener('keydown', showNav);
+    document.addEventListener('scroll', showNav, { passive: true });
+
+    document.addEventListener('DOMContentLoaded', () => { setLanguage('en'); initSlideNav(); showNav(); });
   </script>
 
   <div class="slide-nav">
