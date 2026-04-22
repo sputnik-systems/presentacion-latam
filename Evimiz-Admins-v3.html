@@ -49,7 +49,8 @@
     }
     .section {
       padding: 30px 0 90px;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -105,12 +106,17 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
     }
+    .cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
     .cards-col .card {
-      padding: 20px 24px;
+      padding: 16px 20px;
     }
     .cards-col .card-icon {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
     }
     .grid-with-image {
       display: grid;
@@ -778,12 +784,12 @@
         <p class="section-subtitle" data-i18n="problem-subtitle">Every day brings the same frustrations — lost keys, angry residents, and emergency site visits.</p>
         <div class="mascot-layout">
           <div class="cards-col">
-            <div class="card" style="margin-bottom: 16px;">
+            <div class="card">
               <div class="card-icon">🔑</div>
               <h3 data-i18n="problem-c1-title">Lost keys, forgotten codes</h3>
               <p data-i18n="problem-c1-text">Residents lose keys. Codes get shared. You spend hours on access issues.</p>
             </div>
-            <div class="card" style="margin-bottom: 16px;">
+            <div class="card">
               <div class="card-icon">📢</div>
               <h3 data-i18n="problem-c2-title">Constant resident complaints</h3>
               <p data-i18n="problem-c2-text">No visibility into who entered, when, or why. No data to resolve disputes.</p>

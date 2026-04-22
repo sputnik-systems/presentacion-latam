@@ -49,7 +49,8 @@
     }
     .section {
       padding: 30px 0 90px;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -105,12 +106,17 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 16px;
     }
+    .cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
     .cards-col .card {
-      padding: 20px 24px;
+      padding: 16px 20px;
     }
     .cards-col .card-icon {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
     }
     .grid-with-image {
       display: grid;
@@ -782,18 +788,18 @@
         <h2 class="section-title" data-i18n="problem-title">Buyers Expect Smart Buildings</h2>
         <p class="section-subtitle" data-i18n="problem-subtitle">Buyers today compare, negotiate, and walk away if you can't offer smart living</p>
         <div class="mascot-layout">
-          <div class="cards-col">
-            <div class="card" style="margin-bottom: 16px;">
+          <div class="grid-2x2" style="gap: 12px;">
+            <div class="card">
               <div class="card-icon">🏚️</div>
               <h3 data-i18n="problem-c1-title">Outdated systems cost you sales</h3>
               <p data-i18n="problem-c1-text">Buyers compare your project to modern competitors. A traditional intercom signals old technology.</p>
             </div>
-            <div class="card" style="margin-bottom: 16px;">
+            <div class="card">
               <div class="card-icon">💸</div>
               <h3 data-i18n="problem-c2-title">Price concessions to close deals</h3>
               <p data-i18n="problem-c2-text">Without smart access, you negotiate on price instead of value.</p>
             </div>
-            <div class="card" style="margin-bottom: 16px;">
+            <div class="card">
               <div class="card-icon">📱</div>
               <h3 data-i18n="problem-c3-title">No mobile experience</h3>
               <p data-i18n="problem-c3-text">Modern buyers expect to open doors, invite guests, and manage access from their phone.</p>
