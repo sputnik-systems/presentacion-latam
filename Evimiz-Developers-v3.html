@@ -279,9 +279,8 @@
       text-decoration: none;
       transition: color 0.2s ease;
     }
-    .nav-links a:hover {
-      color: var(--text);
-    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.nav-active { color: var(--accent); font-weight: 600; }
     .nav-toggle {
       display: none;
       background: none;
@@ -702,6 +701,29 @@
       .nav-links.active { display: flex; }
       .nav-toggle { display: block; }
     }
+
+    /* ===== BOTTOM SLIDE NAV ===== */
+    .slide-nav {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(13,13,34,0.88); backdrop-filter: blur(14px);
+      border: 1px solid rgba(124,111,255,0.25); border-radius: 50px;
+      padding: 10px 22px; z-index: 999; user-select: none;
+    }
+    .slide-nav-btn {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.1rem; cursor: pointer; padding: 4px 10px;
+      border-radius: 6px; transition: color 0.2s, background 0.2s;
+    }
+    .slide-nav-btn:hover { color: var(--text); background: rgba(124,111,255,0.15); }
+    .slide-nav-dots { display: flex; gap: 6px; align-items: center; }
+    .slide-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.22); cursor: pointer;
+      transition: background 0.25s, width 0.25s, border-radius 0.25s; flex-shrink: 0;
+    }
+    .slide-dot.active { background: var(--accent); width: 20px; border-radius: 4px; }
+    .slide-nav-counter { color: var(--text-muted); font-size: 0.82rem; min-width: 38px; text-align: center; }
   </style>
 </head>
 <body>
@@ -1337,7 +1359,55 @@
       setLanguage(currentLang === 'en' ? 'es' : 'en');
     }
 
-    document.addEventListener('DOMContentLoaded', () => setLanguage('en'));
+    const sections = ['hero','problem','value','roi','scaling','compare','whitelabel','deploy','proof','monetize','contact'];
+    let currentSection = 0;
+
+    function initSlideNav() {
+      const dotsEl = document.getElementById('slideDots');
+      sections.forEach((id, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => scrollToSection(i));
+        dotsEl.appendChild(dot);
+      });
+      document.getElementById('prevBtn').addEventListener('click', () => scrollToSection(currentSection - 1));
+      document.getElementById('nextBtn').addEventListener('click', () => scrollToSection(currentSection + 1));
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) updateNav(sections.indexOf(entry.target.id));
+        });
+      }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+      sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') scrollToSection(currentSection + 1);
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') scrollToSection(currentSection - 1);
+      });
+    }
+
+    function scrollToSection(idx) {
+      if (idx < 0 || idx >= sections.length) return;
+      const el = document.getElementById(sections[idx]);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateNav(idx) {
+      if (idx < 0) return;
+      currentSection = idx;
+      document.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+      document.getElementById('slideCounter').textContent = (idx + 1) + ' / ' + sections.length;
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('nav-active', a.getAttribute('href') === '#' + sections[idx]);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { setLanguage('en'); initSlideNav(); });
   </script>
+
+  <div class="slide-nav">
+    <button class="slide-nav-btn" id="prevBtn">←</button>
+    <div class="slide-nav-dots" id="slideDots"></div>
+    <span class="slide-nav-counter" id="slideCounter">1 / 11</span>
+    <button class="slide-nav-btn" id="nextBtn">→</button>
+  </div>
 </body>
 </html>
