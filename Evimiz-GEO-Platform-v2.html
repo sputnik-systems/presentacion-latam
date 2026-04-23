@@ -371,6 +371,19 @@
   }
   .qr-wrap img { display: block; border-radius: 4px; }
 
+  /* ── App Store note ── */
+  .s-note {
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: rgba(77,163,255,0.06);
+    border: 1px solid rgba(77,163,255,0.2);
+    border-radius: 50px;
+    padding: 5px 18px;
+    display: inline-block;
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+
   /* ── Utilities ── */
   .highlight { color: #4da3ff; text-shadow: 0 0 20px rgba(77,163,255,0.4); }
   .micro { margin-top: 20px; font-size: 14px; opacity: 0.4; }
@@ -583,24 +596,7 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"><div class="screen">
-        <div class="phone-header"><span>9:41</span><div class="phone-notch"></div><span>●●</span></div>
-        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
-        <div style="font-size:11px;opacity:0.4;text-align:left;margin-bottom:12px;">Good morning, Carlos</div>
-        <div style="background:linear-gradient(135deg,#4da3ff,#7C6FFF);border-radius:14px;padding:14px;margin-bottom:10px;text-align:left;">
-          <div style="font-size:9px;opacity:0.75;letter-spacing:0.08em;text-transform:uppercase;">Front Entrance</div>
-          <div style="font-size:16px;font-weight:700;margin-top:4px;">🔓 Open Door</div>
-        </div>
-        <div class="app-grid">
-          <div class="app-card"><div class="icon camera"></div>Cameras</div>
-          <div class="app-card"><div class="icon guest"></div>Guests</div>
-        </div>
-        <div class="activity" style="margin-top:12px;">
-          <div style="font-size:10px;opacity:0.35;margin-bottom:5px;text-align:left;">Recent</div>
-          <div class="activity-item">🟢 Door opened · 2m ago</div>
-          <div class="activity-item">👤 Guest invited · 1h ago</div>
-        </div>
-      </div></div>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
       <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
@@ -669,6 +665,7 @@ en: [
       { text: "geo.evimiz.ai", cls: "blue" },
       { text: "support@evimiz.ai", cls: "purple" }
     ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
     qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
   }
 ],
@@ -814,6 +811,7 @@ es: [
       { text: "geo.evimiz.ai", cls: "blue" },
       { text: "support@evimiz.ai", cls: "purple" }
     ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
     qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
   }
 ]
@@ -873,24 +871,7 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"><div class="screen">
-        <div class="phone-header"><span>9:41</span><div class="phone-notch"></div><span>●●</span></div>
-        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
-        <div style="font-size:11px;opacity:0.4;text-align:left;margin-bottom:12px;">Good morning, Carlos</div>
-        <div style="background:linear-gradient(135deg,#4da3ff,#7C6FFF);border-radius:14px;padding:14px;margin-bottom:10px;text-align:left;">
-          <div style="font-size:9px;opacity:0.75;letter-spacing:0.08em;text-transform:uppercase;">Front Entrance</div>
-          <div style="font-size:16px;font-weight:700;margin-top:4px;">🔓 Open Door</div>
-        </div>
-        <div class="app-grid">
-          <div class="app-card"><div class="icon camera"></div>Cameras</div>
-          <div class="app-card"><div class="icon guest"></div>Guests</div>
-        </div>
-        <div class="activity" style="margin-top:12px;">
-          <div style="font-size:10px;opacity:0.35;margin-bottom:5px;text-align:left;">Recent</div>
-          <div class="activity-item">🟢 Door opened · 2m ago</div>
-          <div class="activity-item">👤 Guest invited · 1h ago</div>
-        </div>
-      </div></div>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
       <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
@@ -970,6 +951,7 @@ en: [
       { text: "geo.evimiz.ai", cls: "blue" },
       { text: "support@evimiz.ai", cls: "purple" }
     ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
     qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
   }
 ],
@@ -1120,6 +1102,7 @@ es: [
       { text: "geo.evimiz.ai", cls: "blue" },
       { text: "support@evimiz.ai", cls: "purple" }
     ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
     qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
   }
 ]
@@ -1174,24 +1157,7 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"><div class="screen">
-        <div class="phone-header"><span>9:41</span><div class="phone-notch"></div><span>●●</span></div>
-        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
-        <div style="font-size:11px;opacity:0.4;text-align:left;margin-bottom:12px;">Good morning, Carlos</div>
-        <div style="background:linear-gradient(135deg,#4da3ff,#7C6FFF);border-radius:14px;padding:14px;margin-bottom:10px;text-align:left;">
-          <div style="font-size:9px;opacity:0.75;letter-spacing:0.08em;text-transform:uppercase;">Front Entrance</div>
-          <div style="font-size:16px;font-weight:700;margin-top:4px;">🔓 Open Door</div>
-        </div>
-        <div class="app-grid">
-          <div class="app-card"><div class="icon camera"></div>Cameras</div>
-          <div class="app-card"><div class="icon guest"></div>Guests</div>
-        </div>
-        <div class="activity" style="margin-top:12px;">
-          <div style="font-size:10px;opacity:0.35;margin-bottom:5px;text-align:left;">Recent</div>
-          <div class="activity-item">🟢 Door opened · 2m ago</div>
-          <div class="activity-item">👤 Guest invited · 1h ago</div>
-        </div>
-      </div></div>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
       <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
@@ -1270,6 +1236,7 @@ en: [
       { text: "geo.evimiz.ai", cls: "blue" },
       { text: "support@evimiz.ai", cls: "purple" }
     ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
     qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
   }
 ],
@@ -1414,6 +1381,7 @@ es: [
       { text: "geo.evimiz.ai", cls: "blue" },
       { text: "support@evimiz.ai", cls: "purple" }
     ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
     qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
   }
 ]
@@ -1436,6 +1404,7 @@ function buildSlideHTML(s) {
   if (!s.simple && s.tag) top += `<div class="s-tag">${s.tag}</div>`;
   if (s.title) top += `<h1 class="s-h1">${s.title}</h1>`;
   if (s.body)  top += `<p class="s-body">${s.body}</p>`;
+  if (s.note)  top += `<div class="s-note">${s.note}</div>`;
 
   if (s.stats) {
     panel += `<div class="s-stats">` +
