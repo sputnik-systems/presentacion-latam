@@ -24,7 +24,7 @@
 
   body {
     font-family: var(--font);
-    background: var(--bg);
+    background: radial-gradient(circle at top, #111827, #020617);
     color: var(--text);
     height: 100vh;
     overflow: hidden;
@@ -99,29 +99,41 @@
     flex: 1;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .slide {
     position: absolute;
-    inset: 0;
+    top: 0; bottom: 0;
+    left: 50%; transform: translateX(-50%);
+    width: 100%;
+    max-width: 900px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 56px 80px;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.45s ease, transform 0.45s ease;
-    transform: translateX(40px);
+    transition: opacity 0.4s ease;
   }
   .slide.active {
     opacity: 1;
     pointer-events: all;
-    transform: translateX(0);
+    animation: fade 0.4s ease;
+    transform: translateX(-50%);
   }
   .slide.exit {
     opacity: 0;
-    transform: translateX(-40px);
     pointer-events: none;
+    transform: translateX(-50%);
   }
 
   /* ── Slide content ── */
@@ -137,16 +149,15 @@
     padding: 5px 16px;
     border-radius: 50px;
     margin-bottom: 22px;
-    align-self: flex-start;
   }
 
   .s-h1 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    line-height: 1.15;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.2;
     letter-spacing: -0.02em;
     margin-bottom: 20px;
-    max-width: 680px;
+    max-width: 700px;
   }
   .s-h1 .hl {
     background: linear-gradient(90deg, var(--accent2), var(--accent));
@@ -156,10 +167,10 @@
   }
 
   .s-body {
-    font-size: clamp(1rem, 1.8vw, 1.2rem);
-    color: var(--muted);
+    font-size: 20px;
+    opacity: 0.7;
     line-height: 1.65;
-    max-width: 580px;
+    max-width: 600px;
     margin-bottom: 32px;
   }
 
@@ -258,6 +269,38 @@
     opacity: 0.5;
   }
   .dot.active { background: var(--accent); width: 18px; border-radius: 3px; opacity: 1; }
+
+  /* ── New utility classes ── */
+  .highlight { color: #4da3ff; }
+
+  .flow {
+    display: flex;
+    gap: 16px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .flow div {
+    background: #1f2937;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+
+  .phone {
+    width: 220px;
+    height: 440px;
+    border-radius: 32px;
+    background: linear-gradient(145deg, #1f2937, #0f172a);
+    box-shadow: 0 0 40px rgba(77,163,255,0.25);
+    margin-top: 30px;
+  }
+
+  /* Cards centered */
+  .s-cards { justify-content: center; }
+  .s-card  { text-align: left; }
+  .s-stats { justify-content: center; }
+  .s-pills { justify-content: center; }
 </style>
 </head>
 <body>
@@ -1113,32 +1156,14 @@ function renderSlides() {
 
 function goTo(idx) {
   if (idx < 0 || idx >= slides.length) return;
-  const dir = idx > current ? 1 : -1;
 
   slides[current].classList.remove('active');
   slides[current].classList.add('exit');
-  setTimeout(() => slides[current] && slides[current].classList.remove('exit'), 500);
-
   const prev = current;
+  setTimeout(() => slides[prev] && slides[prev].classList.remove('exit'), 450);
+
   current = idx;
-
-  slides[current].style.transform = `translateX(${dir * 40}px)`;
-  slides[current].style.opacity = '0';
-
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    slides[current].style.transition = 'opacity 0.45s ease, transform 0.45s ease';
-    slides[current].style.transform = 'translateX(0)';
-    slides[current].style.opacity   = '1';
-    slides[current].classList.add('active');
-  }));
-
-  setTimeout(() => {
-    if (slides[prev]) {
-      slides[prev].style.transition = '';
-      slides[prev].style.transform  = '';
-      slides[prev].style.opacity    = '';
-    }
-  }, 500);
+  slides[current].classList.add('active');
 
   updateUI();
 }
