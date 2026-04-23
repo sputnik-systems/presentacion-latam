@@ -541,6 +541,43 @@
     background: linear-gradient(135deg, #7C6FFF, #4FC3F7);
     color: #fff;
   }
+
+  /* ─── BRIDGE HARDWARE SLIDE ─── */
+  .slide-bridge2 { text-align: center; }
+  .bridge2-badge {
+    display: inline-block;
+    background: rgba(124,111,255,0.13); border: 1px solid rgba(124,111,255,0.38);
+    color: var(--accent); font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 5px 18px; border-radius: 50px; margin-bottom: 20px;
+  }
+  .bridge2-title {
+    font-size: 1.75rem; font-weight: 800; line-height: 1.25;
+    max-width: 640px; margin: 0 auto 32px;
+  }
+  .bridge2-title .hl {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .bridge2-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    width: 100%; max-width: 820px; margin: 0 auto 28px;
+  }
+  .bridge2-card {
+    background: var(--card); border: 1px solid rgba(124,111,255,0.2);
+    border-radius: 16px; padding: 24px 18px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    transition: border-color 0.25s;
+  }
+  .bridge2-card:hover { border-color: rgba(79,195,247,0.45); }
+  .bridge2-card-icon { font-size: 1.8rem; }
+  .bridge2-card-name { font-size: 0.95rem; font-weight: 700; }
+  .bridge2-card-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+  .bridge2-card-tag {
+    font-size: 0.72rem; color: var(--accent2); font-weight: 600;
+    background: rgba(79,195,247,0.1); border-radius: 50px; padding: 3px 12px;
+  }
+  .bridge2-cta { font-size: 0.9rem; color: var(--muted); font-style: italic; }
 </style>
 </head>
 <body class="show-en">
@@ -925,9 +962,41 @@
 </div>
 
 <!-- ════════════════════════════════════════════
-     SLIDE 11 — CTA
+     SLIDE 11 — HARDWARE BRIDGE
 ════════════════════════════════════════════ -->
-<div class="slide slide-cta" data-index="10">
+<div class="slide slide-bridge2" data-index="10">
+  <div class="bridge2-badge"><span class="lang-en">Ready to Deploy</span><span class="lang-es">Listo para Instalar</span></div>
+  <h2 class="bridge2-title">
+    <span class="lang-en">This platform is designed to work with <span class="hl">simple hardware</span>, ready for real buildings.</span>
+    <span class="lang-es">Esta plataforma está diseñada para funcionar con <span class="hl">hardware simple</span>, listo para edificios reales.</span>
+  </h2>
+  <div class="bridge2-cards">
+    <div class="bridge2-card">
+      <div class="bridge2-card-icon">🔌</div>
+      <div class="bridge2-card-name"><span class="lang-en">Simple to install</span><span class="lang-es">Fácil de instalar</span></div>
+      <div class="bridge2-card-desc"><span class="lang-en">Works with existing wiring. No demolition. No delays.</span><span class="lang-es">Funciona con el cableado existente. Sin obra. Sin demoras.</span></div>
+      <div class="bridge2-card-tag"><span class="lang-en">1–2 days per building</span><span class="lang-es">1–2 días por edificio</span></div>
+    </div>
+    <div class="bridge2-card">
+      <div class="bridge2-card-icon">📟</div>
+      <div class="bridge2-card-name"><span class="lang-en">Real devices</span><span class="lang-es">Dispositivos reales</span></div>
+      <div class="bridge2-card-desc"><span class="lang-en">Smart intercom, HD cameras, NFC keys — all pre-configured.</span><span class="lang-es">Portero inteligente, cámaras HD, llaves NFC — todo listo para usar.</span></div>
+      <div class="bridge2-card-tag"><span class="lang-en">Ships ready to connect</span><span class="lang-es">Llega listo para conectar</span></div>
+    </div>
+    <div class="bridge2-card">
+      <div class="bridge2-card-icon">✅</div>
+      <div class="bridge2-card-name"><span class="lang-en">Ready day one</span><span class="lang-es">Listo desde el día uno</span></div>
+      <div class="bridge2-card-desc"><span class="lang-en">Activated from the platform. Residents start using it immediately.</span><span class="lang-es">Se activa desde la plataforma. Los residentes lo usan de inmediato.</span></div>
+      <div class="bridge2-card-tag"><span class="lang-en">Zero downtime</span><span class="lang-es">Sin tiempo de inactividad</span></div>
+    </div>
+  </div>
+  <div class="bridge2-cta"><span class="lang-en">Next step is to see how this works in your building.</span><span class="lang-es">El siguiente paso es ver cómo funciona en un edificio real.</span></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 12 — CTA
+════════════════════════════════════════════ -->
+<div class="slide slide-cta" data-index="11">
   <div class="tag" style="font-size:12px;font-weight:600;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:20px;border:1px solid rgba(124,111,255,0.4);padding:6px 16px;border-radius:20px;display:inline-block"><span class="lang-en">Ready to start?</span><span class="lang-es">¿Listo para empezar?</span></div>
   <h1 style="font-size:58px;font-weight:800;line-height:1.1;margin-bottom:24px;background:linear-gradient(135deg,#fff 0%,#c8c0ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center"><span class="lang-en">Join 1,000+ buildings<br>on Evimiz GEO</span><span class="lang-es">Sumate a más de 1.000<br>edificios en Evimiz GEO</span></h1>
   <p style="font-size:18px;color:var(--muted);max-width:520px;text-align:center;line-height:1.6;margin:0 auto"><span class="lang-en">One platform. Full control. From device binding to resident app — everything in one place, from $2/device/month.</span><span class="lang-es">Una plataforma. Control total. Desde la vinculación de dispositivos hasta la app de residentes — todo en un lugar, desde $2/dispositivo/mes.</span></p>
@@ -956,7 +1025,7 @@
 <div id="nav">
   <button id="btn-prev" onclick="go(-1)" disabled>←</button>
   <div id="dots"></div>
-  <div id="slide-counter">1 / 11</div>
+  <div id="slide-counter">1 / 12</div>
   <button id="btn-next" onclick="go(1)">→</button>
 </div>
 
