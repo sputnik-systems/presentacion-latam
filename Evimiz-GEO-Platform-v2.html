@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evimiz GEO Platform v2</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:      #0b0f14;
+    --surface: #11161d;
+    --card:    #161d27;
+    --border:  rgba(77,163,255,0.15);
+    --accent:  #4da3ff;
+    --accent2: #7C6FFF;
+    --green:   #3ecf8e;
+    --text:    #f1f5f9;
+    --muted:   #7a8a9e;
+    --font:    -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 16px;
+  }
+
+  .logo {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .logo span { color: #e84040; }
+
+  .controls { display: flex; gap: 10px; align-items: center; }
+
+  select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  select:hover { border-color: var(--accent); }
+  select:focus { border-color: var(--accent); }
+
+  .progress-wrap {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 200px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .slide-counter {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  /* ── Slides ── */
+  #slides-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 56px 80px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    transform: translateX(40px);
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: translateX(-40px);
+    pointer-events: none;
+  }
+
+  /* ── Slide content ── */
+  .s-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(77,163,255,0.35);
+    background: rgba(77,163,255,0.08);
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 22px;
+    align-self: flex-start;
+  }
+
+  .s-h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    max-width: 680px;
+  }
+  .s-h1 .hl {
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s-body {
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 580px;
+    margin-bottom: 32px;
+  }
+
+  /* Cards */
+  .s-cards {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .s-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    min-width: 160px;
+    flex: 1;
+  }
+  .s-card-icon { font-size: 1.4rem; margin-bottom: 8px; }
+  .s-card-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+  .s-card-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+  /* Stat row */
+  .s-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .s-stat-val {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .s-stat-lbl { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  /* Tag row */
+  .s-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .s-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+  .s-pill.blue   { color: var(--accent);  border-color: rgba(77,163,255,0.4);  background: rgba(77,163,255,0.08); }
+  .s-pill.purple { color: var(--accent2); border-color: rgba(124,111,255,0.4); background: rgba(124,111,255,0.08); }
+  .s-pill.green  { color: var(--green);   border-color: rgba(62,207,142,0.4);  background: rgba(62,207,142,0.08); }
+
+  /* Cover gradient bg */
+  .slide-cover {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(77,163,255,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%, rgba(124,111,255,0.12) 0%, transparent 55%),
+      var(--bg);
+  }
+
+  /* ── Bottombar ── */
+  .bottombar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: var(--font);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .dots { display: flex; gap: 6px; align-items: center; }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0.5;
+  }
+  .dot.active { background: var(--accent); width: 18px; border-radius: 3px; opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo"><span>E</span>vimiz GEO</div>
+  <div class="controls">
+    <select id="segment">
+      <option value="dev">🏗 Developer</option>
+      <option value="mgmt">🏢 Management</option>
+      <option value="int">🔧 Integrator</option>
+    </select>
+    <select id="lang">
+      <option value="en">EN</option>
+      <option value="es">ES</option>
+    </select>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="slide-counter" id="slide-counter">1 / 12</div>
+  </div>
+</div>
+
+<!-- SLIDES -->
+<div id="slides-viewport"></div>
+
+<!-- BOTTOMBAR -->
+<div class="bottombar">
+  <button class="nav-btn" id="btn-prev" onclick="go(-1)" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="btn-next" onclick="go(1)">→</button>
+</div>
+
+<script>
+const content = {
+
+/* ══════════════════════════════════
+   DEVELOPERS
+══════════════════════════════════ */
+dev: {
+en: [
+  {
+    tag: "GEO Platform · Developers",
+    title: "Increase property value through <span class='hl'>digital infrastructure</span>",
+    body: "The complete management platform for smart intercom infrastructure — built for developers who want to close deals faster and build lasting value.",
+    stats: [
+      { val: "1,000+", lbl: "Buildings live" },
+      { val: "15–30%", lbl: "Value increase" },
+      { val: "$2/mo",  lbl: "per device" }
+    ]
+  },
+  {
+    tag: "The Market",
+    title: "Buyers expect <span class='hl'>more than concrete</span>",
+    body: "Smart home features now rank among the top 3 purchase decision factors in LatAm urban real estate. Digital infrastructure has become a baseline expectation — not a bonus.",
+    pills: [
+      { text: "App-controlled access", cls: "blue" },
+      { text: "HD video doorbell", cls: "blue" },
+      { text: "NFC keys", cls: "purple" },
+      { text: "Guest management", cls: "green" }
+    ]
+  },
+  {
+    tag: "The Problem",
+    title: "Traditional projects <span class='hl'>don't stand out</span>",
+    body: "Without a digital layer, your building competes only on price and location. Buyers have no reason to pay a premium — and salespeople have no compelling story to tell.",
+    cards: [
+      { icon: "📉", name: "Slower sales", desc: "No differentiator to justify premium pricing" },
+      { icon: "🏚", name: "No stickiness", desc: "Residents leave — nothing ties them to your brand" },
+      { icon: "💸", name: "Revenue ends", desc: "Income stops the moment keys are handed over" }
+    ]
+  },
+  {
+    tag: "The Solution",
+    title: "A <span class='hl'>digital layer</span> that adds real value",
+    body: "Evimiz GEO turns your building into a connected platform. Smart access, resident app, cloud management — delivered as a service, activated in days.",
+    pills: [
+      { text: "15–30% value uplift", cls: "green" },
+      { text: "Ready in days", cls: "blue" },
+      { text: "Zero dev required", cls: "purple" }
+    ]
+  },
+  {
+    tag: "One Ecosystem",
+    title: "Hardware + Platform + <span class='hl'>App — unified</span>",
+    body: "One system covering everything: device binding, cloud management, and a branded resident app. No integrations to build. No vendors to coordinate.",
+    cards: [
+      { icon: "🔌", name: "Hardware", desc: "Smart intercom, HD cameras, NFC keys" },
+      { icon: "☁️", name: "Platform", desc: "GEO cloud — manage everything in one place" },
+      { icon: "📱", name: "App", desc: "White-label resident app with your brand" }
+    ]
+  },
+  {
+    tag: "Branded App",
+    title: "Your brand, <span class='hl'>in every resident's pocket</span>",
+    body: "Launch a fully branded mobile app — your logo, your colors, your identity. Residents use it every day: access control, guest keys, building notifications.",
+    pills: [
+      { text: "iOS + Android", cls: "blue" },
+      { text: "White-label", cls: "purple" },
+      { text: "10+ languages", cls: "green" }
+    ]
+  },
+  {
+    tag: "Experience",
+    title: "No keys. No calls. <span class='hl'>No friction.</span>",
+    body: "Residents open doors, call entrances, and manage guest access — all from their phone. Maintenance requests, parcel notifications, building announcements: all in one place.",
+    stats: [
+      { val: "Daily", lbl: "App engagement" },
+      { val: "< 1s",  lbl: "Door open time" },
+      { val: "24/7",  lbl: "Remote access" }
+    ]
+  },
+  {
+    tag: "Business Model",
+    title: "Free drives adoption. <span class='hl'>Premium drives revenue.</span>",
+    body: "Core features are free for residents — driving daily engagement. Premium unlocks smart home, parking, concierge, and more. You earn a share of every subscription.",
+    cards: [
+      { icon: "🆓", name: "Core — Free", desc: "Access control, video, guest keys, notifications" },
+      { icon: "⭐", name: "Premium — Paid", desc: "Smart home, parking, concierge, storage" },
+      { icon: "💰", name: "You earn", desc: "Revenue share on every premium subscription" }
+    ]
+  },
+  {
+    tag: "Revenue After Handover",
+    title: "Buildings that <span class='hl'>keep earning</span>",
+    body: "Recurring subscription income from every unit, every month — long after the keys are handed over. The platform runs itself; you collect the margin.",
+    stats: [
+      { val: "$2/mo", lbl: "Base per device" },
+      { val: "∞",     lbl: "Monthly recurring" },
+      { val: "0",     lbl: "Maintenance needed" }
+    ]
+  },
+  {
+    tag: "The Flow",
+    title: "Residents → Usage → <span class='hl'>Recurring Revenue</span>",
+    body: "Every interaction generates data, loyalty, and income. The more residents use the app, the more premium features they unlock — and the more you earn.",
+    pills: [
+      { text: "Install hardware", cls: "blue" },
+      { text: "Activate platform", cls: "blue" },
+      { text: "Residents engage", cls: "purple" },
+      { text: "Revenue flows", cls: "green" }
+    ]
+  },
+  {
+    tag: "Competitive Advantage",
+    title: "Differentiate your <span class='hl'>project today</span>",
+    body: "Be the developer that delivers a digital lifestyle — not just square meters. Evimiz GEO gives you a story buyers remember and a product that sells itself.",
+    pills: [
+      { text: "Faster sales cycle", cls: "green" },
+      { text: "Premium positioning", cls: "blue" },
+      { text: "Post-sale revenue", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Next Step",
+    title: "From buildings to <span class='hl'>digital ecosystems</span>",
+    body: "Let's connect your next project to the Evimiz GEO Platform. We'll show you exactly how it works — from hardware to app — in 30 minutes.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ]
+  }
+],
+es: [
+  {
+    tag: "GEO Platform · Desarrolladores",
+    title: "Aumentá el valor de tu proyecto con <span class='hl'>infraestructura digital</span>",
+    body: "La plataforma completa para infraestructura de intercomunicación inteligente — diseñada para desarrolladores que quieren cerrar más ventas y crear valor duradero.",
+    stats: [
+      { val: "1.000+", lbl: "Edificios activos" },
+      { val: "15–30%", lbl: "Aumento de valor" },
+      { val: "$2/mes",  lbl: "por dispositivo" }
+    ]
+  },
+  {
+    tag: "El Mercado",
+    title: "Los compradores esperan <span class='hl'>más que hormigón</span>",
+    body: "Las funciones inteligentes son hoy uno de los 3 factores de decisión de compra en real estate urbano de LatAm. La infraestructura digital ya es expectativa base — no un bonus.",
+    pills: [
+      { text: "Acceso desde la app", cls: "blue" },
+      { text: "Videoportero HD", cls: "blue" },
+      { text: "Llaves NFC", cls: "purple" },
+      { text: "Gestión de visitas", cls: "green" }
+    ]
+  },
+  {
+    tag: "El Problema",
+    title: "Los proyectos tradicionales <span class='hl'>no se diferencian</span>",
+    body: "Sin una capa digital, tu edificio compite solo por precio y ubicación. Los compradores no tienen motivo para pagar un premium — ni los vendedores una historia que contar.",
+    cards: [
+      { icon: "📉", name: "Ventas más lentas", desc: "Sin diferenciador para justificar precio premium" },
+      { icon: "🏚", name: "Sin fidelidad", desc: "Los residentes no tienen conexión con tu marca" },
+      { icon: "💸", name: "Ingresos que terminan", desc: "Todo para cuando entregás las llaves" }
+    ]
+  },
+  {
+    tag: "La Solución",
+    title: "Una <span class='hl'>capa digital</span> que agrega valor real",
+    body: "Evimiz GEO convierte tu edificio en una plataforma conectada. Acceso inteligente, app de residentes, gestión en la nube — entregado como servicio, activado en días.",
+    pills: [
+      { text: "15–30% más valor", cls: "green" },
+      { text: "Listo en días", cls: "blue" },
+      { text: "Sin desarrollo", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Un Ecosistema",
+    title: "Hardware + Plataforma + <span class='hl'>App — todo unificado</span>",
+    body: "Un solo sistema que cubre todo: vinculación de dispositivos, gestión en la nube y una app de residentes con tu marca. Sin integraciones. Sin coordinación de proveedores.",
+    cards: [
+      { icon: "🔌", name: "Hardware", desc: "Portero inteligente, cámaras HD, llaves NFC" },
+      { icon: "☁️", name: "Plataforma", desc: "GEO cloud — todo en un solo lugar" },
+      { icon: "📱", name: "App", desc: "App white-label con tu identidad de marca" }
+    ]
+  },
+  {
+    tag: "App con tu Marca",
+    title: "Tu marca, <span class='hl'>en el bolsillo de cada residente</span>",
+    body: "Lanzá una app mobile completamente personalizada — tu logo, tus colores, tu identidad. Los residentes la usan a diario: acceso, llaves de visita, notificaciones del edificio.",
+    pills: [
+      { text: "iOS + Android", cls: "blue" },
+      { text: "White-label", cls: "purple" },
+      { text: "10+ idiomas", cls: "green" }
+    ]
+  },
+  {
+    tag: "Experiencia",
+    title: "Sin llaves. Sin llamadas. <span class='hl'>Sin fricción.</span>",
+    body: "Los residentes abren puertas, llaman al ingreso y gestionan el acceso de visitas — todo desde el celular. Solicitudes de mantenimiento, paquetes, comunicados: todo en un lugar.",
+    stats: [
+      { val: "Diario", lbl: "Uso de la app" },
+      { val: "< 1s",   lbl: "Apertura de puerta" },
+      { val: "24/7",   lbl: "Acceso remoto" }
+    ]
+  },
+  {
+    tag: "Modelo de Negocio",
+    title: "Gratis impulsa el uso. <span class='hl'>Premium genera ingresos.</span>",
+    body: "Las funciones base son gratuitas para los residentes — generando uso diario. El premium desbloquea hogar inteligente, estacionamiento, conserjería y más. Vos ganás parte de cada suscripción.",
+    cards: [
+      { icon: "🆓", name: "Base — Gratis", desc: "Control de acceso, video, llaves de visita, notificaciones" },
+      { icon: "⭐", name: "Premium — Pago", desc: "Hogar inteligente, estacionamiento, conserjería, depósito" },
+      { icon: "💰", name: "Vos ganás", desc: "Participación en cada suscripción premium" }
+    ]
+  },
+  {
+    tag: "Ingresos Post-Entrega",
+    title: "Edificios que <span class='hl'>siguen generando</span>",
+    body: "Ingresos recurrentes por suscripción de cada unidad, cada mes — mucho después de haber entregado las llaves. La plataforma funciona sola; vos cobrás el margen.",
+    stats: [
+      { val: "$2/mes", lbl: "Base por dispositivo" },
+      { val: "∞",      lbl: "Ingreso mensual" },
+      { val: "0",      lbl: "Mantenimiento" }
+    ]
+  },
+  {
+    tag: "El Flujo",
+    title: "Residentes → Uso → <span class='hl'>Ingresos Recurrentes</span>",
+    body: "Cada interacción genera datos, fidelidad e ingresos. Cuanto más usan la app, más funciones premium activan — y más ganás vos.",
+    pills: [
+      { text: "Instalá el hardware", cls: "blue" },
+      { text: "Activá la plataforma", cls: "blue" },
+      { text: "Residentes se enganchan", cls: "purple" },
+      { text: "Ingresos fluyen", cls: "green" }
+    ]
+  },
+  {
+    tag: "Ventaja Competitiva",
+    title: "Diferenciá tu <span class='hl'>proyecto hoy</span>",
+    body: "Sé el desarrollador que entrega un estilo de vida digital — no solo metros cuadrados. Evimiz GEO te da una historia que los compradores recuerdan y un producto que se vende solo.",
+    pills: [
+      { text: "Ciclo de venta más corto", cls: "green" },
+      { text: "Posicionamiento premium", cls: "blue" },
+      { text: "Ingresos post-venta", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Próximo Paso",
+    title: "De edificios a <span class='hl'>ecosistemas digitales</span>",
+    body: "Conectemos tu próximo proyecto a Evimiz GEO Platform. Te mostramos cómo funciona — del hardware a la app — en 30 minutos.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ]
+  }
+]
+},
+
+/* ══════════════════════════════════
+   MANAGEMENT
+══════════════════════════════════ */
+mgmt: {
+en: [
+  {
+    tag: "GEO Platform · Management",
+    title: "Run your building <span class='hl'>without constant interruptions</span>",
+    body: "One unified platform to manage access, residents, operations, and communications — so your team can focus on service, not firefighting.",
+    stats: [
+      { val: "40–60%", lbl: "Less routine work" },
+      { val: "1 place", lbl: "Everything managed" },
+      { val: "24/7",   lbl: "Resident self-service" }
+    ]
+  },
+  {
+    tag: "The Reality",
+    title: "Teams drown in <span class='hl'>routine tasks</span>",
+    body: "Access requests, lost key calls, maintenance complaints, guest authorizations — it never ends. Your team spends most of their day reacting, not managing.",
+    cards: [
+      { icon: "📞", name: "Endless calls", desc: "Residents call for every small access issue" },
+      { icon: "📋", name: "Paper processes", desc: "No tracking, no history, no accountability" },
+      { icon: "😤", name: "Team burnout", desc: "Staff spends hours on tasks that should be automatic" }
+    ]
+  },
+  {
+    tag: "The Gap",
+    title: "WhatsApp groups are not <span class='hl'>building management</span>",
+    body: "Without a proper system, visibility is zero: you don't know who's in the building, what's been reported, or what's outstanding. Every decision is reactive.",
+    pills: [
+      { text: "No tracking", cls: "blue" },
+      { text: "No visibility", cls: "blue" },
+      { text: "No audit trail", cls: "purple" }
+    ]
+  },
+  {
+    tag: "The Solution",
+    title: "One unified <span class='hl'>management platform</span>",
+    body: "Evimiz GEO centralizes everything your team needs: access control, resident communication, maintenance requests, and operational reporting — all in one dashboard.",
+    pills: [
+      { text: "Cloud dashboard", cls: "blue" },
+      { text: "Mobile for staff", cls: "purple" },
+      { text: "Resident app", cls: "green" }
+    ]
+  },
+  {
+    tag: "Resident Self-Service",
+    title: "Residents handle <span class='hl'>their own requests</span>",
+    body: "Guests, package pickups, maintenance requests, key sharing — residents do it themselves through the app. Your team only gets involved when truly needed.",
+    cards: [
+      { icon: "🚪", name: "Door access", desc: "Open gates and entrances from anywhere" },
+      { icon: "👤", name: "Guest keys", desc: "Send temporary digital keys in seconds" },
+      { icon: "🔧", name: "Maintenance", desc: "Submit and track requests without calling" }
+    ]
+  },
+  {
+    tag: "Operational Impact",
+    title: "Fewer calls. Less paperwork. <span class='hl'>More control.</span>",
+    body: "Management companies using Evimiz GEO report 40–60% reduction in routine operational workload within the first 3 months. Staff focus on what matters.",
+    stats: [
+      { val: "60%", lbl: "Fewer incoming calls" },
+      { val: "3×",  lbl: "Faster issue resolution" },
+      { val: "∞",   lbl: "Audit trail" }
+    ]
+  },
+  {
+    tag: "Communication",
+    title: "Direct channel to <span class='hl'>every resident</span>",
+    body: "Send push notifications, building announcements, and payment reminders instantly. No more bulletin board posts or unanswered group chats.",
+    pills: [
+      { text: "Push notifications", cls: "blue" },
+      { text: "Announcements", cls: "blue" },
+      { text: "Payment reminders", cls: "purple" },
+      { text: "Emergency alerts", cls: "green" }
+    ]
+  },
+  {
+    tag: "Monetization",
+    title: "Turn services into <span class='hl'>revenue</span>",
+    body: "Parking, storage, concierge, premium access — offer these as paid services directly through the resident app. New income without new headcount.",
+    cards: [
+      { icon: "🅿️", name: "Parking", desc: "Book and pay for parking spots in-app" },
+      { icon: "📦", name: "Storage", desc: "Manage storage units with digital access" },
+      { icon: "🤵", name: "Concierge", desc: "Premium service packages, billed monthly" }
+    ]
+  },
+  {
+    tag: "Business Model",
+    title: "Core free. <span class='hl'>Premium pays.</span>",
+    body: "Platform cost is covered by premium feature subscriptions. The more residents upgrade, the lower your net cost — until the platform pays for itself.",
+    stats: [
+      { val: "$2/mo", lbl: "Base per device" },
+      { val: "Free",  lbl: "Core for residents" },
+      { val: "0",     lbl: "Extra IT needed" }
+    ]
+  },
+  {
+    tag: "Visibility",
+    title: "Full operational <span class='hl'>dashboard</span>",
+    body: "Real-time data on access events, open incidents, maintenance queue, and resident activity — available to your team from any device, any time.",
+    pills: [
+      { text: "Live access logs", cls: "blue" },
+      { text: "Incident tracker", cls: "purple" },
+      { text: "Staff assignments", cls: "green" },
+      { text: "Resident reports", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Remote Control",
+    title: "Manage from <span class='hl'>anywhere</span>",
+    body: "Your team operates fully remotely when needed. Grant access, resolve incidents, and communicate with residents without being physically present.",
+    cards: [
+      { icon: "🌐", name: "Web dashboard", desc: "Full control from any browser" },
+      { icon: "📱", name: "Staff mobile app", desc: "Field team stays connected on the go" },
+      { icon: "🔔", name: "Smart alerts", desc: "Get notified only when action is needed" }
+    ]
+  },
+  {
+    tag: "Next Step",
+    title: "Less work. Better service. <span class='hl'>Real revenue.</span>",
+    body: "Let's show you how Evimiz GEO works in your building — from day-one setup to full operational rollout. 30 minutes is all it takes.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ]
+  }
+],
+es: [
+  {
+    tag: "GEO Platform · Administración",
+    title: "Gestioná tu edificio <span class='hl'>sin interrupciones constantes</span>",
+    body: "Una plataforma unificada para gestionar acceso, residentes, operaciones y comunicaciones — para que tu equipo se enfoque en el servicio, no en apagar incendios.",
+    stats: [
+      { val: "40–60%", lbl: "Menos tareas rutinarias" },
+      { val: "1 lugar", lbl: "Todo centralizado" },
+      { val: "24/7",   lbl: "Autogestión de residentes" }
+    ]
+  },
+  {
+    tag: "La Realidad",
+    title: "Los equipos se ahogan en <span class='hl'>tareas rutinarias</span>",
+    body: "Solicitudes de acceso, llamadas por llaves perdidas, quejas de mantenimiento, autorización de visitas — nunca termina. Tu equipo pasa el día reaccionando, no gestionando.",
+    cards: [
+      { icon: "📞", name: "Llamadas sin fin", desc: "Los residentes llaman por cada pequeño problema de acceso" },
+      { icon: "📋", name: "Procesos en papel", desc: "Sin seguimiento, sin historial, sin responsabilidad" },
+      { icon: "😤", name: "Equipo agotado", desc: "El personal pierde horas en tareas que deberían ser automáticas" }
+    ]
+  },
+  {
+    tag: "El Vacío",
+    title: "WhatsApp no es <span class='hl'>gestión de edificios</span>",
+    body: "Sin un sistema adecuado, la visibilidad es cero: no sabés quién está en el edificio, qué se reportó ni qué está pendiente. Cada decisión es reactiva.",
+    pills: [
+      { text: "Sin seguimiento", cls: "blue" },
+      { text: "Sin visibilidad", cls: "blue" },
+      { text: "Sin trazabilidad", cls: "purple" }
+    ]
+  },
+  {
+    tag: "La Solución",
+    title: "Una <span class='hl'>plataforma de gestión</span> unificada",
+    body: "Evimiz GEO centraliza todo lo que tu equipo necesita: control de acceso, comunicación con residentes, solicitudes de mantenimiento y reportes operativos — en un solo dashboard.",
+    pills: [
+      { text: "Dashboard en la nube", cls: "blue" },
+      { text: "App móvil para el equipo", cls: "purple" },
+      { text: "App para residentes", cls: "green" }
+    ]
+  },
+  {
+    tag: "Autogestión de Residentes",
+    title: "Los residentes gestionan <span class='hl'>sus propias solicitudes</span>",
+    body: "Visitas, paquetes, solicitudes de mantenimiento, llaves compartidas — los residentes lo hacen solos desde la app. Tu equipo solo interviene cuando realmente es necesario.",
+    cards: [
+      { icon: "🚪", name: "Acceso a puertas", desc: "Abrí portones e ingresos desde cualquier lugar" },
+      { icon: "👤", name: "Llaves de visita", desc: "Enviá llaves digitales temporales en segundos" },
+      { icon: "🔧", name: "Mantenimiento", desc: "Reportá y seguí solicitudes sin llamar" }
+    ]
+  },
+  {
+    tag: "Impacto Operativo",
+    title: "Menos llamadas. Menos papeleo. <span class='hl'>Más control.</span>",
+    body: "Las administradoras que usan Evimiz GEO reportan una reducción del 40–60% en la carga operativa rutinaria en los primeros 3 meses. El equipo se enfoca en lo que importa.",
+    stats: [
+      { val: "60%", lbl: "Menos llamadas entrantes" },
+      { val: "3×",  lbl: "Resolución más rápida" },
+      { val: "∞",   lbl: "Trazabilidad completa" }
+    ]
+  },
+  {
+    tag: "Comunicación",
+    title: "Canal directo con <span class='hl'>cada residente</span>",
+    body: "Enviá notificaciones push, comunicados del edificio y recordatorios de pago de forma instantánea. Nada de carteleras ni chats grupales sin respuesta.",
+    pills: [
+      { text: "Notificaciones push", cls: "blue" },
+      { text: "Comunicados", cls: "blue" },
+      { text: "Recordatorios de pago", cls: "purple" },
+      { text: "Alertas de emergencia", cls: "green" }
+    ]
+  },
+  {
+    tag: "Monetización",
+    title: "Convertí servicios en <span class='hl'>ingresos</span>",
+    body: "Estacionamiento, depósito, conserjería, acceso premium — ofrecelos como servicios pagos directamente desde la app de residentes. Nuevos ingresos sin sumar personal.",
+    cards: [
+      { icon: "🅿️", name: "Estacionamiento", desc: "Reservá y pagá cocheras desde la app" },
+      { icon: "📦", name: "Depósito", desc: "Gestioná espacios de almacenamiento con acceso digital" },
+      { icon: "🤵", name: "Conserjería", desc: "Paquetes de servicio premium, facturados mensualmente" }
+    ]
+  },
+  {
+    tag: "Modelo de Negocio",
+    title: "Base gratis. <span class='hl'>Premium paga.</span>",
+    body: "El costo de la plataforma se cubre con las suscripciones premium. Cuanto más residentes se pasan al premium, menor es tu costo neto — hasta que la plataforma se paga sola.",
+    stats: [
+      { val: "$2/mes", lbl: "Base por dispositivo" },
+      { val: "Gratis",  lbl: "Base para residentes" },
+      { val: "0",      lbl: "IT adicional" }
+    ]
+  },
+  {
+    tag: "Visibilidad",
+    title: "Dashboard operativo <span class='hl'>completo</span>",
+    body: "Datos en tiempo real sobre accesos, incidentes abiertos, cola de mantenimiento y actividad de residentes — disponibles para tu equipo desde cualquier dispositivo.",
+    pills: [
+      { text: "Logs de acceso en vivo", cls: "blue" },
+      { text: "Seguimiento de incidentes", cls: "purple" },
+      { text: "Asignación de tareas", cls: "green" },
+      { text: "Reportes de residentes", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Control Remoto",
+    title: "Gestioná desde <span class='hl'>cualquier lugar</span>",
+    body: "Tu equipo opera de forma remota cuando lo necesita. Otorgá acceso, resolvé incidentes y comunicarte con residentes sin estar físicamente presente.",
+    cards: [
+      { icon: "🌐", name: "Dashboard web", desc: "Control total desde cualquier navegador" },
+      { icon: "📱", name: "App para el equipo", desc: "El personal de campo se mantiene conectado" },
+      { icon: "🔔", name: "Alertas inteligentes", desc: "Solo te notifica cuando necesitás actuar" }
+    ]
+  },
+  {
+    tag: "Próximo Paso",
+    title: "Menos trabajo. Mejor servicio. <span class='hl'>Ingresos reales.</span>",
+    body: "Te mostramos cómo funciona Evimiz GEO en tu edificio — desde la configuración inicial hasta el despliegue operativo completo. En 30 minutos lo ves todo.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ]
+  }
+]
+},
+
+/* ══════════════════════════════════
+   INTEGRATORS
+══════════════════════════════════ */
+int: {
+en: [
+  {
+    tag: "GEO Platform · Integrators",
+    title: "Turn every installation into <span class='hl'>recurring monthly revenue</span>",
+    body: "Evimiz GEO gives integrators a complete white-label platform to sell alongside hardware — so every job generates income long after you leave the building.",
+    stats: [
+      { val: "$2/mo", lbl: "Base per device" },
+      { val: "∞",     lbl: "Monthly recurring" },
+      { val: "15 min",lbl: "Setup per building" }
+    ]
+  },
+  {
+    tag: "The Limit",
+    title: "Hardware deals <span class='hl'>end at delivery</span>",
+    body: "You install the intercom system, hand over the keys, and the relationship ends. Revenue stops. The next job has to start from zero — every single time.",
+    cards: [
+      { icon: "🔚", name: "One-time income", desc: "Hardware margin is your only revenue per job" },
+      { icon: "🔄", name: "Constant acquisition", desc: "You need new clients to keep cash flowing" },
+      { icon: "📉", name: "Margin pressure", desc: "Hardware prices compress as competition grows" }
+    ]
+  },
+  {
+    tag: "The Opportunity",
+    title: "Add software to <span class='hl'>every installation</span>",
+    body: "Platform subscriptions multiply the lifetime value of every job. A building you installed two years ago keeps paying you every single month — without any extra work.",
+    pills: [
+      { text: "Platform + hardware", cls: "blue" },
+      { text: "Monthly residuals", cls: "green" },
+      { text: "No dev required", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Ready Ecosystem",
+    title: "No development required. <span class='hl'>Deploy in days.</span>",
+    body: "Evimiz GEO is your white-label platform — cloud-ready, pre-built, and deployable in a single afternoon. You configure, you brand, you activate. We handle everything else.",
+    cards: [
+      { icon: "☁️", name: "Cloud-ready", desc: "No servers, no infrastructure, no IT overhead" },
+      { icon: "🎨", name: "White-label", desc: "Your brand on the platform and resident app" },
+      { icon: "⚡", name: "Fast deploy", desc: "15 minutes average per building activation" }
+    ]
+  },
+  {
+    tag: "The App",
+    title: "Residents use it <span class='hl'>every single day</span>",
+    body: "Daily engagement means your product stays top of mind — and premium upgrades happen naturally over time. The app creates a long-term relationship between residents and your brand.",
+    stats: [
+      { val: "Daily", lbl: "Average open rate" },
+      { val: "10+",   lbl: "Languages supported" },
+      { val: "iOS+",  lbl: "Android included" }
+    ]
+  },
+  {
+    tag: "Revenue Streams",
+    title: "Multiple income channels <span class='hl'>from one install</span>",
+    body: "Hardware margin at installation. Monthly platform fee per device. Upsells to premium features. Partner referral commissions. Every building you activate opens all four.",
+    cards: [
+      { icon: "🔌", name: "Hardware", desc: "One-time margin on devices and installation" },
+      { icon: "📆", name: "Platform fee", desc: "$2+/device/month — billed automatically" },
+      { icon: "⭐", name: "Premium upsell", desc: "Share of premium feature subscriptions" }
+    ]
+  },
+  {
+    tag: "The Math",
+    title: "$2/device/month. <span class='hl'>Simple and scalable.</span>",
+    body: "A 100-unit building with 2 entry points generates $200+ per month. 10 buildings: $2,000/month. 50 buildings: $10,000/month — automatically, without lifting a finger.",
+    stats: [
+      { val: "$200",   lbl: "100-unit building/mo" },
+      { val: "$2,000", lbl: "10 buildings/mo" },
+      { val: "Auto",   lbl: "Billed + collected" }
+    ]
+  },
+  {
+    tag: "Flexible Pricing",
+    title: "You set the margin. <span class='hl'>We set the floor.</span>",
+    body: "Wholesale platform access at $2/device/month. You define your retail price. The margin between wholesale and retail is yours — fully. No caps, no sharing.",
+    pills: [
+      { text: "Wholesale access", cls: "blue" },
+      { text: "You set retail price", cls: "green" },
+      { text: "Full margin yours", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Simple Deployment",
+    title: "15 minutes <span class='hl'>per building</span>",
+    body: "Connect hardware to GEO cloud. Bind devices. Configure building profile. Activate resident app. Done. No on-site IT, no complex configuration, no callbacks.",
+    cards: [
+      { icon: "1️⃣", name: "Connect hardware", desc: "Bind intercoms and cameras to GEO cloud" },
+      { icon: "2️⃣", name: "Configure building", desc: "Set units, residents, and access rules" },
+      { icon: "3️⃣", name: "Activate app", desc: "Residents download and start using immediately" }
+    ]
+  },
+  {
+    tag: "Scale",
+    title: "Every install is a <span class='hl'>new revenue stream</span>",
+    body: "Your portfolio of buildings becomes a subscription business. Revenue grows automatically as you add installations — without proportionally increasing your workload.",
+    stats: [
+      { val: "10→",   lbl: "Buildings this year" },
+      { val: "100→",  lbl: "Next year, same effort" },
+      { val: "Auto",  lbl: "Revenue compounds" }
+    ]
+  },
+  {
+    tag: "Partnership",
+    title: "Become an <span class='hl'>Evimiz Certified Partner</span>",
+    body: "Certified integrators get priority technical support, qualified lead sharing, co-marketing materials, and early access to new platform features.",
+    pills: [
+      { text: "Priority support", cls: "blue" },
+      { text: "Lead sharing", cls: "green" },
+      { text: "Co-marketing", cls: "purple" },
+      { text: "Early access", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Next Step",
+    title: "Install once. <span class='hl'>Earn forever.</span>",
+    body: "Let's start with your first GEO-enabled building. We'll walk you through the full setup and show you exactly what your recurring revenue looks like at scale.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ]
+  }
+],
+es: [
+  {
+    tag: "GEO Platform · Integradores",
+    title: "Convertí cada instalación en <span class='hl'>ingresos mensuales recurrentes</span>",
+    body: "Evimiz GEO le da a los integradores una plataforma white-label completa para vender junto con el hardware — para que cada trabajo genere ingresos mucho después de que te vayas del edificio.",
+    stats: [
+      { val: "$2/mes", lbl: "Base por dispositivo" },
+      { val: "∞",      lbl: "Ingresos mensuales" },
+      { val: "15 min", lbl: "Configuración por edificio" }
+    ]
+  },
+  {
+    tag: "El Límite",
+    title: "Los proyectos de hardware <span class='hl'>terminan en la entrega</span>",
+    body: "Instalás el sistema de portería, entregás las llaves, y la relación termina. Los ingresos se cortan. Cada nuevo trabajo tiene que empezar desde cero — siempre.",
+    cards: [
+      { icon: "🔚", name: "Ingreso único", desc: "El margen del hardware es tu único ingreso por trabajo" },
+      { icon: "🔄", name: "Captación constante", desc: "Necesitás nuevos clientes para mantener el flujo de caja" },
+      { icon: "📉", name: "Presión sobre el margen", desc: "Los precios del hardware se comprimen con la competencia" }
+    ]
+  },
+  {
+    tag: "La Oportunidad",
+    title: "Sumá software a <span class='hl'>cada instalación</span>",
+    body: "Las suscripciones a la plataforma multiplican el valor de vida de cada trabajo. Un edificio que instalaste hace dos años te sigue pagando cada mes — sin trabajo adicional.",
+    pills: [
+      { text: "Plataforma + hardware", cls: "blue" },
+      { text: "Ingresos residuales", cls: "green" },
+      { text: "Sin desarrollo", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Ecosistema Listo",
+    title: "Sin desarrollo. <span class='hl'>Desplegá en días.</span>",
+    body: "Evimiz GEO es tu plataforma white-label — lista en la nube, pre-construida y desplegable en una tarde. Vos configurás, personalizás y activás. Nosotros nos encargamos del resto.",
+    cards: [
+      { icon: "☁️", name: "Lista en la nube", desc: "Sin servidores, sin infraestructura, sin IT" },
+      { icon: "🎨", name: "White-label", desc: "Tu marca en la plataforma y la app de residentes" },
+      { icon: "⚡", name: "Deploy rápido", desc: "Promedio de 15 minutos por activación de edificio" }
+    ]
+  },
+  {
+    tag: "La App",
+    title: "Los residentes la usan <span class='hl'>todos los días</span>",
+    body: "El uso diario mantiene tu producto en la mente de todos — y las mejoras premium ocurren de forma natural con el tiempo. La app crea una relación a largo plazo entre los residentes y tu marca.",
+    stats: [
+      { val: "Diario", lbl: "Tasa de apertura promedio" },
+      { val: "10+",    lbl: "Idiomas soportados" },
+      { val: "iOS+",   lbl: "Android incluido" }
+    ]
+  },
+  {
+    tag: "Fuentes de Ingresos",
+    title: "Múltiples canales de ingreso <span class='hl'>desde una sola instalación</span>",
+    body: "Margen de hardware en la instalación. Fee mensual de plataforma por dispositivo. Upsells a funciones premium. Comisiones por referidos. Cada edificio que activás abre los cuatro.",
+    cards: [
+      { icon: "🔌", name: "Hardware", desc: "Margen único en dispositivos e instalación" },
+      { icon: "📆", name: "Fee de plataforma", desc: "$2+/dispositivo/mes — cobrado automáticamente" },
+      { icon: "⭐", name: "Upsell premium", desc: "Participación en suscripciones premium" }
+    ]
+  },
+  {
+    tag: "Los Números",
+    title: "$2/dispositivo/mes. <span class='hl'>Simple y escalable.</span>",
+    body: "Un edificio de 100 unidades con 2 puntos de entrada genera $200+ por mes. 10 edificios: $2.000/mes. 50 edificios: $10.000/mes — de forma automática, sin trabajo extra.",
+    stats: [
+      { val: "$200",    lbl: "Edificio 100 u/mes" },
+      { val: "$2.000",  lbl: "10 edificios/mes" },
+      { val: "Auto",    lbl: "Cobrado + acreditado" }
+    ]
+  },
+  {
+    tag: "Precios Flexibles",
+    title: "Vos ponés el margen. <span class='hl'>Nosotros el piso.</span>",
+    body: "Acceso mayorista a la plataforma a $2/dispositivo/mes. Vos definís el precio de venta. La diferencia entre mayorista y minorista es tuya — sin topes ni compartición.",
+    pills: [
+      { text: "Acceso mayorista", cls: "blue" },
+      { text: "Precio de venta: tuyo", cls: "green" },
+      { text: "Margen completo", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Deploy Simple",
+    title: "15 minutos <span class='hl'>por edificio</span>",
+    body: "Conectá el hardware a la nube GEO. Vinculá dispositivos. Configurá el perfil del edificio. Activá la app de residentes. Listo. Sin IT in situ, sin configuraciones complejas.",
+    cards: [
+      { icon: "1️⃣", name: "Conectá el hardware", desc: "Vinculá porteros y cámaras a la nube GEO" },
+      { icon: "2️⃣", name: "Configurá el edificio", desc: "Definí unidades, residentes y reglas de acceso" },
+      { icon: "3️⃣", name: "Activá la app", desc: "Los residentes descargan y empiezan a usar de inmediato" }
+    ]
+  },
+  {
+    tag: "Escala",
+    title: "Cada instalación es un <span class='hl'>nuevo flujo de ingresos</span>",
+    body: "Tu cartera de edificios se convierte en un negocio de suscripciones. Los ingresos crecen automáticamente a medida que sumás instalaciones — sin aumentar proporcionalmente tu carga de trabajo.",
+    stats: [
+      { val: "10→",   lbl: "Edificios este año" },
+      { val: "100→",  lbl: "El próximo, mismo esfuerzo" },
+      { val: "Auto",  lbl: "Ingresos compuestos" }
+    ]
+  },
+  {
+    tag: "Partnership",
+    title: "Convertite en <span class='hl'>Partner Certificado Evimiz</span>",
+    body: "Los integradores certificados obtienen soporte técnico prioritario, leads calificados, materiales de co-marketing y acceso anticipado a nuevas funciones de la plataforma.",
+    pills: [
+      { text: "Soporte prioritario", cls: "blue" },
+      { text: "Leads compartidos", cls: "green" },
+      { text: "Co-marketing", cls: "purple" },
+      { text: "Acceso anticipado", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Próximo Paso",
+    title: "Instalá una vez. <span class='hl'>Ganás para siempre.</span>",
+    body: "Empecemos con tu primer edificio con GEO. Te guiamos por todo el proceso y te mostramos exactamente cómo se ve tu ingreso recurrente a escala.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ]
+  }
+]
+}
+
+}; // end content
+
+/* ──────────────────────────────
+   RENDER ENGINE
+────────────────────────────── */
+let current = 0;
+let slides = [];
+
+function buildSlideHTML(s) {
+  let inner = '';
+
+  if (s.tag)   inner += `<div class="s-tag">${s.tag}</div>`;
+  if (s.title) inner += `<h1 class="s-h1">${s.title}</h1>`;
+  if (s.body)  inner += `<p class="s-body">${s.body}</p>`;
+
+  if (s.stats) {
+    inner += `<div class="s-stats">` +
+      s.stats.map(st => `<div><div class="s-stat-val">${st.val}</div><div class="s-stat-lbl">${st.lbl}</div></div>`).join('') +
+      `</div>`;
+  }
+
+  if (s.cards) {
+    inner += `<div class="s-cards">` +
+      s.cards.map(c => `
+        <div class="s-card">
+          <div class="s-card-icon">${c.icon}</div>
+          <div class="s-card-name">${c.name}</div>
+          <div class="s-card-desc">${c.desc}</div>
+        </div>`).join('') +
+      `</div>`;
+  }
+
+  if (s.pills) {
+    inner += `<div class="s-pills">` +
+      s.pills.map(p => `<div class="s-pill ${p.cls}">${p.text}</div>`).join('') +
+      `</div>`;
+  }
+
+  return inner;
+}
+
+function renderSlides() {
+  const seg  = document.getElementById('segment').value;
+  const lang = document.getElementById('lang').value;
+  const data = content[seg][lang];
+  const vp   = document.getElementById('slides-viewport');
+
+  vp.innerHTML = '';
+  slides = [];
+
+  data.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide' + (i === 0 ? ' active' : '') + (i === 0 ? ' slide-cover' : '');
+    div.innerHTML = buildSlideHTML(s);
+    vp.appendChild(div);
+    slides.push(div);
+  });
+
+  current = 0;
+  updateUI();
+}
+
+function goTo(idx) {
+  if (idx < 0 || idx >= slides.length) return;
+  const dir = idx > current ? 1 : -1;
+
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(() => slides[current] && slides[current].classList.remove('exit'), 500);
+
+  const prev = current;
+  current = idx;
+
+  slides[current].style.transform = `translateX(${dir * 40}px)`;
+  slides[current].style.opacity = '0';
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    slides[current].style.transition = 'opacity 0.45s ease, transform 0.45s ease';
+    slides[current].style.transform = 'translateX(0)';
+    slides[current].style.opacity   = '1';
+    slides[current].classList.add('active');
+  }));
+
+  setTimeout(() => {
+    if (slides[prev]) {
+      slides[prev].style.transition = '';
+      slides[prev].style.transform  = '';
+      slides[prev].style.opacity    = '';
+    }
+  }, 500);
+
+  updateUI();
+}
+
+function go(dir) { goTo(current + dir); }
+
+function updateUI() {
+  const total = slides.length;
+  document.getElementById('slide-counter').textContent = `${current + 1} / ${total}`;
+  document.getElementById('progress-bar').style.width = `${(current + 1) / total * 100}%`;
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === total - 1;
+
+  const dotsEl = document.getElementById('dots');
+  dotsEl.innerHTML = '';
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === current ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+}
+
+document.getElementById('segment').addEventListener('change', renderSlides);
+document.getElementById('lang').addEventListener('change', renderSlides);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+});
+
+renderSlides();
+</script>
+</body>
+</html>
