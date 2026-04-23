@@ -633,6 +633,24 @@
     }
 
     /* ========== CONTACT ========== */
+    /* ========== BRIDGE ========== */
+    .bridge-top { text-align: center; max-width: 760px; margin: 0 auto; }
+    .bridge-badge { display: inline-block; background: rgba(124,111,255,0.13); border: 1px solid rgba(124,111,255,0.38); color: var(--accent); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 18px; border-radius: 50px; margin-bottom: 20px; }
+    .bridge-title { font-size: 2rem; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 0; }
+    .bridge-title .hl { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .bridge-flow { display: flex; align-items: stretch; gap: 0; width: 100%; max-width: 880px; margin: 0 auto; }
+    .bridge-role { flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 20px 22px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: border-color 0.25s; }
+    .bridge-role:hover { border-color: rgba(124,111,255,0.55); }
+    .bridge-role-icon { font-size: 1.8rem; }
+    .bridge-role-name { font-size: 0.95rem; font-weight: 700; }
+    .bridge-role-desc { font-size: 0.8rem; color: var(--accent2); font-weight: 500; line-height: 1.35; }
+    .bridge-arrow { flex: 0 0 50px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .bridge-arrow::before { content: ''; position: absolute; top: 50%; left: 4px; right: 4px; height: 1px; background: linear-gradient(90deg, rgba(124,111,255,0.45), rgba(79,195,247,0.45)); transform: translateY(-50%); }
+    .bridge-arrow-head { position: relative; z-index: 1; background: var(--bg-dark); padding: 0 4px; color: var(--accent2); font-size: 0.95rem; }
+    .bridge-bottom { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .bridge-pill { background: linear-gradient(135deg, rgba(124,111,255,0.18), rgba(79,195,247,0.1)); border: 1px solid rgba(124,111,255,0.42); border-radius: 50px; padding: 9px 24px; font-size: 0.83rem; font-weight: 700; color: var(--accent2); letter-spacing: 0.02em; }
+    .bridge-cta { font-size: 0.92rem; color: var(--text-muted); font-style: italic; }
+
     .section-contact {
       background: linear-gradient(135deg, #0d0d22 0%, #080818 100%);
     }
@@ -768,6 +786,7 @@
         <a href="#security" data-i18n="nav-security">Security</a>
         <a href="#easy" data-i18n="nav-easy">App</a>
         <a href="#cost" data-i18n="nav-cost">Cost</a>
+        <a href="#bridge" data-i18n="nav-bridge">Platform</a>
         <a href="#contact" data-i18n="nav-contact">Contact</a>
       </div>
       <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
@@ -1083,6 +1102,39 @@
       </div>
     </section>
 
+    <!-- ========== BRIDGE ========== -->
+    <section id="bridge" class="section fade-in">
+      <div class="container" style="display:flex;flex-direction:column;align-items:center;gap:40px;">
+        <div class="bridge-top">
+          <div class="bridge-badge" data-i18n="bridge-badge">Connected Ecosystem</div>
+          <h2 class="bridge-title" data-i18n-html="bridge-title">This is powered by a <span class="hl">unified platform</span> connecting everyone behind the scenes.</h2>
+        </div>
+        <div class="bridge-flow">
+          <div class="bridge-role">
+            <div class="bridge-role-icon">🏗️</div>
+            <div class="bridge-role-name" data-i18n="bridge-r1-name">Developer</div>
+            <div class="bridge-role-desc" data-i18n="bridge-r1-desc">Projects that sell faster</div>
+          </div>
+          <div class="bridge-arrow"><span class="bridge-arrow-head">→</span></div>
+          <div class="bridge-role">
+            <div class="bridge-role-icon">🔧</div>
+            <div class="bridge-role-name" data-i18n="bridge-r2-name">Integrator</div>
+            <div class="bridge-role-desc" data-i18n="bridge-r2-desc">Recurring revenue per building</div>
+          </div>
+          <div class="bridge-arrow"><span class="bridge-arrow-head">→</span></div>
+          <div class="bridge-role">
+            <div class="bridge-role-icon">🏢</div>
+            <div class="bridge-role-name" data-i18n="bridge-r3-name">Property Manager</div>
+            <div class="bridge-role-desc" data-i18n="bridge-r3-desc">Fewer calls, full control</div>
+          </div>
+        </div>
+        <div class="bridge-bottom">
+          <div class="bridge-pill" data-i18n="bridge-pill">⚡ Evimiz Platform — connecting developers, integrators, and operators in one system</div>
+          <div class="bridge-cta" data-i18n="bridge-cta">Let me show you how it works in practice.</div>
+        </div>
+      </div>
+    </section>
+
     <!-- ========== CONTACT ========== -->
     <section id="contact" class="section section-contact fade-in">
       <div class="container">
@@ -1186,7 +1238,7 @@
         'nav-badge': 'For Admins',
         'nav-problem': 'Problem', 'nav-transparency': 'History', 'nav-remote': 'Remote',
         'nav-results': 'Results', 'nav-savings': 'Savings', 'nav-business': 'Business',
-        'nav-security': 'Security', 'nav-easy': 'App', 'nav-cost': 'Cost', 'nav-contact': 'Contact',
+        'nav-security': 'Security', 'nav-easy': 'App', 'nav-cost': 'Cost', 'nav-bridge': 'Platform', 'nav-contact': 'Contact',
         'hero-badge': 'For Property Managers',
         'hero-h1': 'Run Your Building<br>Without Constant Interruptions',
         'hero-subtitle': 'Manage access, residents, and security — all in one place.',
@@ -1280,6 +1332,13 @@
         'cost-f5-title': '📋 No disruption to residents',
         'cost-f5-text': 'Installed without downtime. Training included. Residents are up and running in minutes.',
         'cost-time-value': '⚡ Up and running in under 2 weeks. No construction. No downtime.',
+        'bridge-badge': 'Connected Ecosystem',
+        'bridge-title': 'This is powered by a <span class="hl">unified platform</span> connecting everyone behind the scenes.',
+        'bridge-r1-name': 'Developer', 'bridge-r1-desc': 'Projects that sell faster',
+        'bridge-r2-name': 'Integrator', 'bridge-r2-desc': 'Recurring revenue per building',
+        'bridge-r3-name': 'Property Manager', 'bridge-r3-desc': 'Fewer calls, full control',
+        'bridge-pill': '⚡ Evimiz Platform — connecting developers, integrators, and operators in one system',
+        'bridge-cta': 'Let me show you how it works in practice.',
         'contact-title': 'Let\'s See How This Can Simplify Your Daily Operations.',
         'contact-tagline': 'Let\'s show you how Evimiz works for property managers in Argentina.',
         'contact-btn': 'Book a Demo',
@@ -1289,7 +1348,7 @@
         'nav-badge': 'Para Administradoras',
         'nav-problem': 'Problema', 'nav-transparency': 'Historial', 'nav-remote': 'Remoto',
         'nav-results': 'Resultados', 'nav-savings': 'Ahorros', 'nav-business': 'Negocio',
-        'nav-security': 'Seguridad', 'nav-easy': 'App', 'nav-cost': 'Costo', 'nav-contact': 'Contacto',
+        'nav-security': 'Seguridad', 'nav-easy': 'App', 'nav-cost': 'Costo', 'nav-bridge': 'Plataforma', 'nav-contact': 'Contacto',
         'hero-badge': 'Para Administradoras de Propiedades',
         'hero-h1': 'Gestioná tu Edificio<br>Sin Interrupciones Constantes',
         'hero-subtitle': 'Controlá accesos, residentes y seguridad desde un solo lugar.',
@@ -1383,6 +1442,13 @@
         'cost-f5-title': '📋 Sin interrupción para los residentes',
         'cost-f5-text': 'Se instala sin tiempo de inactividad. Capacitación incluida. Los residentes están funcionando en minutos.',
         'cost-time-value': '⚡ En funcionamiento en menos de 2 semanas. Sin obras. Sin tiempo de inactividad.',
+        'bridge-badge': 'Ecosistema Conectado',
+        'bridge-title': 'Todo esto funciona con una <span class="hl">plataforma</span> que conecta a todos por detrás.',
+        'bridge-r1-name': 'Desarrollador', 'bridge-r1-desc': 'Proyectos que se venden más rápido',
+        'bridge-r2-name': 'Integrador', 'bridge-r2-desc': 'Ingresos recurrentes por edificio',
+        'bridge-r3-name': 'Administrador', 'bridge-r3-desc': 'Menos llamadas, más control',
+        'bridge-pill': '⚡ Plataforma Evimiz — conecta desarrolladores, integradores y administradores en un solo sistema',
+        'bridge-cta': 'Te muestro cómo funciona en la práctica.',
         'contact-title': 'Veamos Cómo Esto Puede Simplificar Tu Operación Diaria.',
         'contact-tagline': 'Te mostramos cómo funciona Evimiz para administradoras en Argentina.',
         'contact-btn': 'Reservar Demo',
