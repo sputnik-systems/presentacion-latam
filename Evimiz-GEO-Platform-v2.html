@@ -103,11 +103,6 @@
     justify-content: center;
   }
 
-  @keyframes fade {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
   .slide {
     position: absolute;
     top: 0; bottom: 0;
@@ -122,18 +117,13 @@
     padding: 80px 40px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.55s ease;
+    z-index: 0;
   }
   .slide.active {
     opacity: 1;
     pointer-events: all;
-    animation: fade 0.4s ease;
-    transform: translateX(-50%);
-  }
-  .slide.exit {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-50%);
+    z-index: 1;
   }
 
   /* ── Slide content ── */
@@ -1080,15 +1070,9 @@ function renderSlides() {
 
 function goTo(idx) {
   if (idx < 0 || idx >= slides.length) return;
-
   slides[current].classList.remove('active');
-  slides[current].classList.add('exit');
-  const prev = current;
-  setTimeout(() => slides[prev] && slides[prev].classList.remove('exit'), 450);
-
   current = idx;
   slides[current].classList.add('active');
-
   updateUI();
 }
 
