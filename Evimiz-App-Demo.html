@@ -306,6 +306,15 @@
   .s-stat-val { font-size: 2rem; font-weight: 800; color: var(--accent); line-height: 1; }
   .s-stat-lbl { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
 
+  /* ── Tagline ── */
+  .demo-tagline {
+    margin-top: 20px;
+    font-size: 0.82rem;
+    color: var(--accent);
+    font-style: italic;
+    opacity: 0.8;
+  }
+
   /* ── Bottombar ── */
   .bottombar {
     display: flex;
@@ -357,519 +366,424 @@
 </div>
 
 <script>
+/* helper: phone with real image */
+const PHONE_REAL = `<div class="demo-phone"><div class="phone-notch-bar"></div><img src="assets/app-live.jpg" alt="Evimiz App"></div>`;
+/* helper: phone placeholder */
+function phonePH(icon, label) {
+  return `<div class="demo-phone"><div class="phone-notch-bar"></div><div class="phone-placeholder"><div class="phone-placeholder-icon">${icon}</div><div class="phone-placeholder-label">${label}</div></div></div>`;
+}
+/* helper: feature rows */
+function feat(icon, name, desc) {
+  return `<div class="demo-feature"><div class="demo-feature-icon">${icon}</div><div class="demo-feature-text"><div class="demo-feature-name">${name}</div><div class="demo-feature-desc">${desc}</div></div></div>`;
+}
+/* helper: tagline */
+function tag(txt) { return `<p class="demo-tagline">${txt}</p>`; }
+
 const content = {
 
+
 en: [
-  /* 1 — Intro */
+
+  /* 1 — Overview */
   {
-    name: "Intro",
-    raw: `
-      <div class="s-tag">Evimiz App & Platform Demo</div>
-      <h1 class="s-h1">SEE HOW IT WORKS<br><span class="highlight">IN REAL LIFE</span></h1>
-      <p class="s-body">A walkthrough of the Evimiz resident experience —<br>from the first tap to daily living.</p>
-      <div class="s-pills">
-        <div class="s-pill blue">Mobile App</div>
-        <div class="s-pill purple">Smart Intercom</div>
-        <div class="s-pill green">Admin Platform</div>
+    name: "Overview",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Evimiz App</div>
+        <h1 class="s-h1">Everything<br><span class="hl">in one app</span></h1>
+        <p class="s-body">Your building — always in your pocket.</p>
+        <div class="demo-features">
+          ${feat("🚪","Access","Open any door instantly")}
+          ${feat("📹","Cameras","Live view from any entrance")}
+          ${feat("👤","Guests","Share access with one tap")}
+          ${feat("👨‍👩‍👧","Family","Everyone connected, one system")}
+        </div>
+        ${tag("Your building — in your pocket")}
       </div>
-    `
+      ${PHONE_REAL}
+    </div>`
   },
 
-  /* 2 — Home Screen */
+  /* 2 — Door Scenario */
   {
-    name: "Home Screen",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Mobile App</div>
-          <h1 class="s-h1">Everything you need,<br><span class="hl">at a glance</span></h1>
-          <p class="s-body">One screen. All building functions — access, cameras, guests, family. No learning curve.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🚪</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Door access</div>
-                <div class="demo-feature-desc">Open any entrance with one tap</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">📹</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Live cameras</div>
-                <div class="demo-feature-desc">See the entrance before you open</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">👥</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Guests & family</div>
-                <div class="demo-feature-desc">Add members and manage access</div>
-              </div>
-            </div>
-          </div>
+    name: "Door Scenario",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Incoming Call</div>
+        <h1 class="s-h1">Someone is<br><span class="hl">at your door</span></h1>
+        <p class="s-body">The intercom rings and your phone responds — with live video, audio, and a single button to let them in.</p>
+        <div class="demo-features">
+          ${feat("📺","Live video instantly","See the entrance the moment they ring")}
+          ${feat("👀","See who is there","Full picture before you decide")}
+          ${feat("🎙","Talk before opening","Two-way audio right from the app")}
         </div>
-        <div class="demo-phone">
-          <div class="phone-notch-bar"></div>
-          <img src="assets/app-live.jpg" alt="Evimiz Home Screen">
-        </div>
+        ${tag("Full control before you act")}
       </div>
-    `
+      ${phonePH("📲","Screenshot: Incoming call screen with live video preview + Answer / Decline")}
+    </div>`
   },
 
-  /* 3 — Door Call */
+  /* 3 — Remote Access */
   {
-    name: "Door Call",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Incoming Call</div>
-          <h1 class="s-h1">Answer from<br><span class="hl">anywhere</span></h1>
-          <p class="s-body">Someone rings your intercom. The app shows live video instantly — answer, talk, and open the door without being home.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">📺</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Live video</div>
-                <div class="demo-feature-desc">See who's at the door in real time</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔓</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">One-tap open</div>
-                <div class="demo-feature-desc">Unlock the door remotely, instantly</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔕</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Never miss a ring</div>
-                <div class="demo-feature-desc">Push notification even when screen is locked</div>
-              </div>
-            </div>
-          </div>
+    name: "Remote Access",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Remote Control</div>
+        <h1 class="s-h1">Not at home?<br><span class="hl">No problem.</span></h1>
+        <p class="s-body">You're at the office, travelling, or just on a walk. The door still opens when it should — you stay in control.</p>
+        <div class="demo-features">
+          ${feat("🌍","Answer from anywhere","Respond to the call from any device")}
+          ${feat("🔓","Open the door remotely","Unlock with one tap, wherever you are")}
+          ${feat("📍","No distance limit","Office, trip, abroad — it always works")}
         </div>
-        <div class="demo-phone" style="transform:rotate(-1.5deg)">
-          <div class="phone-notch-bar"></div>
-          <div class="phone-placeholder">
-            <div class="phone-placeholder-icon">📲</div>
-            <div class="phone-placeholder-label">Screenshot<br>Door Call Screen<br><br>Incoming call UI with live video preview + Open / Decline buttons</div>
-          </div>
-        </div>
+        ${tag("Distance is no longer a limitation")}
       </div>
-    `
+      ${phonePH("📡","Screenshot: Incoming call answered remotely — map or location indicator visible")}
+    </div>`
   },
 
-  /* 4 — Cameras */
+  /* 4 — Instant Access */
+  {
+    name: "Instant Access",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Quick Access</div>
+        <h1 class="s-h1">Open the door<br><span class="hl">in one tap</span></h1>
+        <p class="s-body">Hands full of bags? Gloves on? A widget on your lock screen — tap once, door opens. No searching, no fumbling.</p>
+        <div class="demo-features">
+          ${feat("🔑","No keys","Leave them at home for good")}
+          ${feat("🔢","No codes","Nothing to remember or type")}
+          ${feat("⚡","No delays","Instant response, every time")}
+        </div>
+        ${tag("Fast, simple, frictionless")}
+      </div>
+      ${phonePH("👆","Screenshot: Lock screen widget or large Open Door button — minimal UI")}
+    </div>`
+  },
+
+  /* 5 — Cameras */
   {
     name: "Cameras",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Cameras</div>
-          <h1 class="s-h1">Always on.<br><span class="hl">Always recorded.</span></h1>
-          <p class="s-body">Check live feeds from building entrances or scroll through the video archive — all from your phone, any time.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔴</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Live view</div>
-                <div class="demo-feature-desc">Stream any camera in real time</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🗂</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Video archive</div>
-                <div class="demo-feature-desc">Scroll back through recorded footage</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔒</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Private by design</div>
-                <div class="demo-feature-desc">Only your entrances, only for your unit</div>
-              </div>
-            </div>
-          </div>
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Cameras</div>
+        <h1 class="s-h1">See what's happening<br><span class="hl">in real time</span></h1>
+        <p class="s-body">Live feeds from all building entrances — always on, always available. Tap any camera to go fullscreen.</p>
+        <div class="demo-features">
+          ${feat("🔴","Live video","Stream any entrance camera right now")}
+          ${feat("🖥","Fullscreen view","Tap to expand any camera feed")}
+          ${feat("🔍","Zoom","Get closer when you need to see more")}
         </div>
-        <div class="demo-phone" style="transform:rotate(2deg)">
-          <div class="phone-notch-bar"></div>
-          <div class="phone-placeholder">
-            <div class="phone-placeholder-icon">📹</div>
-            <div class="phone-placeholder-label">Screenshot<br>Cameras Screen<br><br>Camera grid with live thumbnails + tap-to-fullscreen</div>
-          </div>
-        </div>
+        ${tag("Stay aware at any moment")}
       </div>
-    `
+      ${phonePH("📹","Screenshot: Camera grid with live thumbnails + tap-to-fullscreen view")}
+    </div>`
   },
 
-  /* 5 — Guest Access */
+  /* 6 — Video History */
+  {
+    name: "Video History",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Archive</div>
+        <h1 class="s-h1">Go back in time<br><span class="hl">when needed</span></h1>
+        <p class="s-body">Something happened while you were away? Scroll through the video archive and find the exact moment — fast.</p>
+        <div class="demo-features">
+          ${feat("📅","Browse by date","Navigate the archive by day or hour")}
+          ${feat("⏩","Scrub the timeline","Find the exact moment quickly")}
+          ${feat("💾","Save and share","Export clips directly from the app")}
+        </div>
+        ${tag("Nothing is ever missed")}
+      </div>
+      ${phonePH("🗂","Screenshot: Video archive timeline — scrubber bar + recorded clips list")}
+    </div>`
+  },
+
+  /* 7 — Guest Access */
   {
     name: "Guest Access",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Guest Access</div>
-          <h1 class="s-h1">Share access<br><span class="hl">in seconds</span></h1>
-          <p class="s-body">No key handoff. No waiting downstairs. Send a temporary code or a link — and revoke it the moment they leave.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔢</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Temporary codes</div>
-                <div class="demo-feature-desc">One-time or time-limited entry codes</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔗</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Access links</div>
-                <div class="demo-feature-desc">Send via WhatsApp, SMS, or any messenger</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">⏱</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Auto-expiry</div>
-                <div class="demo-feature-desc">Set duration — access disappears automatically</div>
-              </div>
-            </div>
-          </div>
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Guest Access</div>
+        <h1 class="s-h1">Share access<br><span class="hl">instantly</span></h1>
+        <p class="s-body">Send a temporary code or a link via any messenger. Set how long it lasts. Revoke it any time with one tap.</p>
+        <div class="demo-features">
+          ${feat("🔢","Temporary codes","Single-use or time-limited entry")}
+          ${feat("🔗","Share instantly","Via WhatsApp, SMS, or any app")}
+          ${feat("⏱","Auto-expiry","Access disappears when time runs out")}
         </div>
-        <div class="demo-phone" style="transform:rotate(-2deg)">
-          <div class="phone-notch-bar"></div>
-          <div class="phone-placeholder">
-            <div class="phone-placeholder-icon">🗝</div>
-            <div class="phone-placeholder-label">Screenshot<br>Guest Access Screen<br><br>Share code flow: set duration → generate link → send</div>
-          </div>
-        </div>
+        ${tag("No need to meet in person")}
       </div>
-    `
+      ${phonePH("🗝","Screenshot: Guest access flow — set duration → generate code → share link")}
+    </div>`
   },
 
-  /* 6 — Admin Platform */
+  /* 8 — Family Management */
   {
-    name: "Admin Panel",
-    raw: `
-      <div class="s-tag">Platform</div>
-      <h1 class="s-h1">Built for <span class="hl">operators</span></h1>
-      <p class="s-body">Web dashboard with real-time access logs, resident management, and full incident control — from any device.</p>
-      <div class="dash-grid">
-        <div class="dash-card active-card">
-          <div class="dash-card-icon">📊</div>
-          <div class="dash-card-name">Live Dashboard</div>
-          <div class="dash-card-desc">Real-time access events, open incidents, and activity feed across all buildings</div>
+    name: "Family",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Family Access</div>
+        <h1 class="s-h1">Everyone<br><span class="hl">stays connected</span></h1>
+        <p class="s-body">Add family members by phone number — they get full access to cameras, calls, and door controls right away.</p>
+        <div class="demo-features">
+          ${feat("👨‍👩‍👧","Add family members","By phone number, no invites needed")}
+          ${feat("🔐","Shared access","Cameras, calls, keys — for everyone")}
+          ${feat("✏️","Full control","Edit or remove members any time")}
         </div>
-        <div class="dash-card active-card">
-          <div class="dash-card-icon">👤</div>
-          <div class="dash-card-name">Resident Management</div>
-          <div class="dash-card-desc">Add, edit, or remove residents. Manage units, keys, and permissions in one place</div>
-        </div>
-        <div class="dash-card active-card">
-          <div class="dash-card-icon">🔔</div>
-          <div class="dash-card-name">Push & Alerts</div>
-          <div class="dash-card-desc">Send announcements, payment reminders, or emergency alerts to all residents instantly</div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon">📋</div>
-          <div class="dash-card-name">Audit Trail</div>
-          <div class="dash-card-desc">Full history of every access event, change, and incident — exportable at any time</div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon">🔧</div>
-          <div class="dash-card-name">Maintenance Queue</div>
-          <div class="dash-card-desc">Resident requests land in a structured queue — assign, track, and close with one click</div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon">🌐</div>
-          <div class="dash-card-name">Remote Access</div>
-          <div class="dash-card-desc">Grant entry, open doors, and resolve issues without being physically present</div>
-        </div>
+        ${tag("One system for everyone")}
       </div>
-    `
+      ${phonePH("👥","Screenshot: Family members list — user avatars with access status indicators")}
+    </div>`
   },
 
-  /* 7 — Key Message */
+  /* 9 — Security & Control */
   {
-    name: "Key Message",
+    name: "Security",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Security</div>
+        <h1 class="s-h1">Everything<br><span class="hl">is tracked</span></h1>
+        <p class="s-body">Every entry. Every door open. Every guest visit. A complete log is always available — clear and timestamped.</p>
+        <div class="demo-features">
+          ${feat("👤","Who entered","Name or code linked to every event")}
+          ${feat("🕐","When and how","Exact time, method, and door")}
+          ${feat("📋","Full audit trail","Exportable log for any time period")}
+        </div>
+        ${tag("Transparency and security, built in")}
+      </div>
+      ${phonePH("📋","Screenshot: Access log — entry list with timestamps, names, and door icons")}
+    </div>`
+  },
+
+  /* 10 — Closing */
+  {
+    name: "Closing",
     raw: `
       <div class="key-contrast">
-        <div class="key-line dim">Simple for residents.</div>
+        <div class="key-line dim">Simple. Secure.</div>
         <div class="key-divider"></div>
-        <div class="key-line bright">Powerful for operators.</div>
+        <div class="key-line bright">Always with you.</div>
       </div>
-      <div class="s-pills" style="margin-top:40px;">
-        <div class="s-pill blue">Door access</div>
+      <div class="s-pills" style="margin-top:36px;">
+        <div class="s-pill blue">Instant access</div>
         <div class="s-pill blue">Live cameras</div>
-        <div class="s-pill blue">Face unlock</div>
+        <div class="s-pill blue">Remote control</div>
         <div class="s-pill purple">Guest codes</div>
         <div class="s-pill purple">Family sharing</div>
         <div class="s-pill purple">Video archive</div>
-        <div class="s-pill green">Web dashboard</div>
-        <div class="s-pill green">Push notifications</div>
+        <div class="s-pill green">Full visibility</div>
+        <div class="s-pill green">Total control</div>
         <div class="s-pill green">Audit trail</div>
       </div>
-      <p class="micro" style="margin-top:32px;">geo.evimiz.ai · support@evimiz.ai</p>
+      <p class="micro" style="margin-top:28px;font-size:15px;opacity:0.5;">Evimiz makes buildings smarter to live in</p>
+      <p class="micro" style="margin-top:10px;">geo.evimiz.ai · support@evimiz.ai</p>
     `
   }
+
 ],
 
 es: [
-  /* 1 — Intro */
+
+  /* 1 — Overview */
   {
-    name: "Intro",
-    raw: `
-      <div class="s-tag">Evimiz App & Platform Demo</div>
-      <h1 class="s-h1">MIRÁ CÓMO FUNCIONA<br><span class="highlight">EN LA VIDA REAL</span></h1>
-      <p class="s-body">Un recorrido por la experiencia del residente Evimiz —<br>desde el primer toque hasta la vida cotidiana.</p>
-      <div class="s-pills">
-        <div class="s-pill blue">App Móvil</div>
-        <div class="s-pill purple">Portero Inteligente</div>
-        <div class="s-pill green">Plataforma Admin</div>
+    name: "Vista General",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Evimiz App</div>
+        <h1 class="s-h1">Todo<br><span class="hl">en una app</span></h1>
+        <p class="s-body">Tu edificio — siempre en tu bolsillo.</p>
+        <div class="demo-features">
+          ${feat("🚪","Acceso","Abrí cualquier puerta al instante")}
+          ${feat("📹","Cámaras","Vista en vivo desde cualquier entrada")}
+          ${feat("👤","Visitas","Compartí el acceso con un toque")}
+          ${feat("👨‍👩‍👧","Familia","Todos conectados, un solo sistema")}
+        </div>
+        ${tag("Tu edificio — en tu bolsillo")}
       </div>
-    `
+      ${PHONE_REAL}
+    </div>`
   },
 
-  /* 2 — Home Screen */
-  {
-    name: "Pantalla Principal",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">App Móvil</div>
-          <h1 class="s-h1">Todo lo que necesitás,<br><span class="hl">de un vistazo</span></h1>
-          <p class="s-body">Una pantalla. Todas las funciones del edificio — acceso, cámaras, visitas, familia. Sin curva de aprendizaje.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🚪</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Acceso a puertas</div>
-                <div class="demo-feature-desc">Abrí cualquier entrada con un toque</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">📹</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Cámaras en vivo</div>
-                <div class="demo-feature-desc">Mirá la entrada antes de abrir</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">👥</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Visitas y familia</div>
-                <div class="demo-feature-desc">Agregá miembros y gestioná el acceso</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="demo-phone">
-          <div class="phone-notch-bar"></div>
-          <img src="assets/app-live.jpg" alt="Evimiz Home Screen">
-        </div>
-      </div>
-    `
-  },
-
-  /* 3 — Door Call */
+  /* 2 — Door Scenario */
   {
     name: "Llamada en Puerta",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Llamada Entrante</div>
-          <h1 class="s-h1">Respondé desde<br><span class="hl">cualquier lugar</span></h1>
-          <p class="s-body">Alguien toca tu portero. La app muestra video en vivo al instante — respondé, hablá y abrí la puerta sin estar en casa.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">📺</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Video en vivo</div>
-                <div class="demo-feature-desc">Ves quién está en la puerta en tiempo real</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔓</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Un toque para abrir</div>
-                <div class="demo-feature-desc">Desbloqueá la puerta de forma remota</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔕</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Sin perder llamadas</div>
-                <div class="demo-feature-desc">Notificación push aunque la pantalla esté bloqueada</div>
-              </div>
-            </div>
-          </div>
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Llamada Entrante</div>
+        <h1 class="s-h1">Alguien está<br><span class="hl">en tu puerta</span></h1>
+        <p class="s-body">El portero suena y tu celular responde — con video en vivo, audio y un solo botón para abrir.</p>
+        <div class="demo-features">
+          ${feat("📺","Video en vivo al instante","Ves la entrada en el momento que tocan")}
+          ${feat("👀","Ves quién es","Imagen completa antes de decidir")}
+          ${feat("🎙","Hablás antes de abrir","Audio bidireccional desde la app")}
         </div>
-        <div class="demo-phone" style="transform:rotate(-1.5deg)">
-          <div class="phone-notch-bar"></div>
-          <div class="phone-placeholder">
-            <div class="phone-placeholder-icon">📲</div>
-            <div class="phone-placeholder-label">Captura de pantalla<br>Llamada en puerta<br><br>UI de llamada entrante con video en vivo + botones Abrir / Rechazar</div>
-          </div>
-        </div>
+        ${tag("Control total antes de actuar")}
       </div>
-    `
+      ${phonePH("📲","Captura: Pantalla de llamada entrante con video en vivo + Atender / Rechazar")}
+    </div>`
   },
 
-  /* 4 — Cameras */
+  /* 3 — Remote Access */
+  {
+    name: "Acceso Remoto",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Control Remoto</div>
+        <h1 class="s-h1">¿No estás en casa?<br><span class="hl">No importa.</span></h1>
+        <p class="s-body">Estás en la oficina, de viaje o dando una vuelta. La puerta igual se abre cuando debe — vos seguís en control.</p>
+        <div class="demo-features">
+          ${feat("🌍","Respondés desde cualquier lugar","Atendé la llamada desde cualquier dispositivo")}
+          ${feat("🔓","Abrís la puerta de forma remota","Un toque, desde donde estés")}
+          ${feat("📍","Sin límite de distancia","Oficina, viaje, otro país — siempre funciona")}
+        </div>
+        ${tag("La distancia ya no es una limitación")}
+      </div>
+      ${phonePH("📡","Captura: Llamada atendida de forma remota — indicador de ubicación visible")}
+    </div>`
+  },
+
+  /* 4 — Instant Access */
+  {
+    name: "Acceso Rápido",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Acceso Rápido</div>
+        <h1 class="s-h1">Abrí la puerta<br><span class="hl">con un toque</span></h1>
+        <p class="s-body">¿Manos ocupadas? ¿Guantes puestos? Un widget en la pantalla de bloqueo — tocás una vez y el portón se abre.</p>
+        <div class="demo-features">
+          ${feat("🔑","Sin llaves","Dejálas en casa para siempre")}
+          ${feat("🔢","Sin códigos","Nada que recordar ni escribir")}
+          ${feat("⚡","Sin demoras","Respuesta instantánea, siempre")}
+        </div>
+        ${tag("Rápido, simple, sin fricción")}
+      </div>
+      ${phonePH("👆","Captura: Widget en pantalla de bloqueo o botón grande de Abrir Puerta")}
+    </div>`
+  },
+
+  /* 5 — Cameras */
   {
     name: "Cámaras",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Cámaras</div>
-          <h1 class="s-h1">Siempre activas.<br><span class="hl">Siempre grabando.</span></h1>
-          <p class="s-body">Mirá las cámaras del edificio en vivo o revisá el archivo de video — desde tu celular, en cualquier momento.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔴</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Vista en vivo</div>
-                <div class="demo-feature-desc">Transmisión de cualquier cámara en tiempo real</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🗂</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Archivo de video</div>
-                <div class="demo-feature-desc">Revisá grabaciones anteriores cuando quieras</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔒</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Privado por diseño</div>
-                <div class="demo-feature-desc">Solo tus entradas, solo para tu unidad</div>
-              </div>
-            </div>
-          </div>
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Cámaras</div>
+        <h1 class="s-h1">Mirá qué pasa<br><span class="hl">en tiempo real</span></h1>
+        <p class="s-body">Transmisión en vivo de todas las entradas del edificio — siempre activas, siempre disponibles. Tocá para pantalla completa.</p>
+        <div class="demo-features">
+          ${feat("🔴","Video en vivo","Transmisión de cualquier cámara ahora mismo")}
+          ${feat("🖥","Pantalla completa","Tocá cualquier cámara para expandir")}
+          ${feat("🔍","Zoom","Acercate cuando necesitás ver más")}
         </div>
-        <div class="demo-phone" style="transform:rotate(2deg)">
-          <div class="phone-notch-bar"></div>
-          <div class="phone-placeholder">
-            <div class="phone-placeholder-icon">📹</div>
-            <div class="phone-placeholder-label">Captura de pantalla<br>Pantalla de Cámaras<br><br>Grilla de cámaras con miniaturas en vivo + toque para pantalla completa</div>
-          </div>
-        </div>
+        ${tag("Enterate de todo en cualquier momento")}
       </div>
-    `
+      ${phonePH("📹","Captura: Grilla de cámaras con miniaturas en vivo + vista en pantalla completa")}
+    </div>`
   },
 
-  /* 5 — Guest Access */
+  /* 6 — Video History */
+  {
+    name: "Historial de Video",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Archivo</div>
+        <h1 class="s-h1">Volvé atrás<br><span class="hl">cuando lo necesitás</span></h1>
+        <p class="s-body">¿Pasó algo mientras no estabas? Navegá el archivo de video y encontrá el momento exacto — rápido.</p>
+        <div class="demo-features">
+          ${feat("📅","Por fecha","Navegá el archivo por día u hora")}
+          ${feat("⏩","Línea de tiempo","Encontrá el momento exacto rápidamente")}
+          ${feat("💾","Guardá y compartí","Exportá clips directamente desde la app")}
+        </div>
+        ${tag("Nada se pierde nunca")}
+      </div>
+      ${phonePH("🗂","Captura: Línea de tiempo del archivo — barra de desplazamiento + lista de clips")}
+    </div>`
+  },
+
+  /* 7 — Guest Access */
   {
     name: "Acceso de Visitas",
-    raw: `
-      <div class="demo-split">
-        <div class="demo-text">
-          <div class="s-tag">Acceso de Visitas</div>
-          <h1 class="s-h1">Compartí el acceso<br><span class="hl">en segundos</span></h1>
-          <p class="s-body">Sin entregar llaves. Sin esperar en la planta baja. Enviá un código temporal o un link — y revocalo en cuanto se vayan.</p>
-          <div class="demo-features">
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔢</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Códigos temporales</div>
-                <div class="demo-feature-desc">Códigos de uso único o con tiempo limitado</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">🔗</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Links de acceso</div>
-                <div class="demo-feature-desc">Enviá por WhatsApp, SMS o cualquier mensajero</div>
-              </div>
-            </div>
-            <div class="demo-feature">
-              <div class="demo-feature-icon">⏱</div>
-              <div class="demo-feature-text">
-                <div class="demo-feature-name">Vencimiento automático</div>
-                <div class="demo-feature-desc">El acceso desaparece solo al terminar el tiempo</div>
-              </div>
-            </div>
-          </div>
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Acceso de Visitas</div>
+        <h1 class="s-h1">Compartí el acceso<br><span class="hl">al instante</span></h1>
+        <p class="s-body">Enviá un código temporal o un link por cualquier mensajero. Definí cuánto dura. Revocalo con un toque.</p>
+        <div class="demo-features">
+          ${feat("🔢","Códigos temporales","De uso único o con tiempo limitado")}
+          ${feat("🔗","Compartí al instante","Por WhatsApp, SMS o cualquier app")}
+          ${feat("⏱","Vencimiento automático","El acceso desaparece solo al terminar")}
         </div>
-        <div class="demo-phone" style="transform:rotate(-2deg)">
-          <div class="phone-notch-bar"></div>
-          <div class="phone-placeholder">
-            <div class="phone-placeholder-icon">🗝</div>
-            <div class="phone-placeholder-label">Captura de pantalla<br>Pantalla de Visitas<br><br>Flujo: definir duración → generar link → compartir</div>
-          </div>
-        </div>
+        ${tag("Sin necesidad de encontrarse en persona")}
       </div>
-    `
+      ${phonePH("🗝","Captura: Flujo de visitas — definir duración → generar código → compartir link")}
+    </div>`
   },
 
-  /* 6 — Admin Platform */
+  /* 8 — Family Management */
   {
-    name: "Panel Admin",
-    raw: `
-      <div class="s-tag">Plataforma</div>
-      <h1 class="s-h1">Construido para <span class="hl">operadores</span></h1>
-      <p class="s-body">Dashboard web con registros de acceso en tiempo real, gestión de residentes y control total de incidentes — desde cualquier dispositivo.</p>
-      <div class="dash-grid">
-        <div class="dash-card active-card">
-          <div class="dash-card-icon">📊</div>
-          <div class="dash-card-name">Dashboard en Vivo</div>
-          <div class="dash-card-desc">Eventos de acceso en tiempo real, incidentes abiertos y actividad en todos los edificios</div>
+    name: "Familia",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Acceso Familiar</div>
+        <h1 class="s-h1">Todos<br><span class="hl">conectados</span></h1>
+        <p class="s-body">Agregá familiares por número de teléfono — acceden a cámaras, llamadas y puertas de inmediato, sin invitaciones.</p>
+        <div class="demo-features">
+          ${feat("👨‍👩‍👧","Agregá miembros","Por número, sin confirmar invitaciones")}
+          ${feat("🔐","Acceso compartido","Cámaras, llamadas, llaves — para todos")}
+          ${feat("✏️","Control total","Editá o eliminá miembros en cualquier momento")}
         </div>
-        <div class="dash-card active-card">
-          <div class="dash-card-icon">👤</div>
-          <div class="dash-card-name">Gestión de Residentes</div>
-          <div class="dash-card-desc">Agregá, editá o eliminá residentes. Gestioná unidades, llaves y permisos en un solo lugar</div>
-        </div>
-        <div class="dash-card active-card">
-          <div class="dash-card-icon">🔔</div>
-          <div class="dash-card-name">Push y Alertas</div>
-          <div class="dash-card-desc">Enviá comunicados, recordatorios de pago o alertas de emergencia a todos los residentes</div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon">📋</div>
-          <div class="dash-card-name">Trazabilidad</div>
-          <div class="dash-card-desc">Historial completo de cada evento de acceso, cambio e incidente — exportable en cualquier momento</div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon">🔧</div>
-          <div class="dash-card-name">Cola de Mantenimiento</div>
-          <div class="dash-card-desc">Las solicitudes llegan en una cola estructurada — asigná, seguí y cerrá con un clic</div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-icon">🌐</div>
-          <div class="dash-card-name">Control Remoto</div>
-          <div class="dash-card-desc">Otorgá acceso, abrí puertas y resolvé problemas sin estar físicamente presente</div>
-        </div>
+        ${tag("Un sistema para todos")}
       </div>
-    `
+      ${phonePH("👥","Captura: Lista de miembros de la familia — avatares con indicadores de estado")}
+    </div>`
   },
 
-  /* 7 — Key Message */
+  /* 9 — Security & Control */
   {
-    name: "Mensaje Clave",
+    name: "Seguridad",
+    raw: `<div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag">Seguridad</div>
+        <h1 class="s-h1">Todo<br><span class="hl">queda registrado</span></h1>
+        <p class="s-body">Cada entrada. Cada apertura. Cada visita. Un registro completo, siempre disponible — claro y con hora exacta.</p>
+        <div class="demo-features">
+          ${feat("👤","Quién entró","Nombre o código vinculado a cada evento")}
+          ${feat("🕐","Cuándo y cómo","Hora exacta, método y puerta")}
+          ${feat("📋","Trazabilidad completa","Log exportable de cualquier período")}
+        </div>
+        ${tag("Transparencia y seguridad, de serie")}
+      </div>
+      ${phonePH("📋","Captura: Log de acceso — lista de entradas con timestamps, nombres e íconos de puerta")}
+    </div>`
+  },
+
+  /* 10 — Closing */
+  {
+    name: "Cierre",
     raw: `
       <div class="key-contrast">
-        <div class="key-line dim">Simple para los residentes.</div>
+        <div class="key-line dim">Simple. Seguro.</div>
         <div class="key-divider"></div>
-        <div class="key-line bright">Poderoso para los operadores.</div>
+        <div class="key-line bright">Siempre con vos.</div>
       </div>
-      <div class="s-pills" style="margin-top:40px;">
-        <div class="s-pill blue">Acceso a puertas</div>
+      <div class="s-pills" style="margin-top:36px;">
+        <div class="s-pill blue">Acceso instantáneo</div>
         <div class="s-pill blue">Cámaras en vivo</div>
-        <div class="s-pill blue">Reconocimiento facial</div>
+        <div class="s-pill blue">Control remoto</div>
         <div class="s-pill purple">Códigos de visitas</div>
         <div class="s-pill purple">Acceso familiar</div>
         <div class="s-pill purple">Archivo de video</div>
-        <div class="s-pill green">Dashboard web</div>
-        <div class="s-pill green">Notificaciones push</div>
+        <div class="s-pill green">Visibilidad total</div>
+        <div class="s-pill green">Control completo</div>
         <div class="s-pill green">Trazabilidad</div>
       </div>
-      <p class="micro" style="margin-top:32px;">geo.evimiz.ai · support@evimiz.ai</p>
+      <p class="micro" style="margin-top:28px;font-size:15px;opacity:0.5;">Evimiz hace que los edificios sean más inteligentes para vivir</p>
+      <p class="micro" style="margin-top:10px;">geo.evimiz.ai · support@evimiz.ai</p>
     `
   }
+
 ]
+
 
 }; // end content
 
