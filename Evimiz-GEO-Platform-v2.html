@@ -264,7 +264,31 @@
   }
   .dot.active { background: var(--accent); width: 18px; border-radius: 3px; opacity: 1; }
 
-  /* ── New utility classes ── */
+  /* ── Type A: hero — stark, full dark, huge text ── */
+  .slide-a .s-h1 { font-size: 62px; line-height: 1.08; }
+
+  /* ── Type B: structure — subtle glow + panel ── */
+  .slide-b::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 110%, rgba(77,163,255,0.07) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide-b > * { position: relative; z-index: 1; }
+
+  .s-panel {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 740px;
+    margin-top: 8px;
+  }
+
+  /* ── Utilities ── */
   .highlight { color: #4da3ff; text-shadow: 0 0 20px rgba(77,163,255,0.4); }
   .micro { margin-top: 20px; font-size: 14px; opacity: 0.4; }
 
@@ -410,9 +434,6 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
-    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
-  },
-  {
     tag: "The Market",
     title: "Buyers expect <span class='hl'>more than concrete</span>",
     body: "Smart home features now rank among the top 3 purchase decision factors in LatAm urban real estate. Digital infrastructure has become a baseline expectation — not a bonus.",
@@ -540,9 +561,6 @@ es: [
   },
   {
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
-  },
-  {
-    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
   },
   {
     tag: "El Mercado",
@@ -680,9 +698,6 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
-    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
-  },
-  {
     tag: "The Reality",
     title: "Teams drown in <span class='hl'>routine tasks</span>",
     body: "Access requests, lost key calls, maintenance complaints, guest authorizations — it never ends. Your team spends most of their day reacting, not managing.",
@@ -815,9 +830,6 @@ es: [
   },
   {
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
-  },
-  {
-    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
   },
   {
     tag: "La Realidad",
@@ -960,9 +972,6 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
-    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
-  },
-  {
     tag: "The Limit",
     title: "Hardware deals <span class='hl'>end at delivery</span>",
     body: "You install the intercom system, hand over the keys, and the relationship ends. Revenue stops. The next job has to start from zero — every single time.",
@@ -1091,9 +1100,6 @@ es: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
   },
   {
-    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
-  },
-  {
     tag: "El Límite",
     title: "Los proyectos de hardware <span class='hl'>terminan en la entrega</span>",
     body: "Instalás el sistema de portería, entregás las llaves, y la relación termina. Los ingresos se cortan. Cada nuevo trabajo tiene que empezar desde cero — siempre.",
@@ -1220,20 +1226,21 @@ let slides = [];
 function buildSlideHTML(s) {
   if (s.raw) return s.raw;
 
-  let inner = '';
+  let top = '';
+  let panel = '';
 
-  if (!s.simple && s.tag) inner += `<div class="s-tag">${s.tag}</div>`;
-  if (s.title) inner += `<h1 class="s-h1">${s.title}</h1>`;
-  if (s.body)  inner += `<p class="s-body">${s.body}</p>`;
+  if (!s.simple && s.tag) top += `<div class="s-tag">${s.tag}</div>`;
+  if (s.title) top += `<h1 class="s-h1">${s.title}</h1>`;
+  if (s.body)  top += `<p class="s-body">${s.body}</p>`;
 
   if (s.stats) {
-    inner += `<div class="s-stats">` +
+    panel += `<div class="s-stats">` +
       s.stats.map(st => `<div><div class="s-stat-val">${st.val}</div><div class="s-stat-lbl">${st.lbl}</div></div>`).join('') +
       `</div>`;
   }
 
   if (s.cards) {
-    inner += `<div class="s-cards">` +
+    panel += `<div class="s-cards">` +
       s.cards.map(c => `
         <div class="s-card">
           <div class="s-card-icon">${c.icon}</div>
@@ -1244,12 +1251,12 @@ function buildSlideHTML(s) {
   }
 
   if (s.pills) {
-    inner += `<div class="s-pills">` +
+    panel += `<div class="s-pills">` +
       s.pills.map(p => `<div class="s-pill ${p.cls}">${p.text}</div>`).join('') +
       `</div>`;
   }
 
-  return inner;
+  return top + (panel ? `<div class="s-panel">${panel}</div>` : '');
 }
 
 function renderSlides() {
@@ -1262,8 +1269,10 @@ function renderSlides() {
   slides = [];
 
   data.forEach((s, i) => {
+    const isHero = s.raw || (!s.cards && !s.stats && !s.pills);
+    const typeClass = isHero ? 'slide-a' : 'slide-b';
     const div = document.createElement('div');
-    div.className = 'slide' + (i === 0 ? ' active' : '') + (i === 0 ? ' slide-cover' : '');
+    div.className = 'slide ' + typeClass + (i === 0 ? ' active slide-cover' : '');
     div.innerHTML = buildSlideHTML(s);
     vp.appendChild(div);
     slides.push(div);
