@@ -71,10 +71,10 @@
   .slide {
     position: absolute; top: 0; bottom: 0; left: 50%;
     transform: translateX(-50%) translateY(20px);
-    width: 100%; max-width: 1040px;
+    width: 100%; max-width: 1200px;
     display: flex; flex-direction: column;
     justify-content: center; align-items: center; text-align: center;
-    padding: 48px 48px;
+    padding: 40px 56px;
     opacity: 0; pointer-events: none;
     transition: opacity 0.45s ease, transform 0.45s ease; z-index: 0;
   }
@@ -120,10 +120,12 @@
   /* ── Browser / dashboard frame ── */
   .browser-wrap {
     flex-shrink: 0; width: 620px;
-    border-radius: 12px; overflow: hidden;
+    border-radius: 14px; overflow: hidden;
     background: #0d1117;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 0 50px rgba(77,163,255,0.12), 0 24px 60px rgba(0,0,0,0.45);
+    border: 1px solid rgba(77,163,255,0.18);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04),
+                0 0 60px rgba(77,163,255,0.15),
+                0 28px 70px rgba(0,0,0,0.55);
   }
   .browser-bar {
     display: flex; align-items: center; gap: 6px;
@@ -140,7 +142,7 @@
   }
   .browser-wrap img {
     width: 100%; display: block;
-    max-height: 420px; object-fit: cover; object-position: top;
+    max-height: 440px; object-fit: cover; object-position: top;
   }
 
   /* ── Pills ── */
@@ -370,12 +372,7 @@ en: [
         </div>
         ${tag("Fits into your ecosystem")}
       </div>
-      <div class="browser-wrap" style="display:flex;align-items:center;justify-content:center;min-height:200px;background:var(--card);border:1px solid var(--border);">
-        <div style="text-align:center;opacity:0.25;padding:40px;">
-          <div style="font-size:2.5rem;margin-bottom:12px;">🔌</div>
-          <div style="font-size:0.8rem;">Integration screenshot<br>placeholder</div>
-        </div>
-      </div>
+      ${browser("07-mobile-branding-en.png")}
     </div>`
   },
 
@@ -571,12 +568,7 @@ es: [
         </div>
         ${tag("Se adapta a tu ecosistema")}
       </div>
-      <div class="browser-wrap" style="display:flex;align-items:center;justify-content:center;min-height:200px;background:var(--card);border:1px solid var(--border);">
-        <div style="text-align:center;opacity:0.25;padding:40px;">
-          <div style="font-size:2.5rem;margin-bottom:12px;">🔌</div>
-          <div style="font-size:0.8rem;">Captura de pantalla<br>integración</div>
-        </div>
-      </div>
+      ${browser("es-mobile-branding.png")}
     </div>`
   },
 
