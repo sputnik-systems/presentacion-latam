@@ -310,6 +310,29 @@
     font-size: 24px;
     line-height: 1;
   }
+  .flow-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin: 20px 0;
+  }
+  .flow-step {
+    background: #1f2937;
+    padding: 11px 32px;
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+  .flow-arrow { opacity: 0.4; font-size: 20px; line-height: 1; }
+  .flow-revenue {
+    color: #4da3ff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(77,163,255,0.5);
+    background: rgba(77,163,255,0.08);
+    border: 1px solid rgba(77,163,255,0.3);
+    padding: 14px 40px;
+  }
 
   .phone {
     width: 260px;
@@ -322,6 +345,7 @@
     overflow: hidden;
     margin-top: 24px;
     flex-shrink: 0;
+    transform: rotate(-2deg);
   }
   .screen { padding: 20px; }
   .status-bar {
@@ -358,6 +382,7 @@
     font-size: 13px;
     transition: 0.2s;
     cursor: default;
+    backdrop-filter: blur(6px);
   }
   .app-card:hover { transform: translateY(-2px); }
   .icon {
@@ -434,6 +459,9 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT A BUILDING SYSTEM<br><span class="highlight">THIS IS A DIGITAL REVENUE LAYER</span></h1>`
+  },
+  {
     tag: "The Market",
     title: "Buyers expect <span class='hl'>more than concrete</span>",
     body: "Smart home features now rank among the top 3 purchase decision factors in LatAm urban real estate. Digital infrastructure has become a baseline expectation — not a bonus.",
@@ -499,8 +527,16 @@ en: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
+  },
+  {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
-      <div class="flow"><div>Resident</div><span>→</span><div class="highlight">App</div><span>→</span><div>Action</div><span>→</span><div class="highlight">Revenue</div></div>
+      <div class="flow-vertical">
+        <div class="flow-step">Resident</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Mobile App</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">User Action</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Revenue</div>
+      </div>
       <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
@@ -561,6 +597,9 @@ es: [
   },
   {
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">ESTO NO ES UN SISTEMA DE EDIFICIOS<br><span class="highlight">ESTO ES UNA CAPA DIGITAL DE INGRESOS</span></h1>`
   },
   {
     tag: "El Mercado",
@@ -628,8 +667,16 @@ es: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">Y AQUÍ ES DONDE<br><span class="highlight">COMIENZA LA MONETIZACIÓN</span></h1>`
+  },
+  {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
-      <div class="flow"><div>Residente</div><span>→</span><div class="highlight">App</div><span>→</span><div>Acción</div><span>→</span><div class="highlight">Ingresos</div></div>
+      <div class="flow-vertical">
+        <div class="flow-step">Residente</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">App Móvil</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Acción</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Ingresos</div>
+      </div>
       <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
@@ -696,6 +743,9 @@ en: [
   },
   {
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">THIS IS NOT A BUILDING SYSTEM<br><span class="highlight">THIS IS A DIGITAL REVENUE LAYER</span></h1>`
   },
   {
     tag: "The Reality",
@@ -768,8 +818,16 @@ en: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
+  },
+  {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
-      <div class="flow"><div>Resident</div><span>→</span><div class="highlight">App</div><span>→</span><div>Action</div><span>→</span><div class="highlight">Revenue</div></div>
+      <div class="flow-vertical">
+        <div class="flow-step">Resident</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Mobile App</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">User Action</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Revenue</div>
+      </div>
       <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
@@ -830,6 +888,9 @@ es: [
   },
   {
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">ESTO NO ES UN SISTEMA DE EDIFICIOS<br><span class="highlight">ESTO ES UNA CAPA DIGITAL DE INGRESOS</span></h1>`
   },
   {
     tag: "La Realidad",
@@ -902,8 +963,16 @@ es: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">Y AQUÍ ES DONDE<br><span class="highlight">COMIENZA LA MONETIZACIÓN</span></h1>`
+  },
+  {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
-      <div class="flow"><div>Residente</div><span>→</span><div class="highlight">App</div><span>→</span><div>Acción</div><span>→</span><div class="highlight">Ingresos</div></div>
+      <div class="flow-vertical">
+        <div class="flow-step">Residente</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">App Móvil</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Acción</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Ingresos</div>
+      </div>
       <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
@@ -972,6 +1041,9 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT A BUILDING SYSTEM<br><span class="highlight">THIS IS A DIGITAL REVENUE LAYER</span></h1>`
+  },
+  {
     tag: "The Limit",
     title: "Hardware deals <span class='hl'>end at delivery</span>",
     body: "You install the intercom system, hand over the keys, and the relationship ends. Revenue stops. The next job has to start from zero — every single time.",
@@ -1016,8 +1088,16 @@ en: [
       <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
+    raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
+  },
+  {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
-      <div class="flow"><div>Resident</div><span>→</span><div class="highlight">App</div><span>→</span><div>Action</div><span>→</span><div class="highlight">Revenue</div></div>
+      <div class="flow-vertical">
+        <div class="flow-step">Resident</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Mobile App</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">User Action</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Revenue</div>
+      </div>
       <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
@@ -1100,6 +1180,9 @@ es: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES UN SISTEMA DE EDIFICIOS<br><span class="highlight">ESTO ES UNA CAPA DIGITAL DE INGRESOS</span></h1>`
+  },
+  {
     tag: "El Límite",
     title: "Los proyectos de hardware <span class='hl'>terminan en la entrega</span>",
     body: "Instalás el sistema de portería, entregás las llaves, y la relación termina. Los ingresos se cortan. Cada nuevo trabajo tiene que empezar desde cero — siempre.",
@@ -1144,8 +1227,16 @@ es: [
       <p class="micro">Uso diario. No ocasional.</p>`
   },
   {
+    raw: `<h1 class="s-h1">Y AQUÍ ES DONDE<br><span class="highlight">COMIENZA LA MONETIZACIÓN</span></h1>`
+  },
+  {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
-      <div class="flow"><div>Residente</div><span>→</span><div class="highlight">App</div><span>→</span><div>Acción</div><span>→</span><div class="highlight">Ingresos</div></div>
+      <div class="flow-vertical">
+        <div class="flow-step">Residente</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">App Móvil</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Acción</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Ingresos</div>
+      </div>
       <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
