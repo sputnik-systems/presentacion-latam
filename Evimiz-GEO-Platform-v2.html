@@ -24,7 +24,7 @@
 
   body {
     font-family: var(--font);
-    background: radial-gradient(circle at top, #111827, #020617);
+    background: radial-gradient(circle at 20% 20%, #1e293b, #020617);
     color: var(--text);
     height: 100vh;
     overflow: hidden;
@@ -278,14 +278,51 @@
     border-radius: 12px;
     font-size: 0.9rem;
   }
+  .flow span {
+    opacity: 0.5;
+    font-size: 24px;
+    line-height: 1;
+  }
 
   .phone {
-    width: 220px;
-    height: 440px;
-    border-radius: 32px;
-    background: linear-gradient(145deg, #1f2937, #0f172a);
-    box-shadow: 0 0 40px rgba(77,163,255,0.25);
+    width: 240px;
+    height: 480px;
+    border-radius: 36px;
+    background: linear-gradient(145deg, #0f172a, #020617);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 0 60px rgba(77,163,255,0.25),
+      inset 0 0 20px rgba(255,255,255,0.05);
+    position: relative;
     margin-top: 30px;
+    flex-shrink: 0;
+  }
+  .phone::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 6px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+  }
+  .screen {
+    padding: 52px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+  }
+  .app-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.7);
+    text-align: left;
   }
 
   /* Cards centered */
@@ -346,6 +383,9 @@ en: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
+  },
+  {
     tag: "The Market",
     title: "Buyers expect <span class='hl'>more than concrete</span>",
     body: "Smart home features now rank among the top 3 purchase decision factors in LatAm urban real estate. Digital infrastructure has become a baseline expectation — not a bonus.",
@@ -378,13 +418,13 @@ en: [
   },
   {
     raw: `<h1 class="s-h1">ONE<br><span class="highlight">CONNECTED SYSTEM</span></h1>
-      <div class="flow"><div>Hardware</div><div>Platform</div><div>Mobile App</div></div>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Platform</div><span>→</span><div>Mobile App</div></div>
       <p class="s-body">Everything works together in real time</p>`
   },
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"></div>`
+      <div class="phone"><div class="screen"><div class="app-card">🚪 Door</div><div class="app-card">📷 Camera</div><div class="app-card">👤 Guests</div></div></div>`
   },
   {
     tag: "Experience",
@@ -398,7 +438,7 @@ en: [
   },
   {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
-      <div class="flow"><div>Resident</div><div>App</div><div>Action</div><div>Revenue</div></div>
+      <div class="flow"><div>Resident</div><span>→</span><div class="highlight">App</div><span>→</span><div>Action</div><span>→</span><div class="highlight">Revenue</div></div>
       <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
@@ -454,6 +494,9 @@ es: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
+  },
+  {
     tag: "El Mercado",
     title: "Los compradores esperan <span class='hl'>más que hormigón</span>",
     body: "Las funciones inteligentes son hoy uno de los 3 factores de decisión de compra en real estate urbano de LatAm. La infraestructura digital ya es expectativa base — no un bonus.",
@@ -486,13 +529,13 @@ es: [
   },
   {
     raw: `<h1 class="s-h1">UN<br><span class="highlight">SISTEMA CONECTADO</span></h1>
-      <div class="flow"><div>Hardware</div><div>Plataforma</div><div>App Móvil</div></div>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Plataforma</div><span>→</span><div>App Móvil</div></div>
       <p class="s-body">Todo funciona junto en tiempo real</p>`
   },
   {
     raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
       <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
-      <div class="phone"></div>`
+      <div class="phone"><div class="screen"><div class="app-card">🚪 Puerta</div><div class="app-card">📷 Cámara</div><div class="app-card">👤 Visitas</div></div></div>`
   },
   {
     tag: "Experiencia",
@@ -506,7 +549,7 @@ es: [
   },
   {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
-      <div class="flow"><div>Residente</div><div>App</div><div>Acción</div><div>Ingresos</div></div>
+      <div class="flow"><div>Residente</div><span>→</span><div class="highlight">App</div><span>→</span><div>Acción</div><span>→</span><div class="highlight">Ingresos</div></div>
       <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
@@ -568,6 +611,9 @@ en: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT BUILDING MANAGEMENT<br><span class="highlight">THIS IS YOUR OPERATIONAL EDGE</span></h1>`
+  },
+  {
     tag: "The Reality",
     title: "Teams drown in <span class='hl'>routine tasks</span>",
     body: "Access requests, lost key calls, maintenance complaints, guest authorizations — it never ends. Your team spends most of their day reacting, not managing.",
@@ -600,7 +646,7 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"></div>`
+      <div class="phone"><div class="screen"><div class="app-card">🚪 Door</div><div class="app-card">📷 Camera</div><div class="app-card">👤 Guests</div></div></div>`
   },
   {
     tag: "Operational Impact",
@@ -625,7 +671,7 @@ en: [
   },
   {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
-      <div class="flow"><div>Resident</div><div>App</div><div>Action</div><div>Revenue</div></div>
+      <div class="flow"><div>Resident</div><span>→</span><div class="highlight">App</div><span>→</span><div>Action</div><span>→</span><div class="highlight">Revenue</div></div>
       <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
@@ -681,6 +727,9 @@ es: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES GESTIÓN DE EDIFICIOS<br><span class="highlight">ESTO ES TU VENTAJA OPERATIVA</span></h1>`
+  },
+  {
     tag: "La Realidad",
     title: "Los equipos se ahogan en <span class='hl'>tareas rutinarias</span>",
     body: "Solicitudes de acceso, llamadas por llaves perdidas, quejas de mantenimiento, autorización de visitas — nunca termina. Tu equipo pasa el día reaccionando, no gestionando.",
@@ -713,7 +762,7 @@ es: [
   {
     raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
       <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
-      <div class="phone"></div>`
+      <div class="phone"><div class="screen"><div class="app-card">🚪 Puerta</div><div class="app-card">📷 Cámara</div><div class="app-card">👤 Visitas</div></div></div>`
   },
   {
     tag: "Impacto Operativo",
@@ -738,7 +787,7 @@ es: [
   },
   {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
-      <div class="flow"><div>Residente</div><div>App</div><div>Acción</div><div>Ingresos</div></div>
+      <div class="flow"><div>Residente</div><span>→</span><div class="highlight">App</div><span>→</span><div>Acción</div><span>→</span><div class="highlight">Ingresos</div></div>
       <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
@@ -800,6 +849,9 @@ en: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT HARDWARE INSTALLATION<br><span class="highlight">THIS IS A RECURRING REVENUE BUSINESS</span></h1>`
+  },
+  {
     tag: "The Limit",
     title: "Hardware deals <span class='hl'>end at delivery</span>",
     body: "You install the intercom system, hand over the keys, and the relationship ends. Revenue stops. The next job has to start from zero — every single time.",
@@ -821,17 +873,17 @@ en: [
   },
   {
     raw: `<h1 class="s-h1">ONE<br><span class="highlight">CONNECTED SYSTEM</span></h1>
-      <div class="flow"><div>Hardware</div><div>Platform</div><div>Mobile App</div></div>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Platform</div><span>→</span><div>Mobile App</div></div>
       <p class="s-body">Everything works together in real time</p>`
   },
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"></div>`
+      <div class="phone"><div class="screen"><div class="app-card">🚪 Door</div><div class="app-card">📷 Camera</div><div class="app-card">👤 Guests</div></div></div>`
   },
   {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
-      <div class="flow"><div>Resident</div><div>App</div><div>Action</div><div>Revenue</div></div>
+      <div class="flow"><div>Resident</div><span>→</span><div class="highlight">App</div><span>→</span><div>Action</div><span>→</span><div class="highlight">Revenue</div></div>
       <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
@@ -907,6 +959,9 @@ es: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES INSTALACIÓN DE HARDWARE<br><span class="highlight">ESTO ES UN NEGOCIO DE INGRESOS RECURRENTES</span></h1>`
+  },
+  {
     tag: "El Límite",
     title: "Los proyectos de hardware <span class='hl'>terminan en la entrega</span>",
     body: "Instalás el sistema de portería, entregás las llaves, y la relación termina. Los ingresos se cortan. Cada nuevo trabajo tiene que empezar desde cero — siempre.",
@@ -928,17 +983,17 @@ es: [
   },
   {
     raw: `<h1 class="s-h1">UN<br><span class="highlight">SISTEMA CONECTADO</span></h1>
-      <div class="flow"><div>Hardware</div><div>Plataforma</div><div>App Móvil</div></div>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Plataforma</div><span>→</span><div>App Móvil</div></div>
       <p class="s-body">Todo funciona junto en tiempo real</p>`
   },
   {
     raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
       <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
-      <div class="phone"></div>`
+      <div class="phone"><div class="screen"><div class="app-card">🚪 Puerta</div><div class="app-card">📷 Cámara</div><div class="app-card">👤 Visitas</div></div></div>`
   },
   {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
-      <div class="flow"><div>Residente</div><div>App</div><div>Acción</div><div>Ingresos</div></div>
+      <div class="flow"><div>Residente</div><span>→</span><div class="highlight">App</div><span>→</span><div>Acción</div><span>→</span><div class="highlight">Ingresos</div></div>
       <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
@@ -1070,9 +1125,20 @@ function renderSlides() {
 
 function goTo(idx) {
   if (idx < 0 || idx >= slides.length) return;
-  slides[current].classList.remove('active');
-  current = idx;
-  slides[current].classList.add('active');
+
+  slides.forEach(s => {
+    s.style.transition = 'opacity 0.15s ease';
+    s.style.opacity = '0';
+  });
+
+  setTimeout(() => {
+    slides[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    slides.forEach(s => { s.style.transition = ''; s.style.opacity = ''; });
+    updateUI();
+  }, 150);
+
   updateUI();
 }
 
