@@ -384,6 +384,35 @@
     opacity: 0.85;
   }
 
+  /* ── Product Model (Core + Premium) ── */
+  .pricing-grid {
+    display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0;
+    align-items: center; width: 100%; max-width: 560px; margin: 28px auto 0;
+  }
+  .pricing-card {
+    background: var(--bg-card); border-radius: 18px; padding: 26px 22px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .pricing-card h2 { font-size: 1rem; font-weight: 800; letter-spacing: 0.03em; margin-bottom: 4px; }
+  .pricing-card.core { border: 1px solid rgba(77,163,255,0.25); }
+  .pricing-card.premium { border: 1px solid rgba(124,111,255,0.45); background: rgba(124,111,255,0.08); }
+  .pricing-card.premium h2 { color: var(--accent); }
+  .pricing-card.core h2 { color: var(--accent2); }
+  .pricing-feature {
+    font-size: 0.82rem; color: var(--text-muted);
+    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .pricing-feature:last-of-type { border-bottom: none; }
+  .pricing-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 10px; padding: 5px 14px; border-radius: 50px; text-align: center;
+    background: rgba(77,163,255,0.1); color: var(--accent2);
+  }
+  .pricing-label.revenue { background: rgba(124,111,255,0.15); color: var(--accent); }
+  .pricing-arrow {
+    font-size: 1.4rem; color: var(--accent); text-align: center; opacity: 0.6;
+  }
+
   /* ── Utilities ── */
   .highlight { color: #4da3ff; text-shadow: 0 0 20px rgba(77,163,255,0.4); }
   .micro { margin-top: 20px; font-size: 14px; opacity: 0.4; }
@@ -608,6 +637,29 @@ en: [
       { val: "< 1s",  lbl: "Door open time" },
       { val: "24/7",  lbl: "Remote access" }
     ]
+  },
+  {
+    raw: `<h1 class="s-h1">PRODUCT MODEL<br><span class="highlight">CORE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Free (Core)</h2>
+          <div class="pricing-feature">Door access</div>
+          <div class="pricing-feature">Answer calls</div>
+          <div class="pricing-feature">Live video</div>
+          <div class="pricing-feature">Family access</div>
+          <div class="pricing-label">Adoption</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Guest access</div>
+          <div class="pricing-feature">Face recognition</div>
+          <div class="pricing-feature">Video archive</div>
+          <div class="pricing-feature">Access history</div>
+          <div class="pricing-label revenue">Revenue</div>
+        </div>
+      </div>
+      <p class="micro">Core drives usage — premium drives revenue</p>`
   },
   {
     raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
@@ -896,6 +948,29 @@ en: [
     ]
   },
   {
+    raw: `<h1 class="s-h1">PRODUCT MODEL<br><span class="highlight">CORE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Free (Core)</h2>
+          <div class="pricing-feature">Door access</div>
+          <div class="pricing-feature">Answer calls</div>
+          <div class="pricing-feature">Live video</div>
+          <div class="pricing-feature">Family access</div>
+          <div class="pricing-label">Adoption</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Guest access</div>
+          <div class="pricing-feature">Face recognition</div>
+          <div class="pricing-feature">Video archive</div>
+          <div class="pricing-feature">Access history</div>
+          <div class="pricing-label revenue">Revenue</div>
+        </div>
+      </div>
+      <p class="micro">Core drives usage — premium drives revenue</p>`
+  },
+  {
     raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
   },
   {
@@ -1159,6 +1234,29 @@ en: [
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
       <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
       <p class="micro">Used daily. Not occasionally.</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">PRODUCT MODEL<br><span class="highlight">CORE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Free (Core)</h2>
+          <div class="pricing-feature">Door access</div>
+          <div class="pricing-feature">Answer calls</div>
+          <div class="pricing-feature">Live video</div>
+          <div class="pricing-feature">Family access</div>
+          <div class="pricing-label">Adoption</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Guest access</div>
+          <div class="pricing-feature">Face recognition</div>
+          <div class="pricing-feature">Video archive</div>
+          <div class="pricing-feature">Access history</div>
+          <div class="pricing-label revenue">Revenue</div>
+        </div>
+      </div>
+      <p class="micro">Core drives usage — premium drives revenue</p>`
   },
   {
     raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
