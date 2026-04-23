@@ -246,18 +246,19 @@
   }
 
   .nav-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 9px 20px;
-    border-radius: 9px;
+    background: #4da3ff;
+    border: none;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: 600;
     font-family: var(--font);
-    transition: all 0.2s;
+    transition: 0.2s;
   }
-  .nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(77,163,255,0.3); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; transform: none; box-shadow: none; }
 
   .dots { display: flex; gap: 6px; align-items: center; }
   .dot {
@@ -272,6 +273,7 @@
 
   /* ── New utility classes ── */
   .highlight { color: #4da3ff; }
+  .s-h1 .highlight { text-shadow: 0 0 20px rgba(77,163,255,0.4); }
 
   .flow {
     display: flex;
@@ -385,24 +387,14 @@ en: [
     ]
   },
   {
-    tag: "One Ecosystem",
-    title: "Hardware + Platform + <span class='hl'>App — unified</span>",
-    body: "One system covering everything: device binding, cloud management, and a branded resident app. No integrations to build. No vendors to coordinate.",
-    cards: [
-      { icon: "🔌", name: "Hardware", desc: "Smart intercom, HD cameras, NFC keys" },
-      { icon: "☁️", name: "Platform", desc: "GEO cloud — manage everything in one place" },
-      { icon: "📱", name: "App", desc: "White-label resident app with your brand" }
-    ]
+    raw: `<h1 class="s-h1">ONE<br><span class="highlight">CONNECTED SYSTEM</span></h1>
+      <div class="flow"><div>Hardware</div><div>Platform</div><div>Mobile App</div></div>
+      <p class="s-body">Everything works together in real time</p>`
   },
   {
-    tag: "Branded App",
-    title: "Your brand, <span class='hl'>in every resident's pocket</span>",
-    body: "Launch a fully branded mobile app — your logo, your colors, your identity. Residents use it every day: access control, guest keys, building notifications.",
-    pills: [
-      { text: "iOS + Android", cls: "blue" },
-      { text: "White-label", cls: "purple" },
-      { text: "10+ languages", cls: "green" }
-    ]
+    raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
+      <p class="s-body">Access, cameras, guests and security — all in one app</p>
+      <div class="phone"></div>`
   },
   {
     tag: "Experience",
@@ -415,14 +407,9 @@ en: [
     ]
   },
   {
-    tag: "Business Model",
-    title: "Free drives adoption. <span class='hl'>Premium drives revenue.</span>",
-    body: "Core features are free for residents — driving daily engagement. Premium unlocks smart home, parking, concierge, and more. You earn a share of every subscription.",
-    cards: [
-      { icon: "🆓", name: "Core — Free", desc: "Access control, video, guest keys, notifications" },
-      { icon: "⭐", name: "Premium — Paid", desc: "Smart home, parking, concierge, storage" },
-      { icon: "💰", name: "You earn", desc: "Revenue share on every premium subscription" }
-    ]
+    raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
+      <div class="flow"><div>Resident</div><div>App</div><div>Action</div><div>Revenue</div></div>
+      <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
     tag: "Revenue After Handover",
@@ -508,24 +495,14 @@ es: [
     ]
   },
   {
-    tag: "Un Ecosistema",
-    title: "Hardware + Plataforma + <span class='hl'>App — todo unificado</span>",
-    body: "Un solo sistema que cubre todo: vinculación de dispositivos, gestión en la nube y una app de residentes con tu marca. Sin integraciones. Sin coordinación de proveedores.",
-    cards: [
-      { icon: "🔌", name: "Hardware", desc: "Portero inteligente, cámaras HD, llaves NFC" },
-      { icon: "☁️", name: "Plataforma", desc: "GEO cloud — todo en un solo lugar" },
-      { icon: "📱", name: "App", desc: "App white-label con tu identidad de marca" }
-    ]
+    raw: `<h1 class="s-h1">UN<br><span class="highlight">SISTEMA CONECTADO</span></h1>
+      <div class="flow"><div>Hardware</div><div>Plataforma</div><div>App Móvil</div></div>
+      <p class="s-body">Todo funciona junto en tiempo real</p>`
   },
   {
-    tag: "App con tu Marca",
-    title: "Tu marca, <span class='hl'>en el bolsillo de cada residente</span>",
-    body: "Lanzá una app mobile completamente personalizada — tu logo, tus colores, tu identidad. Los residentes la usan a diario: acceso, llaves de visita, notificaciones del edificio.",
-    pills: [
-      { text: "iOS + Android", cls: "blue" },
-      { text: "White-label", cls: "purple" },
-      { text: "10+ idiomas", cls: "green" }
-    ]
+    raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
+      <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
+      <div class="phone"></div>`
   },
   {
     tag: "Experiencia",
@@ -538,14 +515,9 @@ es: [
     ]
   },
   {
-    tag: "Modelo de Negocio",
-    title: "Gratis impulsa el uso. <span class='hl'>Premium genera ingresos.</span>",
-    body: "Las funciones base son gratuitas para los residentes — generando uso diario. El premium desbloquea hogar inteligente, estacionamiento, conserjería y más. Vos ganás parte de cada suscripción.",
-    cards: [
-      { icon: "🆓", name: "Base — Gratis", desc: "Control de acceso, video, llaves de visita, notificaciones" },
-      { icon: "⭐", name: "Premium — Pago", desc: "Hogar inteligente, estacionamiento, conserjería, depósito" },
-      { icon: "💰", name: "Vos ganás", desc: "Participación en cada suscripción premium" }
-    ]
+    raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
+      <div class="flow"><div>Residente</div><div>App</div><div>Acción</div><div>Ingresos</div></div>
+      <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
     tag: "Ingresos Post-Entrega",
@@ -636,14 +608,9 @@ en: [
     ]
   },
   {
-    tag: "Resident Self-Service",
-    title: "Residents handle <span class='hl'>their own requests</span>",
-    body: "Guests, package pickups, maintenance requests, key sharing — residents do it themselves through the app. Your team only gets involved when truly needed.",
-    cards: [
-      { icon: "🚪", name: "Door access", desc: "Open gates and entrances from anywhere" },
-      { icon: "👤", name: "Guest keys", desc: "Send temporary digital keys in seconds" },
-      { icon: "🔧", name: "Maintenance", desc: "Submit and track requests without calling" }
-    ]
+    raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
+      <p class="s-body">Access, cameras, guests and security — all in one app</p>
+      <div class="phone"></div>`
   },
   {
     tag: "Operational Impact",
@@ -667,14 +634,9 @@ en: [
     ]
   },
   {
-    tag: "Monetization",
-    title: "Turn services into <span class='hl'>revenue</span>",
-    body: "Parking, storage, concierge, premium access — offer these as paid services directly through the resident app. New income without new headcount.",
-    cards: [
-      { icon: "🅿️", name: "Parking", desc: "Book and pay for parking spots in-app" },
-      { icon: "📦", name: "Storage", desc: "Manage storage units with digital access" },
-      { icon: "🤵", name: "Concierge", desc: "Premium service packages, billed monthly" }
-    ]
+    raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
+      <div class="flow"><div>Resident</div><div>App</div><div>Action</div><div>Revenue</div></div>
+      <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
     tag: "Business Model",
@@ -759,14 +721,9 @@ es: [
     ]
   },
   {
-    tag: "Autogestión de Residentes",
-    title: "Los residentes gestionan <span class='hl'>sus propias solicitudes</span>",
-    body: "Visitas, paquetes, solicitudes de mantenimiento, llaves compartidas — los residentes lo hacen solos desde la app. Tu equipo solo interviene cuando realmente es necesario.",
-    cards: [
-      { icon: "🚪", name: "Acceso a puertas", desc: "Abrí portones e ingresos desde cualquier lugar" },
-      { icon: "👤", name: "Llaves de visita", desc: "Enviá llaves digitales temporales en segundos" },
-      { icon: "🔧", name: "Mantenimiento", desc: "Reportá y seguí solicitudes sin llamar" }
-    ]
+    raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
+      <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
+      <div class="phone"></div>`
   },
   {
     tag: "Impacto Operativo",
@@ -790,14 +747,9 @@ es: [
     ]
   },
   {
-    tag: "Monetización",
-    title: "Convertí servicios en <span class='hl'>ingresos</span>",
-    body: "Estacionamiento, depósito, conserjería, acceso premium — ofrecelos como servicios pagos directamente desde la app de residentes. Nuevos ingresos sin sumar personal.",
-    cards: [
-      { icon: "🅿️", name: "Estacionamiento", desc: "Reservá y pagá cocheras desde la app" },
-      { icon: "📦", name: "Depósito", desc: "Gestioná espacios de almacenamiento con acceso digital" },
-      { icon: "🤵", name: "Conserjería", desc: "Paquetes de servicio premium, facturados mensualmente" }
-    ]
+    raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
+      <div class="flow"><div>Residente</div><div>App</div><div>Acción</div><div>Ingresos</div></div>
+      <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
     tag: "Modelo de Negocio",
@@ -878,34 +830,19 @@ en: [
     ]
   },
   {
-    tag: "Ready Ecosystem",
-    title: "No development required. <span class='hl'>Deploy in days.</span>",
-    body: "Evimiz GEO is your white-label platform — cloud-ready, pre-built, and deployable in a single afternoon. You configure, you brand, you activate. We handle everything else.",
-    cards: [
-      { icon: "☁️", name: "Cloud-ready", desc: "No servers, no infrastructure, no IT overhead" },
-      { icon: "🎨", name: "White-label", desc: "Your brand on the platform and resident app" },
-      { icon: "⚡", name: "Fast deploy", desc: "15 minutes average per building activation" }
-    ]
+    raw: `<h1 class="s-h1">ONE<br><span class="highlight">CONNECTED SYSTEM</span></h1>
+      <div class="flow"><div>Hardware</div><div>Platform</div><div>Mobile App</div></div>
+      <p class="s-body">Everything works together in real time</p>`
   },
   {
-    tag: "The App",
-    title: "Residents use it <span class='hl'>every single day</span>",
-    body: "Daily engagement means your product stays top of mind — and premium upgrades happen naturally over time. The app creates a long-term relationship between residents and your brand.",
-    stats: [
-      { val: "Daily", lbl: "Average open rate" },
-      { val: "10+",   lbl: "Languages supported" },
-      { val: "iOS+",  lbl: "Android included" }
-    ]
+    raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
+      <p class="s-body">Access, cameras, guests and security — all in one app</p>
+      <div class="phone"></div>`
   },
   {
-    tag: "Revenue Streams",
-    title: "Multiple income channels <span class='hl'>from one install</span>",
-    body: "Hardware margin at installation. Monthly platform fee per device. Upsells to premium features. Partner referral commissions. Every building you activate opens all four.",
-    cards: [
-      { icon: "🔌", name: "Hardware", desc: "One-time margin on devices and installation" },
-      { icon: "📆", name: "Platform fee", desc: "$2+/device/month — billed automatically" },
-      { icon: "⭐", name: "Premium upsell", desc: "Share of premium feature subscriptions" }
-    ]
+    raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
+      <div class="flow"><div>Resident</div><div>App</div><div>Action</div><div>Revenue</div></div>
+      <p class="s-body">Daily usage creates recurring income</p>`
   },
   {
     tag: "The Math",
@@ -1000,34 +937,19 @@ es: [
     ]
   },
   {
-    tag: "Ecosistema Listo",
-    title: "Sin desarrollo. <span class='hl'>Desplegá en días.</span>",
-    body: "Evimiz GEO es tu plataforma white-label — lista en la nube, pre-construida y desplegable en una tarde. Vos configurás, personalizás y activás. Nosotros nos encargamos del resto.",
-    cards: [
-      { icon: "☁️", name: "Lista en la nube", desc: "Sin servidores, sin infraestructura, sin IT" },
-      { icon: "🎨", name: "White-label", desc: "Tu marca en la plataforma y la app de residentes" },
-      { icon: "⚡", name: "Deploy rápido", desc: "Promedio de 15 minutos por activación de edificio" }
-    ]
+    raw: `<h1 class="s-h1">UN<br><span class="highlight">SISTEMA CONECTADO</span></h1>
+      <div class="flow"><div>Hardware</div><div>Plataforma</div><div>App Móvil</div></div>
+      <p class="s-body">Todo funciona junto en tiempo real</p>`
   },
   {
-    tag: "La App",
-    title: "Los residentes la usan <span class='hl'>todos los días</span>",
-    body: "El uso diario mantiene tu producto en la mente de todos — y las mejoras premium ocurren de forma natural con el tiempo. La app crea una relación a largo plazo entre los residentes y tu marca.",
-    stats: [
-      { val: "Diario", lbl: "Tasa de apertura promedio" },
-      { val: "10+",    lbl: "Idiomas soportados" },
-      { val: "iOS+",   lbl: "Android incluido" }
-    ]
+    raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
+      <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
+      <div class="phone"></div>`
   },
   {
-    tag: "Fuentes de Ingresos",
-    title: "Múltiples canales de ingreso <span class='hl'>desde una sola instalación</span>",
-    body: "Margen de hardware en la instalación. Fee mensual de plataforma por dispositivo. Upsells a funciones premium. Comisiones por referidos. Cada edificio que activás abre los cuatro.",
-    cards: [
-      { icon: "🔌", name: "Hardware", desc: "Margen único en dispositivos e instalación" },
-      { icon: "📆", name: "Fee de plataforma", desc: "$2+/dispositivo/mes — cobrado automáticamente" },
-      { icon: "⭐", name: "Upsell premium", desc: "Participación en suscripciones premium" }
-    ]
+    raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
+      <div class="flow"><div>Residente</div><div>App</div><div>Acción</div><div>Ingresos</div></div>
+      <p class="s-body">El uso diario crea ingresos recurrentes</p>`
   },
   {
     tag: "Los Números",
@@ -1101,9 +1023,11 @@ let current = 0;
 let slides = [];
 
 function buildSlideHTML(s) {
+  if (s.raw) return s.raw;
+
   let inner = '';
 
-  if (s.tag)   inner += `<div class="s-tag">${s.tag}</div>`;
+  if (!s.simple && s.tag) inner += `<div class="s-tag">${s.tag}</div>`;
   if (s.title) inner += `<h1 class="s-h1">${s.title}</h1>`;
   if (s.body)  inner += `<p class="s-body">${s.body}</p>`;
 
