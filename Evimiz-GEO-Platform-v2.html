@@ -106,7 +106,8 @@
   .slide {
     position: absolute;
     top: 0; bottom: 0;
-    left: 50%; transform: translateX(-50%);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
     width: 100%;
     max-width: 900px;
     display: flex;
@@ -117,12 +118,13 @@
     padding: 100px 40px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.55s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
     z-index: 0;
     backdrop-filter: blur(6px);
   }
   .slide.active {
     opacity: 1;
+    transform: translateX(-50%) translateY(0);
     pointer-events: all;
     z-index: 1;
   }
@@ -263,8 +265,8 @@
   .dot.active { background: var(--accent); width: 18px; border-radius: 3px; opacity: 1; }
 
   /* ── New utility classes ── */
-  .highlight { color: #4da3ff; }
-  .s-h1 .highlight { text-shadow: 0 0 20px rgba(77,163,255,0.4); }
+  .highlight { color: #4da3ff; text-shadow: 0 0 20px rgba(77,163,255,0.4); }
+  .micro { margin-top: 20px; font-size: 14px; opacity: 0.4; }
 
   .flow {
     display: flex;
@@ -286,45 +288,66 @@
   }
 
   .phone {
-    width: 240px;
-    height: 480px;
-    border-radius: 36px;
-    background: linear-gradient(145deg, #0f172a, #020617);
+    width: 260px;
+    height: 520px;
+    border-radius: 40px;
+    background: linear-gradient(145deg, #020617, #0f172a);
     border: 1px solid rgba(255,255,255,0.08);
-    box-shadow:
-      0 0 60px rgba(77,163,255,0.25),
-      inset 0 0 20px rgba(255,255,255,0.05);
+    box-shadow: 0 0 80px rgba(77,163,255,0.25);
     position: relative;
-    margin-top: 30px;
+    overflow: hidden;
+    margin-top: 24px;
     flex-shrink: 0;
   }
-  .phone::after {
-    content: "";
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
+  .screen { padding: 20px; }
+  .status-bar {
     height: 6px;
-    border-radius: 10px;
+    width: 60px;
     background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    margin: 0 auto 10px;
   }
-  .screen {
-    padding: 52px 16px 16px;
+  .app-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: #4da3ff;
+    border-radius: 50%;
+  }
+  .app-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
-    height: 100%;
   }
   .app-card {
     background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.06);
-    padding: 14px 16px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.7);
+    border-radius: 14px;
+    padding: 14px;
     text-align: left;
+    font-size: 13px;
+    transition: 0.2s;
+    cursor: default;
   }
+  .app-card:hover { transform: translateY(-2px); }
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+  }
+  .door   { background: #4da3ff; }
+  .camera { background: #22c55e; }
+  .guest  { background: #f59e0b; }
+  .key    { background: #a78bfa; }
+  .activity { margin-top: 14px; }
+  .activity-item { font-size: 12px; opacity: 0.6; padding: 4px 0; }
 
   /* Cards centered */
   .s-cards { justify-content: center; }
@@ -387,6 +410,9 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
+  },
+  {
     tag: "The Market",
     title: "Buyers expect <span class='hl'>more than concrete</span>",
     body: "Smart home features now rank among the top 3 purchase decision factors in LatAm urban real estate. Digital infrastructure has become a baseline expectation — not a bonus.",
@@ -425,8 +451,21 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"><div class="screen"><div class="app-card">🚪 Door</div><div class="app-card">📷 Camera</div><div class="app-card">👤 Guests</div></div></div>
-      <p style="margin-top:20px;font-size:16px;opacity:0.5;">Used daily. Not occasionally.</p>`
+      <div class="phone"><div class="screen">
+        <div class="status-bar"></div>
+        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
+        <div class="app-grid">
+          <div class="app-card"><div class="icon door"></div>Door</div>
+          <div class="app-card"><div class="icon camera"></div>Cameras</div>
+          <div class="app-card"><div class="icon guest"></div>Guests</div>
+          <div class="app-card"><div class="icon key"></div>Keys</div>
+        </div>
+        <div class="activity">
+          <div class="activity-item">Door opened</div>
+          <div class="activity-item">Guest invited</div>
+        </div>
+      </div></div>
+      <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
     tag: "Experience",
@@ -503,6 +542,9 @@ es: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
+  },
+  {
     tag: "El Mercado",
     title: "Los compradores esperan <span class='hl'>más que hormigón</span>",
     body: "Las funciones inteligentes son hoy uno de los 3 factores de decisión de compra en real estate urbano de LatAm. La infraestructura digital ya es expectativa base — no un bonus.",
@@ -541,8 +583,21 @@ es: [
   {
     raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
       <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
-      <div class="phone"><div class="screen"><div class="app-card">🚪 Puerta</div><div class="app-card">📷 Cámara</div><div class="app-card">👤 Visitas</div></div></div>
-      <p style="margin-top:20px;font-size:16px;opacity:0.5;">Uso diario. No ocasional.</p>`
+      <div class="phone"><div class="screen">
+        <div class="status-bar"></div>
+        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
+        <div class="app-grid">
+          <div class="app-card"><div class="icon door"></div>Puerta</div>
+          <div class="app-card"><div class="icon camera"></div>Cámara</div>
+          <div class="app-card"><div class="icon guest"></div>Visitas</div>
+          <div class="app-card"><div class="icon key"></div>Llaves</div>
+        </div>
+        <div class="activity">
+          <div class="activity-item">Puerta abierta</div>
+          <div class="activity-item">Visita invitada</div>
+        </div>
+      </div></div>
+      <p class="micro">Uso diario. No ocasional.</p>`
   },
   {
     tag: "Experiencia",
@@ -625,6 +680,9 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
+  },
+  {
     tag: "The Reality",
     title: "Teams drown in <span class='hl'>routine tasks</span>",
     body: "Access requests, lost key calls, maintenance complaints, guest authorizations — it never ends. Your team spends most of their day reacting, not managing.",
@@ -657,8 +715,21 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"><div class="screen"><div class="app-card">🚪 Door</div><div class="app-card">📷 Camera</div><div class="app-card">👤 Guests</div></div></div>
-      <p style="margin-top:20px;font-size:16px;opacity:0.5;">Used daily. Not occasionally.</p>`
+      <div class="phone"><div class="screen">
+        <div class="status-bar"></div>
+        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
+        <div class="app-grid">
+          <div class="app-card"><div class="icon door"></div>Door</div>
+          <div class="app-card"><div class="icon camera"></div>Cameras</div>
+          <div class="app-card"><div class="icon guest"></div>Guests</div>
+          <div class="app-card"><div class="icon key"></div>Keys</div>
+        </div>
+        <div class="activity">
+          <div class="activity-item">Door opened</div>
+          <div class="activity-item">Guest invited</div>
+        </div>
+      </div></div>
+      <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
     tag: "Operational Impact",
@@ -746,6 +817,9 @@ es: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
+  },
+  {
     tag: "La Realidad",
     title: "Los equipos se ahogan en <span class='hl'>tareas rutinarias</span>",
     body: "Solicitudes de acceso, llamadas por llaves perdidas, quejas de mantenimiento, autorización de visitas — nunca termina. Tu equipo pasa el día reaccionando, no gestionando.",
@@ -778,8 +852,21 @@ es: [
   {
     raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
       <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
-      <div class="phone"><div class="screen"><div class="app-card">🚪 Puerta</div><div class="app-card">📷 Cámara</div><div class="app-card">👤 Visitas</div></div></div>
-      <p style="margin-top:20px;font-size:16px;opacity:0.5;">Uso diario. No ocasional.</p>`
+      <div class="phone"><div class="screen">
+        <div class="status-bar"></div>
+        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
+        <div class="app-grid">
+          <div class="app-card"><div class="icon door"></div>Puerta</div>
+          <div class="app-card"><div class="icon camera"></div>Cámara</div>
+          <div class="app-card"><div class="icon guest"></div>Visitas</div>
+          <div class="app-card"><div class="icon key"></div>Llaves</div>
+        </div>
+        <div class="activity">
+          <div class="activity-item">Puerta abierta</div>
+          <div class="activity-item">Visita invitada</div>
+        </div>
+      </div></div>
+      <p class="micro">Uso diario. No ocasional.</p>`
   },
   {
     tag: "Impacto Operativo",
@@ -873,6 +960,9 @@ en: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">THIS IS NOT ACCESS CONTROL<br><span class="highlight">THIS IS A REVENUE PLATFORM</span></h1>`
+  },
+  {
     tag: "The Limit",
     title: "Hardware deals <span class='hl'>end at delivery</span>",
     body: "You install the intercom system, hand over the keys, and the relationship ends. Revenue stops. The next job has to start from zero — every single time.",
@@ -900,8 +990,21 @@ en: [
   {
     raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
       <p class="s-body">Access, cameras, guests and security — all in one app</p>
-      <div class="phone"><div class="screen"><div class="app-card">🚪 Door</div><div class="app-card">📷 Camera</div><div class="app-card">👤 Guests</div></div></div>
-      <p style="margin-top:20px;font-size:16px;opacity:0.5;">Used daily. Not occasionally.</p>`
+      <div class="phone"><div class="screen">
+        <div class="status-bar"></div>
+        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
+        <div class="app-grid">
+          <div class="app-card"><div class="icon door"></div>Door</div>
+          <div class="app-card"><div class="icon camera"></div>Cameras</div>
+          <div class="app-card"><div class="icon guest"></div>Guests</div>
+          <div class="app-card"><div class="icon key"></div>Keys</div>
+        </div>
+        <div class="activity">
+          <div class="activity-item">Door opened</div>
+          <div class="activity-item">Guest invited</div>
+        </div>
+      </div></div>
+      <p class="micro">Used daily. Not occasionally.</p>`
   },
   {
     raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
@@ -988,6 +1091,9 @@ es: [
     raw: `<h1 class="s-h1" style="font-size:64px;line-height:1.1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
   },
   {
+    raw: `<h1 class="s-h1">ESTO NO ES CONTROL DE ACCESO<br><span class="highlight">ESTO ES UNA PLATAFORMA DE INGRESOS</span></h1>`
+  },
+  {
     tag: "El Límite",
     title: "Los proyectos de hardware <span class='hl'>terminan en la entrega</span>",
     body: "Instalás el sistema de portería, entregás las llaves, y la relación termina. Los ingresos se cortan. Cada nuevo trabajo tiene que empezar desde cero — siempre.",
@@ -1015,8 +1121,21 @@ es: [
   {
     raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
       <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
-      <div class="phone"><div class="screen"><div class="app-card">🚪 Puerta</div><div class="app-card">📷 Cámara</div><div class="app-card">👤 Visitas</div></div></div>
-      <p style="margin-top:20px;font-size:16px;opacity:0.5;">Uso diario. No ocasional.</p>`
+      <div class="phone"><div class="screen">
+        <div class="status-bar"></div>
+        <div class="app-header"><div>Evimiz</div><div class="dot"></div></div>
+        <div class="app-grid">
+          <div class="app-card"><div class="icon door"></div>Puerta</div>
+          <div class="app-card"><div class="icon camera"></div>Cámara</div>
+          <div class="app-card"><div class="icon guest"></div>Visitas</div>
+          <div class="app-card"><div class="icon key"></div>Llaves</div>
+        </div>
+        <div class="activity">
+          <div class="activity-item">Puerta abierta</div>
+          <div class="activity-item">Visita invitada</div>
+        </div>
+      </div></div>
+      <p class="micro">Uso diario. No ocasional.</p>`
   },
   {
     raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
@@ -1156,20 +1275,12 @@ function renderSlides() {
 
 function goTo(idx) {
   if (idx < 0 || idx >= slides.length) return;
-
-  slides.forEach(s => {
-    s.style.transition = 'opacity 0.15s ease';
-    s.style.opacity = '0';
-  });
-
+  slides.forEach(s => s.classList.remove('active'));
+  current = idx;
   setTimeout(() => {
-    slides[current].classList.remove('active');
-    current = idx;
     slides[current].classList.add('active');
-    slides.forEach(s => { s.style.transition = ''; s.style.opacity = ''; });
     updateUI();
-  }, 150);
-
+  }, 50);
   updateUI();
 }
 
