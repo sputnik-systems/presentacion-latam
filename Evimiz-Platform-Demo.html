@@ -97,39 +97,44 @@
   .micro { margin-top: 16px; font-size: 13px; opacity: 0.35; }
   .demo-tagline { margin-top: 18px; font-size: 0.82rem; color: var(--accent); font-style: italic; opacity: 0.8; }
 
-  /* ── Split layout ── */
-  .demo-split {
-    display: flex; align-items: center; gap: 36px;
+  /* ── Stack layout: header row + full-width browser ── */
+  .demo-stack {
+    display: flex; flex-direction: column; gap: 20px;
     width: 100%;
   }
-  .demo-text { flex: 0 0 30%; min-width: 260px; text-align: left; }
-  .demo-text .s-h1 { font-size: 30px; margin-bottom: 10px; }
-  .demo-text .s-body { font-size: 14px; margin-bottom: 0; max-width: 100%; }
+  .demo-header {
+    display: flex; align-items: center; gap: 32px;
+    width: 100%;
+  }
+  .demo-header-text { flex: 0 0 auto; text-align: left; }
+  .demo-header-text .s-tag { margin-bottom: 8px; }
+  .demo-header-text .s-h1 { font-size: 28px; margin-bottom: 0; line-height: 1.2; }
+  .demo-header-feats {
+    flex: 1; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center;
+  }
 
   /* ── Feature list ── */
-  .demo-features { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; }
-  .demo-feature { display: flex; align-items: center; gap: 12px; }
+  .demo-feature { display: flex; align-items: center; gap: 10px; }
   .demo-feature-icon {
-    font-size: 1.2rem; width: 38px; height: 38px;
+    font-size: 1.1rem; width: 34px; height: 34px;
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
-  .demo-feature-name { font-size: 0.88rem; font-weight: 700; }
-  .demo-feature-desc { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+  .demo-feature-name { font-size: 0.82rem; font-weight: 700; }
+  .demo-feature-desc { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
 
   /* ── Browser / dashboard frame ── */
   .browser-wrap {
-    flex: 1; min-width: 0;
-    border-radius: 14px; overflow: hidden;
+    width: 100%; border-radius: 14px; overflow: hidden;
     background: #0d1117;
     border: 1px solid rgba(77,163,255,0.18);
     box-shadow: 0 0 0 1px rgba(255,255,255,0.04),
-                0 0 60px rgba(77,163,255,0.15),
-                0 28px 70px rgba(0,0,0,0.55);
+                0 0 50px rgba(77,163,255,0.12),
+                0 20px 50px rgba(0,0,0,0.5);
   }
   .browser-bar {
     display: flex; align-items: center; gap: 6px;
-    padding: 10px 14px; background: #161d27;
+    padding: 9px 14px; background: #161d27;
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
   .bdot { width: 10px; height: 10px; border-radius: 50%; }
@@ -137,12 +142,12 @@
   .bdot.y { background: #febc2e; }
   .bdot.g { background: #28c840; }
   .burl {
-    flex: 1; height: 20px; margin: 0 8px;
+    flex: 1; height: 18px; margin: 0 8px;
     background: rgba(255,255,255,0.04); border-radius: 5px;
   }
   .browser-wrap img {
     width: 100%; display: block;
-    height: 480px; object-fit: cover; object-position: top;
+    height: 400px; object-fit: cover; object-position: top;
   }
 
   /* ── Pills ── */
@@ -200,6 +205,18 @@
 function feat(icon, name, desc) {
   return `<div class="demo-feature"><div class="demo-feature-icon">${icon}</div><div><div class="demo-feature-name">${name}</div><div class="demo-feature-desc">${desc}</div></div></div>`;
 }
+function stack(tag, title, feats, imgSrc) {
+  return `<div class="demo-stack">
+    <div class="demo-header">
+      <div class="demo-header-text">
+        <div class="s-tag">${tag}</div>
+        <h1 class="s-h1">${title}</h1>
+      </div>
+      <div class="demo-header-feats">${feats}</div>
+    </div>
+    ${browser(imgSrc)}
+  </div>`;
+}
 function tag(txt) { return `<p class="demo-tagline">${txt}</p>`; }
 function browser(imgSrc) {
   return `<div class="browser-wrap"><div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div><img src="${imgSrc}" alt="Platform Screenshot"></div>`;
@@ -227,153 +244,82 @@ en: [
   /* 2 — Overview */
   {
     name: "Overview",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Dashboard</div>
-        <h1 class="s-h1">A complete view<br><span class="hl">of your property</span></h1>
-        <p class="s-body">One screen. All your infrastructure — buildings, entrances, devices, and users — visible at a glance.</p>
-        <div class="demo-features">
-          ${feat("🏢","Buildings","All properties in one centralized view")}
-          ${feat("🚪","Entrances","Every access point, live status")}
-          ${feat("📡","Devices","Hardware health and connectivity")}
-          ${feat("👤","Users","Residents and staff in one place")}
-        </div>
-        ${tag("Full control from a single interface")}
-      </div>
-      ${browser("12-english-dashboard.png")}
-    </div>`
+    raw: stack("Dashboard","A complete view of <span class='hl'>your property</span>",
+      feat("🏢","Buildings","All properties in one view") +
+      feat("🚪","Entrances","Every access point, live") +
+      feat("📡","Devices","Hardware health & connectivity") +
+      feat("👤","Users","Residents and staff in one place"),
+      "12-english-dashboard.png")
   },
 
   /* 3 — Access Management */
   {
     name: "Access Management",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Access Management</div>
-        <h1 class="s-h1">Control<br><span class="hl">who can enter</span></h1>
-        <p class="s-body">Add, remove and configure users instantly. Assign permissions by role, unit, or entrance — no manual paperwork.</p>
-        <div class="demo-features">
-          ${feat("➕","Add and remove users","Changes take effect immediately")}
-          ${feat("🔐","Assign permissions","By role, unit, entrance, or schedule")}
-          ${feat("⚙️","Manage access rights","Full granular control over every user")}
-        </div>
-        ${tag("No manual processes")}
-      </div>
-      ${browser("05-residents-en.png")}
-    </div>`
+    raw: stack("Access Management","Control <span class='hl'>who can enter</span>",
+      feat("➕","Add & remove users","Changes take effect immediately") +
+      feat("🔐","Assign permissions","By role, unit, entrance, or schedule") +
+      feat("⚙️","Manage rights","Full granular control over every user"),
+      "05-residents-en.png")
   },
 
   /* 4 — Real-Time Monitoring */
   {
     name: "Monitoring",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Live Monitoring</div>
-        <h1 class="s-h1">See everything<br><span class="hl">live</span></h1>
-        <p class="s-body">Real-time video feeds from all cameras across all properties. No switching between systems — it's all here.</p>
-        <div class="demo-features">
-          ${feat("🔴","Live video feeds","Stream any camera instantly")}
-          ${feat("📷","Multiple cameras","All entrances, one dashboard")}
-          ${feat("⚡","Instant visibility","No delay, no refresh needed")}
-        </div>
-        ${tag("Know what's happening at any moment")}
-      </div>
-      ${browser("13-call-quality.png")}
-    </div>`
+    raw: stack("Live Monitoring","See everything <span class='hl'>live</span>",
+      feat("🔴","Live video feeds","Stream any camera instantly") +
+      feat("📷","Multiple cameras","All entrances, one dashboard") +
+      feat("⚡","Instant visibility","No delay, no refresh needed"),
+      "13-call-quality.png")
   },
 
   /* 5 — Events & Logs */
   {
     name: "Events & Logs",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Events & Logs</div>
-        <h1 class="s-h1">Track<br><span class="hl">every action</span></h1>
-        <p class="s-body">Every entry, every door open, every user change — logged automatically with timestamp and context.</p>
-        <div class="demo-features">
-          ${feat("📋","Entry history","Full record of who entered and when")}
-          ${feat("🕐","Event timeline","Chronological view of all system events")}
-          ${feat("🔍","Full transparency","Searchable, filterable, exportable")}
-        </div>
-        ${tag("Everything is recorded")}
-      </div>
-      ${browser("15-pro-house-detail.png")}
-    </div>`
+    raw: stack("Events & Logs","Track <span class='hl'>every action</span>",
+      feat("📋","Entry history","Full record of who entered and when") +
+      feat("🕐","Event timeline","Chronological view of all events") +
+      feat("🔍","Full transparency","Searchable, filterable, exportable"),
+      "15-pro-house-detail.png")
   },
 
   /* 6 — Alerts */
   {
     name: "Alerts",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Alerts & Notifications</div>
-        <h1 class="s-h1">Stay informed<br><span class="hl">automatically</span></h1>
-        <p class="s-body">The platform notifies you the moment something needs attention — device offline, unauthorized access, or system update required.</p>
-        <div class="demo-features">
-          ${feat("🔔","Instant alerts","Triggered by events you define")}
-          ${feat("📲","Push notifications","Delivered to staff in real time")}
-          ${feat("📊","Automated reports","Scheduled summaries, no manual work")}
-        </div>
-        ${tag("Nothing goes unnoticed")}
-      </div>
-      ${browser("09-mobile-push-en.png")}
-    </div>`
+    raw: stack("Alerts & Notifications","Stay informed <span class='hl'>automatically</span>",
+      feat("🔔","Instant alerts","Triggered by events you define") +
+      feat("📲","Push notifications","Delivered to staff in real time") +
+      feat("📊","Automated reports","Scheduled summaries, no manual work"),
+      "09-mobile-push-en.png")
   },
 
   /* 7 — Remote Control */
   {
     name: "Remote Control",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Remote Control</div>
-        <h1 class="s-h1">Operate the system<br><span class="hl">in real time</span></h1>
-        <p class="s-body">Open doors, restart devices, update access rights — all from the platform, without being on site.</p>
-        <div class="demo-features">
-          ${feat("🔓","Open doors","Unlock any entrance remotely, instantly")}
-          ${feat("🔄","Restart devices","Reboot hardware without a site visit")}
-          ${feat("⚡","Update access instantly","Changes apply in seconds, not hours")}
-        </div>
-        ${tag("Instant response when needed")}
-      </div>
-      ${browser("14-installation-points-tab.png")}
-    </div>`
+    raw: stack("Remote Control","Operate the system <span class='hl'>in real time</span>",
+      feat("🔓","Open doors","Unlock any entrance remotely, instantly") +
+      feat("🔄","Restart devices","Reboot hardware without a site visit") +
+      feat("⚡","Update access instantly","Changes apply in seconds"),
+      "14-installation-points-tab.png")
   },
 
   /* 8 — Multi-Property */
   {
     name: "Multi-Property",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Scale</div>
-        <h1 class="s-h1">Manage multiple buildings<br><span class="hl">in one place</span></h1>
-        <p class="s-body">One platform for 1 building or 100. Add new properties in minutes — users, devices, and access rules scale with you.</p>
-        <div class="demo-features">
-          ${feat("🏙","Centralized system","All buildings, one login, one view")}
-          ${feat("📈","Scalable across projects","Add properties without extra infrastructure")}
-        </div>
-        ${tag("Built for growth")}
-      </div>
-      ${browser("12-english-dashboard.png")}
-    </div>`
+    raw: stack("Scale","Manage multiple buildings <span class='hl'>in one place</span>",
+      feat("🏙","Centralized system","All buildings, one login, one view") +
+      feat("📈","Scalable","Add properties without extra infrastructure") +
+      feat("⚡","Minutes to add","New property live in under 10 minutes"),
+      "12-english-dashboard.png")
   },
 
   /* 9 — Integration */
   {
     name: "Integration",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Integration</div>
-        <h1 class="s-h1">Connect with<br><span class="hl">your existing systems</span></h1>
-        <p class="s-body">Evimiz GEO Platform connects to your tech stack via open API — CRM, ERP, billing, or any third-party service.</p>
-        <div class="demo-features">
-          ${feat("🔌","API access","REST API for full custom integration")}
-          ${feat("🗂","CRM integration","Sync residents and contracts automatically")}
-          ${feat("🔗","Third-party services","Connect billing, ITSM, and more")}
-        </div>
-        ${tag("Fits into your ecosystem")}
-      </div>
-      ${browser("07-mobile-branding-en.png")}
-    </div>`
+    raw: stack("Integration","Connect with <span class='hl'>your existing systems</span>",
+      feat("🔌","API access","REST API for full custom integration") +
+      feat("🗂","CRM integration","Sync residents and contracts automatically") +
+      feat("🔗","Third-party services","Connect billing, ITSM, and more"),
+      "07-mobile-branding-en.png")
   },
 
   /* 10 — Closing */
@@ -423,153 +369,82 @@ es: [
   /* 2 — Overview */
   {
     name: "Vista General",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Dashboard</div>
-        <h1 class="s-h1">Una vista completa<br><span class="hl">de tu propiedad</span></h1>
-        <p class="s-body">Una sola pantalla. Toda tu infraestructura — edificios, entradas, dispositivos y usuarios — visible de un vistazo.</p>
-        <div class="demo-features">
-          ${feat("🏢","Edificios","Todas las propiedades en una vista centralizada")}
-          ${feat("🚪","Entradas","Cada punto de acceso, estado en vivo")}
-          ${feat("📡","Dispositivos","Estado y conectividad del hardware")}
-          ${feat("👤","Usuarios","Residentes y personal en un solo lugar")}
-        </div>
-        ${tag("Control total desde una sola interfaz")}
-      </div>
-      ${browser("es-dashboard.png")}
-    </div>`
+    raw: stack("Dashboard","Vista completa de <span class='hl'>tu propiedad</span>",
+      feat("🏢","Edificios","Todas las propiedades en una vista") +
+      feat("🚪","Entradas","Cada punto de acceso, en vivo") +
+      feat("📡","Dispositivos","Estado y conectividad del hardware") +
+      feat("👤","Usuarios","Residentes y personal en un solo lugar"),
+      "es-dashboard.png")
   },
 
   /* 3 — Access Management */
   {
     name: "Control de Acceso",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Gestión de Acceso</div>
-        <h1 class="s-h1">Controla<br><span class="hl">quién puede entrar</span></h1>
-        <p class="s-body">Agrega, elimina y configura usuarios al instante. Asigna permisos por rol, unidad o entrada — sin papeleo manual.</p>
-        <div class="demo-features">
-          ${feat("➕","Agrega y elimina usuarios","Los cambios se aplican de inmediato")}
-          ${feat("🔐","Asigna permisos","Por rol, unidad, entrada o horario")}
-          ${feat("⚙️","Gestiona los derechos de acceso","Control granular sobre cada usuario")}
-        </div>
-        ${tag("Sin procesos manuales")}
-      </div>
-      ${browser("es-residents.png")}
-    </div>`
+    raw: stack("Gestión de Acceso","Controla <span class='hl'>quién puede entrar</span>",
+      feat("➕","Agrega y elimina","Los cambios se aplican de inmediato") +
+      feat("🔐","Asigna permisos","Por rol, unidad, entrada o horario") +
+      feat("⚙️","Gestiona derechos","Control granular sobre cada usuario"),
+      "es-residents.png")
   },
 
   /* 4 — Real-Time Monitoring */
   {
     name: "Monitoreo",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Monitoreo en Vivo</div>
-        <h1 class="s-h1">Mira todo<br><span class="hl">en tiempo real</span></h1>
-        <p class="s-body">Video en vivo de todas las cámaras en todas las propiedades. Sin cambiar entre sistemas — todo está aquí.</p>
-        <div class="demo-features">
-          ${feat("🔴","Video en vivo","Transmite cualquier cámara al instante")}
-          ${feat("📷","Múltiples cámaras","Todas las entradas, un solo dashboard")}
-          ${feat("⚡","Visibilidad inmediata","Sin demora, sin actualizaciones manuales")}
-        </div>
-        ${tag("Sabe lo que pasa en cualquier momento")}
-      </div>
-      ${browser("es-call-quality.png")}
-    </div>`
+    raw: stack("Monitoreo en Vivo","Mira todo <span class='hl'>en tiempo real</span>",
+      feat("🔴","Video en vivo","Transmite cualquier cámara al instante") +
+      feat("📷","Múltiples cámaras","Todas las entradas, un solo dashboard") +
+      feat("⚡","Visibilidad inmediata","Sin demora, sin actualizaciones manuales"),
+      "es-call-quality.png")
   },
 
   /* 5 — Events & Logs */
   {
     name: "Eventos y Logs",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Eventos y Registros</div>
-        <h1 class="s-h1">Rastrea<br><span class="hl">cada acción</span></h1>
-        <p class="s-body">Cada entrada, cada apertura, cada cambio de usuario — registrado automáticamente con fecha, hora y contexto.</p>
-        <div class="demo-features">
-          ${feat("📋","Historial de entradas","Registro completo de quién entró y cuándo")}
-          ${feat("🕐","Línea de tiempo de eventos","Vista cronológica de todo el sistema")}
-          ${feat("🔍","Transparencia total","Buscable, filtrable y exportable")}
-        </div>
-        ${tag("Todo queda registrado")}
-      </div>
-      ${browser("es-point-detail.png")}
-    </div>`
+    raw: stack("Eventos y Registros","Rastrea <span class='hl'>cada acción</span>",
+      feat("📋","Historial de entradas","Registro completo de quién entró y cuándo") +
+      feat("🕐","Línea de tiempo","Vista cronológica de todo el sistema") +
+      feat("🔍","Transparencia total","Buscable, filtrable y exportable"),
+      "es-point-detail.png")
   },
 
   /* 6 — Alerts */
   {
     name: "Alertas",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Alertas y Notificaciones</div>
-        <h1 class="s-h1">Mantente informado<br><span class="hl">automáticamente</span></h1>
-        <p class="s-body">La plataforma te notifica en el momento en que algo requiere atención — dispositivo offline, acceso no autorizado o actualización pendiente.</p>
-        <div class="demo-features">
-          ${feat("🔔","Alertas instantáneas","Activadas por los eventos que definas")}
-          ${feat("📲","Notificaciones push","Entregadas al personal en tiempo real")}
-          ${feat("📊","Reportes automáticos","Resúmenes programados, sin trabajo manual")}
-        </div>
-        ${tag("Nada pasa desapercibido")}
-      </div>
-      ${browser("es-mobile-push.png")}
-    </div>`
+    raw: stack("Alertas y Notificaciones","Mantente informado <span class='hl'>automáticamente</span>",
+      feat("🔔","Alertas instantáneas","Activadas por los eventos que definas") +
+      feat("📲","Notificaciones push","Entregadas al personal en tiempo real") +
+      feat("📊","Reportes automáticos","Resúmenes programados, sin trabajo manual"),
+      "es-mobile-push.png")
   },
 
   /* 7 — Remote Control */
   {
     name: "Control Remoto",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Control Remoto</div>
-        <h1 class="s-h1">Opera el sistema<br><span class="hl">en tiempo real</span></h1>
-        <p class="s-body">Abre puertas, reinicia dispositivos, actualiza accesos — todo desde la plataforma, sin necesidad de ir al lugar.</p>
-        <div class="demo-features">
-          ${feat("🔓","Abre puertas","Desbloquea cualquier entrada de forma remota")}
-          ${feat("🔄","Reinicia dispositivos","Reinicia el hardware sin visita presencial")}
-          ${feat("⚡","Actualiza accesos al instante","Los cambios se aplican en segundos")}
-        </div>
-        ${tag("Respuesta inmediata cuando se necesita")}
-      </div>
-      ${browser("es-installation-points.png")}
-    </div>`
+    raw: stack("Control Remoto","Opera el sistema <span class='hl'>en tiempo real</span>",
+      feat("🔓","Abre puertas","Desbloquea cualquier entrada de forma remota") +
+      feat("🔄","Reinicia dispositivos","Sin visita presencial") +
+      feat("⚡","Actualiza al instante","Los cambios se aplican en segundos"),
+      "es-installation-points.png")
   },
 
   /* 8 — Multi-Property */
   {
     name: "Multi-Propiedad",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Escala</div>
-        <h1 class="s-h1">Gestiona múltiples edificios<br><span class="hl">en un solo lugar</span></h1>
-        <p class="s-body">Una plataforma para 1 edificio o 100. Agrega nuevas propiedades en minutos — usuarios, dispositivos y reglas de acceso escalan contigo.</p>
-        <div class="demo-features">
-          ${feat("🏙","Sistema centralizado","Todos los edificios, un solo acceso, una vista")}
-          ${feat("📈","Escalable entre proyectos","Agrega propiedades sin infraestructura adicional")}
-        </div>
-        ${tag("Diseñado para crecer")}
-      </div>
-      ${browser("es-dashboard.png")}
-    </div>`
+    raw: stack("Escala","Gestiona múltiples edificios <span class='hl'>en un solo lugar</span>",
+      feat("🏙","Sistema centralizado","Todos los edificios, un solo acceso") +
+      feat("📈","Escalable","Agrega propiedades sin infraestructura adicional") +
+      feat("⚡","Minutos para agregar","Nueva propiedad lista en menos de 10 min"),
+      "es-dashboard.png")
   },
 
   /* 9 — Integration */
   {
     name: "Integración",
-    raw: `<div class="demo-split">
-      <div class="demo-text">
-        <div class="s-tag">Integración</div>
-        <h1 class="s-h1">Conecta con<br><span class="hl">tus sistemas existentes</span></h1>
-        <p class="s-body">Evimiz GEO Platform se conecta a tu stack tecnológico mediante API abierta — CRM, ERP, facturación o cualquier servicio de terceros.</p>
-        <div class="demo-features">
-          ${feat("🔌","Acceso API","REST API para integración personalizada completa")}
-          ${feat("🗂","Integración CRM","Sincroniza residentes y contratos automáticamente")}
-          ${feat("🔗","Servicios de terceros","Conecta facturación, ITSM y más")}
-        </div>
-        ${tag("Se adapta a tu ecosistema")}
-      </div>
-      ${browser("es-mobile-branding.png")}
-    </div>`
+    raw: stack("Integración","Conecta con <span class='hl'>tus sistemas existentes</span>",
+      feat("🔌","Acceso API","REST API para integración personalizada completa") +
+      feat("🗂","Integración CRM","Sincroniza residentes y contratos automáticamente") +
+      feat("🔗","Servicios de terceros","Conecta facturación, ITSM y más"),
+      "es-mobile-branding.png")
   },
 
   /* 10 — Closing */
