@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evimiz GEO Platform v2</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:      #0b0f14;
+    --surface: #11161d;
+    --card:    #161d27;
+    --border:  rgba(77,163,255,0.15);
+    --accent:  #4da3ff;
+    --accent2: #7C6FFF;
+    --green:   #3ecf8e;
+    --text:    #f1f5f9;
+    --muted:   #7a8a9e;
+    --font:    -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font);
+    background: radial-gradient(circle at 20% 20%, #1e293b, #020617);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Topbar ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 16px;
+  }
+
+  .logo {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .logo span { color: #e84040; }
+
+  .controls { display: flex; gap: 10px; align-items: center; }
+
+  select {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  select:hover { border-color: var(--accent); }
+  select:focus { border-color: var(--accent); }
+
+  .progress-wrap {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 200px;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+  .slide-counter {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  /* ── Slides ── */
+  #slides-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 0;
+    backdrop-filter: blur(6px);
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+    z-index: 1;
+  }
+
+  /* ── Slide content ── */
+  .s-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(77,163,255,0.35);
+    background: rgba(77,163,255,0.08);
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 22px;
+  }
+
+  .s-h1 {
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+  .s-h1 .hl {
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .s-body {
+    font-size: 20px;
+    opacity: 0.7;
+    line-height: 1.65;
+    max-width: 600px;
+    margin-bottom: 32px;
+  }
+
+  /* Cards */
+  .s-cards {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .s-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    min-width: 160px;
+    flex: 1;
+  }
+  .s-card-icon { font-size: 1.4rem; margin-bottom: 8px; }
+  .s-card-name { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+  .s-card-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+  /* Stat row */
+  .s-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .s-stat-val {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .s-stat-lbl { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  /* Tag row */
+  .s-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .s-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+  .s-pill.blue   { color: var(--accent);  border-color: rgba(77,163,255,0.4);  background: rgba(77,163,255,0.08); }
+  .s-pill.purple { color: var(--accent2); border-color: rgba(124,111,255,0.4); background: rgba(124,111,255,0.08); }
+  .s-pill.green  { color: var(--green);   border-color: rgba(62,207,142,0.4);  background: rgba(62,207,142,0.08); }
+
+  /* Cover gradient bg */
+  .slide-cover {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(77,163,255,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 30%, rgba(124,111,255,0.12) 0%, transparent 55%),
+      var(--bg);
+  }
+
+  /* ── Bottombar ── */
+  .bottombar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    background: #4da3ff;
+    border: none;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: var(--font);
+    transition: 0.2s;
+  }
+  .nav-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(77,163,255,0.3); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; transform: none; box-shadow: none; }
+
+  .dots { display: flex; gap: 6px; align-items: center; }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    cursor: pointer;
+    transition: all 0.3s;
+    opacity: 0.5;
+  }
+  .dot.active { background: var(--accent); width: 18px; border-radius: 3px; opacity: 1; }
+
+  /* ── Type A: hero — stark, full dark, huge text ── */
+  .slide-a .s-h1 { font-size: 62px; line-height: 1.08; }
+
+  /* ── Type B: structure — subtle glow + panel ── */
+  .slide-b::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 110%, rgba(77,163,255,0.07) 0%, transparent 55%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slide-b > * { position: relative; z-index: 1; }
+
+  .s-panel {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 24px 28px;
+    width: 100%;
+    max-width: 740px;
+    margin-top: 8px;
+  }
+
+  /* ── Skyline decoration ── */
+  .skyline-bg {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 200px;
+    clip-path: polygon(
+      0% 100%, 0% 58%, 4% 58%, 4% 35%, 8% 35%, 8% 58%,
+      11% 58%, 11% 20%, 15% 20%, 15% 58%,
+      19% 58%, 19% 42%, 23% 42%, 23% 58%,
+      27% 58%, 27% 28%, 31% 28%, 31% 58%,
+      34% 58%, 34% 48%, 38% 48%, 38% 58%,
+      41% 58%, 41% 16%, 45% 16%, 45% 58%,
+      49% 58%, 49% 36%, 53% 36%, 53% 58%,
+      57% 58%, 57% 44%, 61% 44%, 61% 58%,
+      65% 58%, 65% 24%, 69% 24%, 69% 58%,
+      73% 58%, 73% 40%, 77% 40%, 77% 58%,
+      81% 58%, 81% 32%, 85% 32%, 85% 58%,
+      89% 58%, 89% 50%, 93% 50%, 93% 58%,
+      97% 58%, 97% 45%, 100% 45%, 100% 100%
+    );
+    background: linear-gradient(to top, rgba(77,163,255,0.14), rgba(77,163,255,0.02));
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Flow icon steps ── */
+  .flow-icon-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: #1f2937;
+    padding: 14px 20px;
+    border-radius: 14px;
+    min-width: 100px;
+    font-size: 0.88rem;
+  }
+  .flow-icon-step.highlight {
+    color: #4da3ff;
+    background: rgba(77,163,255,0.08);
+    border: 1px solid rgba(77,163,255,0.3);
+    text-shadow: 0 0 20px rgba(77,163,255,0.4);
+  }
+  .ficon { font-size: 1.5rem; line-height: 1; }
+
+  /* ── Stats glow ── */
+  .s-stat-val { position: relative; }
+  .s-stat-val::before {
+    content: '';
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(77,163,255,0.13), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Phone header (replaces status-bar) ── */
+  .phone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 6px 10px;
+    font-size: 9px;
+    font-weight: 700;
+    opacity: 0.55;
+  }
+  .phone-notch {
+    width: 40px; height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+  }
+
+  /* ── QR code ── */
+  .qr-block { margin-top: 28px; text-align: center; }
+  .qr-wrap {
+    display: inline-block;
+    padding: 10px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 0 30px rgba(77,163,255,0.3);
+  }
+  .qr-wrap img { display: block; border-radius: 4px; }
+
+  /* ── App Store note ── */
+  .s-note {
+    font-size: 0.8rem;
+    color: var(--accent);
+    background: rgba(77,163,255,0.06);
+    border: 1px solid rgba(77,163,255,0.2);
+    border-radius: 50px;
+    padding: 5px 18px;
+    display: inline-block;
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+
+  /* ── Product Model (Core + Premium) ── */
+  .pricing-grid {
+    display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0;
+    align-items: center; width: 100%; max-width: 560px; margin: 28px auto 0;
+  }
+  .pricing-card {
+    background: var(--card); border-radius: 18px; padding: 26px 22px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .pricing-card h2 { font-size: 1rem; font-weight: 800; letter-spacing: 0.03em; margin-bottom: 4px; }
+  .pricing-card.core { border: 1px solid rgba(77,163,255,0.25); }
+  .pricing-card.premium { border: 1px solid rgba(124,111,255,0.45); background: rgba(124,111,255,0.08); }
+  .pricing-card.premium h2 { color: var(--accent); }
+  .pricing-card.core h2 { color: var(--accent2); }
+  .pricing-feature {
+    font-size: 0.82rem; color: var(--muted);
+    padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .pricing-feature:last-of-type { border-bottom: none; }
+  .pricing-label {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    margin-top: 10px; padding: 5px 14px; border-radius: 50px; text-align: center;
+    background: rgba(77,163,255,0.1); color: var(--accent2);
+  }
+  .pricing-label.revenue { background: rgba(124,111,255,0.15); color: var(--accent); }
+  .pricing-arrow {
+    font-size: 1.4rem; color: var(--accent); text-align: center; opacity: 0.6;
+  }
+
+  /* ── Utilities ── */
+  .highlight { color: #4da3ff; text-shadow: 0 0 20px rgba(77,163,255,0.4); }
+  .micro { margin-top: 20px; font-size: 14px; opacity: 0.4; }
+
+  .flow {
+    display: flex;
+    gap: 16px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .flow div {
+    background: #1f2937;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+  .flow span {
+    opacity: 0.5;
+    font-size: 24px;
+    line-height: 1;
+  }
+  .flow-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin: 20px 0;
+  }
+  .flow-step {
+    background: #1f2937;
+    padding: 11px 32px;
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+  .flow-arrow { opacity: 0.4; font-size: 20px; line-height: 1; }
+  .flow-revenue {
+    color: #4da3ff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(77,163,255,0.5);
+    background: rgba(77,163,255,0.08);
+    border: 1px solid rgba(77,163,255,0.3);
+    padding: 14px 40px;
+  }
+
+  .phone {
+    width: 260px;
+    height: 520px;
+    border-radius: 40px;
+    background: linear-gradient(145deg, #020617, #0f172a);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 80px rgba(77,163,255,0.25);
+    position: relative;
+    overflow: hidden;
+    margin-top: 24px;
+    flex-shrink: 0;
+    transform: rotate(-2deg);
+  }
+  .screen { padding: 20px; }
+  .status-bar {
+    height: 6px;
+    width: 60px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    margin: 0 auto 10px;
+  }
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: #4da3ff;
+    border-radius: 50%;
+  }
+  .app-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .app-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: left;
+    font-size: 13px;
+    transition: 0.2s;
+    cursor: default;
+    backdrop-filter: blur(6px);
+  }
+  .app-card:hover { transform: translateY(-2px); }
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+  }
+  .door   { background: #4da3ff; }
+  .camera { background: #22c55e; }
+  .guest  { background: #f59e0b; }
+  .key    { background: #a78bfa; }
+  .activity { margin-top: 14px; }
+  .activity-item { font-size: 12px; opacity: 0.6; padding: 4px 0; }
+
+  /* Cards centered */
+  .s-cards { justify-content: center; }
+  .s-card  { text-align: left; }
+  .s-stats { justify-content: center; }
+  .s-pills { justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo"><span>E</span>vimiz GEO</div>
+  <div class="controls">
+    <select id="segment">
+      <option value="dev">🏗 Developer</option>
+      <option value="mgmt">🏢 Management</option>
+      <option value="int">🔧 Integrator</option>
+    </select>
+    <select id="lang">
+      <option value="en">EN</option>
+      <option value="es">ES</option>
+    </select>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="slide-counter" id="slide-counter">1 / 12</div>
+  </div>
+</div>
+
+<!-- SLIDES -->
+<div id="slides-viewport"></div>
+
+<!-- BOTTOMBAR -->
+<div class="bottombar">
+  <button class="nav-btn" id="btn-prev" onclick="go(-1)" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="btn-next" onclick="go(1)">→</button>
+</div>
+
+<script>
+const content = {
+
+/* ══════════════════════════════════
+   DEVELOPERS
+══════════════════════════════════ */
+dev: {
+en: [
+  {
+    tag: "GEO Platform · Developers",
+    title: "Increase property value through <span class='hl'>digital infrastructure</span>",
+    body: "The complete management platform for smart intercom infrastructure — built for developers who want to close deals faster and build lasting value.",
+    stats: [
+      { val: "1,000+", lbl: "Buildings live" },
+      { val: "15–30%", lbl: "Value increase" },
+      { val: "$2/mo",  lbl: "per device" }
+    ]
+  },
+  {
+    raw: `<div class="skyline-bg"></div><h1 class="s-h1" style="font-size:64px;line-height:1.1;position:relative;z-index:1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">THIS IS NOT A BUILDING SYSTEM<br><span class="highlight">THIS IS A DIGITAL REVENUE LAYER</span></h1>`
+  },
+  {
+    tag: "The Market",
+    title: "Buyers expect <span class='hl'>more than concrete</span>",
+    body: "Smart home features now rank among the top 3 purchase decision factors in LatAm urban real estate. Digital infrastructure has become a baseline expectation — not a bonus.",
+    pills: [
+      { text: "App-controlled access", cls: "blue" },
+      { text: "HD video doorbell", cls: "blue" },
+      { text: "NFC keys", cls: "purple" },
+      { text: "Guest management", cls: "green" }
+    ]
+  },
+  {
+    tag: "The Problem",
+    title: "Traditional projects <span class='hl'>don't stand out</span>",
+    body: "Without a digital layer, your building competes only on price and location. Buyers have no reason to pay a premium — and salespeople have no compelling story to tell.",
+    cards: [
+      { icon: "📉", name: "Slower sales", desc: "No differentiator to justify premium pricing" },
+      { icon: "🏚", name: "No stickiness", desc: "Residents leave — nothing ties them to your brand" },
+      { icon: "💸", name: "Revenue ends", desc: "Income stops the moment keys are handed over" }
+    ]
+  },
+  {
+    tag: "The Solution",
+    title: "A <span class='hl'>digital layer</span> that adds real value",
+    body: "Evimiz GEO turns your building into a connected platform. Smart access, resident app, cloud management — delivered as a service, activated in days.",
+    pills: [
+      { text: "15–30% value uplift", cls: "green" },
+      { text: "Ready in days", cls: "blue" },
+      { text: "Zero dev required", cls: "purple" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">ONE<br><span class="highlight">CONNECTED SYSTEM</span></h1>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Platform</div><span>→</span><div>Mobile App</div></div>
+      <p class="s-body">Everything works together in real time</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
+      <p class="s-body">Access, cameras, guests and security — all in one app</p>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
+      <p class="micro">Used daily. Not occasionally.</p>`
+  },
+  {
+    tag: "Experience",
+    title: "No keys. No calls. <span class='hl'>No friction.</span>",
+    body: "Residents open doors, call entrances, and manage guest access — all from their phone. Maintenance requests, parcel notifications, building announcements: all in one place.",
+    stats: [
+      { val: "Daily", lbl: "App engagement" },
+      { val: "< 1s",  lbl: "Door open time" },
+      { val: "24/7",  lbl: "Remote access" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">PRODUCT MODEL<br><span class="highlight">CORE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Free (Core)</h2>
+          <div class="pricing-feature">Door access</div>
+          <div class="pricing-feature">Answer calls</div>
+          <div class="pricing-feature">Live video</div>
+          <div class="pricing-feature">Family access</div>
+          <div class="pricing-label">Adoption</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Guest access</div>
+          <div class="pricing-feature">Face recognition</div>
+          <div class="pricing-feature">Video archive</div>
+          <div class="pricing-feature">Access history</div>
+          <div class="pricing-label revenue">Revenue</div>
+        </div>
+      </div>
+      <p class="micro">Core drives usage — premium drives revenue</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
+      <div class="flow-vertical">
+        <div class="flow-icon-step"><div class="ficon">👤</div>Resident</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">📱</div>Mobile App</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">👆</div>User Action</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Revenue</div>
+      </div>
+      <p class="s-body">Daily usage creates recurring income</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">WITHOUT THE APP<br>YOU MANAGE BUILDINGS</h1>
+      <h1 class="s-h1 highlight" style="margin-top:16px;">WITH THE APP<br>YOU GENERATE REVENUE</h1>`
+  },
+  {
+    tag: "Revenue After Handover",
+    title: "Buildings that <span class='hl'>keep earning</span>",
+    body: "Recurring subscription income from every unit, every month — long after the keys are handed over. The platform runs itself; you collect the margin.",
+    stats: [
+      { val: "$2/mo", lbl: "Base per device" },
+      { val: "∞",     lbl: "Monthly recurring" },
+      { val: "0",     lbl: "Maintenance needed" }
+    ]
+  },
+  {
+    tag: "The Flow",
+    title: "Residents → Usage → <span class='hl'>Recurring Revenue</span>",
+    body: "Every interaction generates data, loyalty, and income. The more residents use the app, the more premium features they unlock — and the more you earn.",
+    pills: [
+      { text: "Install hardware", cls: "blue" },
+      { text: "Activate platform", cls: "blue" },
+      { text: "Residents engage", cls: "purple" },
+      { text: "Revenue flows", cls: "green" }
+    ]
+  },
+  {
+    tag: "Competitive Advantage",
+    title: "Differentiate your <span class='hl'>project today</span>",
+    body: "Be the developer that delivers a digital lifestyle — not just square meters. Evimiz GEO gives you a story buyers remember and a product that sells itself.",
+    pills: [
+      { text: "Faster sales cycle", cls: "green" },
+      { text: "Premium positioning", cls: "blue" },
+      { text: "Post-sale revenue", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Next Step",
+    title: "From buildings to <span class='hl'>digital ecosystems</span>",
+    body: "Let's connect your next project to the Evimiz GEO Platform. We'll show you exactly how it works — from hardware to app — in 30 minutes.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
+    qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
+  }
+],
+es: [
+  {
+    tag: "GEO Platform · Desarrolladores",
+    title: "Aumentá el valor de tu proyecto con <span class='hl'>infraestructura digital</span>",
+    body: "La plataforma completa para infraestructura de intercomunicación inteligente — diseñada para desarrolladores que quieren cerrar más ventas y crear valor duradero.",
+    stats: [
+      { val: "1.000+", lbl: "Edificios activos" },
+      { val: "15–30%", lbl: "Aumento de valor" },
+      { val: "$2/mes",  lbl: "por dispositivo" }
+    ]
+  },
+  {
+    raw: `<div class="skyline-bg"></div><h1 class="s-h1" style="font-size:64px;line-height:1.1;position:relative;z-index:1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">ESTO NO ES UN SISTEMA DE EDIFICIOS<br><span class="highlight">ESTO ES UNA CAPA DIGITAL DE INGRESOS</span></h1>`
+  },
+  {
+    tag: "El Mercado",
+    title: "Los compradores esperan <span class='hl'>más que hormigón</span>",
+    body: "Las funciones inteligentes son hoy uno de los 3 factores de decisión de compra en real estate urbano de LatAm. La infraestructura digital ya es expectativa base — no un bonus.",
+    pills: [
+      { text: "Acceso desde la app", cls: "blue" },
+      { text: "Videoportero HD", cls: "blue" },
+      { text: "Llaves NFC", cls: "purple" },
+      { text: "Gestión de visitas", cls: "green" }
+    ]
+  },
+  {
+    tag: "El Problema",
+    title: "Los proyectos tradicionales <span class='hl'>no se diferencian</span>",
+    body: "Sin una capa digital, tu edificio compite solo por precio y ubicación. Los compradores no tienen motivo para pagar un premium — ni los vendedores una historia que contar.",
+    cards: [
+      { icon: "📉", name: "Ventas más lentas", desc: "Sin diferenciador para justificar precio premium" },
+      { icon: "🏚", name: "Sin fidelidad", desc: "Los residentes no tienen conexión con tu marca" },
+      { icon: "💸", name: "Ingresos que terminan", desc: "Todo para cuando entregás las llaves" }
+    ]
+  },
+  {
+    tag: "La Solución",
+    title: "Una <span class='hl'>capa digital</span> que agrega valor real",
+    body: "Evimiz GEO convierte tu edificio en una plataforma conectada. Acceso inteligente, app de residentes, gestión en la nube — entregado como servicio, activado en días.",
+    pills: [
+      { text: "15–30% más valor", cls: "green" },
+      { text: "Listo en días", cls: "blue" },
+      { text: "Sin desarrollo", cls: "purple" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">UN<br><span class="highlight">SISTEMA CONECTADO</span></h1>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Plataforma</div><span>→</span><div>App Móvil</div></div>
+      <p class="s-body">Todo funciona junto en tiempo real</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
+      <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
+      <p class="micro">Uso diario. No ocasional.</p>`
+  },
+  {
+    tag: "Experiencia",
+    title: "Sin llaves. Sin llamadas. <span class='hl'>Sin fricción.</span>",
+    body: "Los residentes abren puertas, llaman al ingreso y gestionan el acceso de visitas — todo desde el celular. Solicitudes de mantenimiento, paquetes, comunicados: todo en un lugar.",
+    stats: [
+      { val: "Diario", lbl: "Uso de la app" },
+      { val: "< 1s",   lbl: "Apertura de puerta" },
+      { val: "24/7",   lbl: "Acceso remoto" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">MODELO DE PRODUCTO<br><span class="highlight">BASE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Gratis (Base)</h2>
+          <div class="pricing-feature">Acceso a puertas</div>
+          <div class="pricing-feature">Atender llamadas</div>
+          <div class="pricing-feature">Video en vivo</div>
+          <div class="pricing-feature">Acceso familiar</div>
+          <div class="pricing-label">Adopción</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Acceso de visitas</div>
+          <div class="pricing-feature">Reconocimiento facial</div>
+          <div class="pricing-feature">Archivo de video</div>
+          <div class="pricing-feature">Historial de acceso</div>
+          <div class="pricing-label revenue">Ingresos</div>
+        </div>
+      </div>
+      <p class="micro">La base genera uso — el premium genera ingresos</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">Y AQUÍ ES DONDE<br><span class="highlight">COMIENZA LA MONETIZACIÓN</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
+      <div class="flow-vertical">
+        <div class="flow-icon-step"><div class="ficon">👤</div>Residente</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">📱</div>App Móvil</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">👆</div>Acción</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Ingresos</div>
+      </div>
+      <p class="s-body">El uso diario crea ingresos recurrentes</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">SIN LA APP<br>ADMINISTRÁS EDIFICIOS</h1>
+      <h1 class="s-h1 highlight" style="margin-top:16px;">CON LA APP<br>GENERÁS INGRESOS</h1>`
+  },
+  {
+    tag: "Ingresos Post-Entrega",
+    title: "Edificios que <span class='hl'>siguen generando</span>",
+    body: "Ingresos recurrentes por suscripción de cada unidad, cada mes — mucho después de haber entregado las llaves. La plataforma funciona sola; vos cobrás el margen.",
+    stats: [
+      { val: "$2/mes", lbl: "Base por dispositivo" },
+      { val: "∞",      lbl: "Ingreso mensual" },
+      { val: "0",      lbl: "Mantenimiento" }
+    ]
+  },
+  {
+    tag: "El Flujo",
+    title: "Residentes → Uso → <span class='hl'>Ingresos Recurrentes</span>",
+    body: "Cada interacción genera datos, fidelidad e ingresos. Cuanto más usan la app, más funciones premium activan — y más ganás vos.",
+    pills: [
+      { text: "Instalá el hardware", cls: "blue" },
+      { text: "Activá la plataforma", cls: "blue" },
+      { text: "Residentes se enganchan", cls: "purple" },
+      { text: "Ingresos fluyen", cls: "green" }
+    ]
+  },
+  {
+    tag: "Ventaja Competitiva",
+    title: "Diferenciá tu <span class='hl'>proyecto hoy</span>",
+    body: "Sé el desarrollador que entrega un estilo de vida digital — no solo metros cuadrados. Evimiz GEO te da una historia que los compradores recuerdan y un producto que se vende solo.",
+    pills: [
+      { text: "Ciclo de venta más corto", cls: "green" },
+      { text: "Posicionamiento premium", cls: "blue" },
+      { text: "Ingresos post-venta", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Próximo Paso",
+    title: "De edificios a <span class='hl'>ecosistemas digitales</span>",
+    body: "Conectemos tu próximo proyecto a Evimiz GEO Platform. Te mostramos cómo funciona — del hardware a la app — en 30 minutos.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
+    qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
+  }
+]
+},
+
+/* ══════════════════════════════════
+   MANAGEMENT
+══════════════════════════════════ */
+mgmt: {
+en: [
+  {
+    tag: "GEO Platform · Management",
+    title: "Run your building <span class='hl'>without constant interruptions</span>",
+    body: "One unified platform to manage access, residents, operations, and communications — so your team can focus on service, not firefighting.",
+    stats: [
+      { val: "40–60%", lbl: "Less routine work" },
+      { val: "1 place", lbl: "Everything managed" },
+      { val: "24/7",   lbl: "Resident self-service" }
+    ]
+  },
+  {
+    raw: `<div class="skyline-bg"></div><h1 class="s-h1" style="font-size:64px;line-height:1.1;position:relative;z-index:1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">THIS IS NOT A BUILDING SYSTEM<br><span class="highlight">THIS IS A DIGITAL REVENUE LAYER</span></h1>`
+  },
+  {
+    tag: "The Reality",
+    title: "Teams drown in <span class='hl'>routine tasks</span>",
+    body: "Access requests, lost key calls, maintenance complaints, guest authorizations — it never ends. Your team spends most of their day reacting, not managing.",
+    cards: [
+      { icon: "📞", name: "Endless calls", desc: "Residents call for every small access issue" },
+      { icon: "📋", name: "Paper processes", desc: "No tracking, no history, no accountability" },
+      { icon: "😤", name: "Team burnout", desc: "Staff spends hours on tasks that should be automatic" }
+    ]
+  },
+  {
+    tag: "The Gap",
+    title: "WhatsApp groups are not <span class='hl'>building management</span>",
+    body: "Without a proper system, visibility is zero: you don't know who's in the building, what's been reported, or what's outstanding. Every decision is reactive.",
+    pills: [
+      { text: "No tracking", cls: "blue" },
+      { text: "No visibility", cls: "blue" },
+      { text: "No audit trail", cls: "purple" }
+    ]
+  },
+  {
+    tag: "The Solution",
+    title: "One unified <span class='hl'>management platform</span>",
+    body: "Evimiz GEO centralizes everything your team needs: access control, resident communication, maintenance requests, and operational reporting — all in one dashboard.",
+    pills: [
+      { text: "Cloud dashboard", cls: "blue" },
+      { text: "Mobile for staff", cls: "purple" },
+      { text: "Resident app", cls: "green" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
+      <p class="s-body">Access, cameras, guests and security — all in one app</p>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
+      <p class="micro">Used daily. Not occasionally.</p>`
+  },
+  {
+    tag: "Operational Impact",
+    title: "Fewer calls. Less paperwork. <span class='hl'>More control.</span>",
+    body: "Management companies using Evimiz GEO report 40–60% reduction in routine operational workload within the first 3 months. Staff focus on what matters.",
+    stats: [
+      { val: "60%", lbl: "Fewer incoming calls" },
+      { val: "3×",  lbl: "Faster issue resolution" },
+      { val: "∞",   lbl: "Audit trail" }
+    ]
+  },
+  {
+    tag: "Communication",
+    title: "Direct channel to <span class='hl'>every resident</span>",
+    body: "Send push notifications, building announcements, and payment reminders instantly. No more bulletin board posts or unanswered group chats.",
+    pills: [
+      { text: "Push notifications", cls: "blue" },
+      { text: "Announcements", cls: "blue" },
+      { text: "Payment reminders", cls: "purple" },
+      { text: "Emergency alerts", cls: "green" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">PRODUCT MODEL<br><span class="highlight">CORE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Free (Core)</h2>
+          <div class="pricing-feature">Door access</div>
+          <div class="pricing-feature">Answer calls</div>
+          <div class="pricing-feature">Live video</div>
+          <div class="pricing-feature">Family access</div>
+          <div class="pricing-label">Adoption</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Guest access</div>
+          <div class="pricing-feature">Face recognition</div>
+          <div class="pricing-feature">Video archive</div>
+          <div class="pricing-feature">Access history</div>
+          <div class="pricing-label revenue">Revenue</div>
+        </div>
+      </div>
+      <p class="micro">Core drives usage — premium drives revenue</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
+      <div class="flow-vertical">
+        <div class="flow-icon-step"><div class="ficon">👤</div>Resident</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">📱</div>Mobile App</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">👆</div>User Action</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Revenue</div>
+      </div>
+      <p class="s-body">Daily usage creates recurring income</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">WITHOUT THE APP<br>YOU MANAGE BUILDINGS</h1>
+      <h1 class="s-h1 highlight" style="margin-top:16px;">WITH THE APP<br>YOU GENERATE REVENUE</h1>`
+  },
+  {
+    tag: "Business Model",
+    title: "Core free. <span class='hl'>Premium pays.</span>",
+    body: "Platform cost is covered by premium feature subscriptions. The more residents upgrade, the lower your net cost — until the platform pays for itself.",
+    stats: [
+      { val: "$2/mo", lbl: "Base per device" },
+      { val: "Free",  lbl: "Core for residents" },
+      { val: "0",     lbl: "Extra IT needed" }
+    ]
+  },
+  {
+    tag: "Visibility",
+    title: "Full operational <span class='hl'>dashboard</span>",
+    body: "Real-time data on access events, open incidents, maintenance queue, and resident activity — available to your team from any device, any time.",
+    pills: [
+      { text: "Live access logs", cls: "blue" },
+      { text: "Incident tracker", cls: "purple" },
+      { text: "Staff assignments", cls: "green" },
+      { text: "Resident reports", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Remote Control",
+    title: "Manage from <span class='hl'>anywhere</span>",
+    body: "Your team operates fully remotely when needed. Grant access, resolve incidents, and communicate with residents without being physically present.",
+    cards: [
+      { icon: "🌐", name: "Web dashboard", desc: "Full control from any browser" },
+      { icon: "📱", name: "Staff mobile app", desc: "Field team stays connected on the go" },
+      { icon: "🔔", name: "Smart alerts", desc: "Get notified only when action is needed" }
+    ]
+  },
+  {
+    tag: "Next Step",
+    title: "Less work. Better service. <span class='hl'>Real revenue.</span>",
+    body: "Let's show you how Evimiz GEO works in your building — from day-one setup to full operational rollout. 30 minutes is all it takes.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
+    qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
+  }
+],
+es: [
+  {
+    tag: "GEO Platform · Administración",
+    title: "Gestioná tu edificio <span class='hl'>sin interrupciones constantes</span>",
+    body: "Una plataforma unificada para gestionar acceso, residentes, operaciones y comunicaciones — para que tu equipo se enfoque en el servicio, no en apagar incendios.",
+    stats: [
+      { val: "40–60%", lbl: "Menos tareas rutinarias" },
+      { val: "1 lugar", lbl: "Todo centralizado" },
+      { val: "24/7",   lbl: "Autogestión de residentes" }
+    ]
+  },
+  {
+    raw: `<div class="skyline-bg"></div><h1 class="s-h1" style="font-size:64px;line-height:1.1;position:relative;z-index:1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">ESTO NO ES UN SISTEMA DE EDIFICIOS<br><span class="highlight">ESTO ES UNA CAPA DIGITAL DE INGRESOS</span></h1>`
+  },
+  {
+    tag: "La Realidad",
+    title: "Los equipos se ahogan en <span class='hl'>tareas rutinarias</span>",
+    body: "Solicitudes de acceso, llamadas por llaves perdidas, quejas de mantenimiento, autorización de visitas — nunca termina. Tu equipo pasa el día reaccionando, no gestionando.",
+    cards: [
+      { icon: "📞", name: "Llamadas sin fin", desc: "Los residentes llaman por cada pequeño problema de acceso" },
+      { icon: "📋", name: "Procesos en papel", desc: "Sin seguimiento, sin historial, sin responsabilidad" },
+      { icon: "😤", name: "Equipo agotado", desc: "El personal pierde horas en tareas que deberían ser automáticas" }
+    ]
+  },
+  {
+    tag: "El Vacío",
+    title: "WhatsApp no es <span class='hl'>gestión de edificios</span>",
+    body: "Sin un sistema adecuado, la visibilidad es cero: no sabés quién está en el edificio, qué se reportó ni qué está pendiente. Cada decisión es reactiva.",
+    pills: [
+      { text: "Sin seguimiento", cls: "blue" },
+      { text: "Sin visibilidad", cls: "blue" },
+      { text: "Sin trazabilidad", cls: "purple" }
+    ]
+  },
+  {
+    tag: "La Solución",
+    title: "Una <span class='hl'>plataforma de gestión</span> unificada",
+    body: "Evimiz GEO centraliza todo lo que tu equipo necesita: control de acceso, comunicación con residentes, solicitudes de mantenimiento y reportes operativos — en un solo dashboard.",
+    pills: [
+      { text: "Dashboard en la nube", cls: "blue" },
+      { text: "App móvil para el equipo", cls: "purple" },
+      { text: "App para residentes", cls: "green" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
+      <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
+      <p class="micro">Uso diario. No ocasional.</p>`
+  },
+  {
+    tag: "Impacto Operativo",
+    title: "Menos llamadas. Menos papeleo. <span class='hl'>Más control.</span>",
+    body: "Las administradoras que usan Evimiz GEO reportan una reducción del 40–60% en la carga operativa rutinaria en los primeros 3 meses. El equipo se enfoca en lo que importa.",
+    stats: [
+      { val: "60%", lbl: "Menos llamadas entrantes" },
+      { val: "3×",  lbl: "Resolución más rápida" },
+      { val: "∞",   lbl: "Trazabilidad completa" }
+    ]
+  },
+  {
+    tag: "Comunicación",
+    title: "Canal directo con <span class='hl'>cada residente</span>",
+    body: "Enviá notificaciones push, comunicados del edificio y recordatorios de pago de forma instantánea. Nada de carteleras ni chats grupales sin respuesta.",
+    pills: [
+      { text: "Notificaciones push", cls: "blue" },
+      { text: "Comunicados", cls: "blue" },
+      { text: "Recordatorios de pago", cls: "purple" },
+      { text: "Alertas de emergencia", cls: "green" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">MODELO DE PRODUCTO<br><span class="highlight">BASE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Gratis (Base)</h2>
+          <div class="pricing-feature">Acceso a puertas</div>
+          <div class="pricing-feature">Atender llamadas</div>
+          <div class="pricing-feature">Video en vivo</div>
+          <div class="pricing-feature">Acceso familiar</div>
+          <div class="pricing-label">Adopción</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Acceso de visitas</div>
+          <div class="pricing-feature">Reconocimiento facial</div>
+          <div class="pricing-feature">Archivo de video</div>
+          <div class="pricing-feature">Historial de acceso</div>
+          <div class="pricing-label revenue">Ingresos</div>
+        </div>
+      </div>
+      <p class="micro">La base genera uso — el premium genera ingresos</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">Y AQUÍ ES DONDE<br><span class="highlight">COMIENZA LA MONETIZACIÓN</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
+      <div class="flow-vertical">
+        <div class="flow-icon-step"><div class="ficon">👤</div>Residente</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">📱</div>App Móvil</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">👆</div>Acción</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Ingresos</div>
+      </div>
+      <p class="s-body">El uso diario crea ingresos recurrentes</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">SIN LA APP<br>ADMINISTRÁS EDIFICIOS</h1>
+      <h1 class="s-h1 highlight" style="margin-top:16px;">CON LA APP<br>GENERÁS INGRESOS</h1>`
+  },
+  {
+    tag: "Modelo de Negocio",
+    title: "Base gratis. <span class='hl'>Premium paga.</span>",
+    body: "El costo de la plataforma se cubre con las suscripciones premium. Cuanto más residentes se pasan al premium, menor es tu costo neto — hasta que la plataforma se paga sola.",
+    stats: [
+      { val: "$2/mes", lbl: "Base por dispositivo" },
+      { val: "Gratis",  lbl: "Base para residentes" },
+      { val: "0",      lbl: "IT adicional" }
+    ]
+  },
+  {
+    tag: "Visibilidad",
+    title: "Dashboard operativo <span class='hl'>completo</span>",
+    body: "Datos en tiempo real sobre accesos, incidentes abiertos, cola de mantenimiento y actividad de residentes — disponibles para tu equipo desde cualquier dispositivo.",
+    pills: [
+      { text: "Logs de acceso en vivo", cls: "blue" },
+      { text: "Seguimiento de incidentes", cls: "purple" },
+      { text: "Asignación de tareas", cls: "green" },
+      { text: "Reportes de residentes", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Control Remoto",
+    title: "Gestioná desde <span class='hl'>cualquier lugar</span>",
+    body: "Tu equipo opera de forma remota cuando lo necesita. Otorgá acceso, resolvé incidentes y comunicarte con residentes sin estar físicamente presente.",
+    cards: [
+      { icon: "🌐", name: "Dashboard web", desc: "Control total desde cualquier navegador" },
+      { icon: "📱", name: "App para el equipo", desc: "El personal de campo se mantiene conectado" },
+      { icon: "🔔", name: "Alertas inteligentes", desc: "Solo te notifica cuando necesitás actuar" }
+    ]
+  },
+  {
+    tag: "Próximo Paso",
+    title: "Menos trabajo. Mejor servicio. <span class='hl'>Ingresos reales.</span>",
+    body: "Te mostramos cómo funciona Evimiz GEO en tu edificio — desde la configuración inicial hasta el despliegue operativo completo. En 30 minutos lo ves todo.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
+    qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
+  }
+]
+},
+
+/* ══════════════════════════════════
+   INTEGRATORS
+══════════════════════════════════ */
+int: {
+en: [
+  {
+    tag: "GEO Platform · Integrators",
+    title: "Turn every installation into <span class='hl'>recurring monthly revenue</span>",
+    body: "Evimiz GEO gives integrators a complete white-label platform to sell alongside hardware — so every job generates income long after you leave the building.",
+    stats: [
+      { val: "$2/mo", lbl: "Base per device" },
+      { val: "∞",     lbl: "Monthly recurring" },
+      { val: "15 min",lbl: "Setup per building" }
+    ]
+  },
+  {
+    raw: `<div class="skyline-bg"></div><h1 class="s-h1" style="font-size:64px;line-height:1.1;position:relative;z-index:1;">BUILDINGS ARE NO LONGER PHYSICAL<br><span class="highlight">THEY ARE DIGITAL PRODUCTS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">THIS IS NOT A BUILDING SYSTEM<br><span class="highlight">THIS IS A DIGITAL REVENUE LAYER</span></h1>`
+  },
+  {
+    tag: "The Limit",
+    title: "Hardware deals <span class='hl'>end at delivery</span>",
+    body: "You install the intercom system, hand over the keys, and the relationship ends. Revenue stops. The next job has to start from zero — every single time.",
+    cards: [
+      { icon: "🔚", name: "One-time income", desc: "Hardware margin is your only revenue per job" },
+      { icon: "🔄", name: "Constant acquisition", desc: "You need new clients to keep cash flowing" },
+      { icon: "📉", name: "Margin pressure", desc: "Hardware prices compress as competition grows" }
+    ]
+  },
+  {
+    tag: "The Opportunity",
+    title: "Add software to <span class='hl'>every installation</span>",
+    body: "Platform subscriptions multiply the lifetime value of every job. A building you installed two years ago keeps paying you every single month — without any extra work.",
+    pills: [
+      { text: "Platform + hardware", cls: "blue" },
+      { text: "Monthly residuals", cls: "green" },
+      { text: "No dev required", cls: "purple" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">ONE<br><span class="highlight">CONNECTED SYSTEM</span></h1>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Platform</div><span>→</span><div>Mobile App</div></div>
+      <p class="s-body">Everything works together in real time</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">YOUR HOME<br><span class="highlight">IN YOUR POCKET</span></h1>
+      <p class="s-body">Access, cameras, guests and security — all in one app</p>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
+      <p class="micro">Used daily. Not occasionally.</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">PRODUCT MODEL<br><span class="highlight">CORE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Free (Core)</h2>
+          <div class="pricing-feature">Door access</div>
+          <div class="pricing-feature">Answer calls</div>
+          <div class="pricing-feature">Live video</div>
+          <div class="pricing-feature">Family access</div>
+          <div class="pricing-label">Adoption</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Guest access</div>
+          <div class="pricing-feature">Face recognition</div>
+          <div class="pricing-feature">Video archive</div>
+          <div class="pricing-feature">Access history</div>
+          <div class="pricing-label revenue">Revenue</div>
+        </div>
+      </div>
+      <p class="micro">Core drives usage — premium drives revenue</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">AND THIS IS WHERE<br><span class="highlight">MONETIZATION BEGINS</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">FROM USAGE<br><span class="highlight">TO REVENUE</span></h1>
+      <div class="flow-vertical">
+        <div class="flow-icon-step"><div class="ficon">👤</div>Resident</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">📱</div>Mobile App</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">👆</div>User Action</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Revenue</div>
+      </div>
+      <p class="s-body">Daily usage creates recurring income</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">WITHOUT THE APP<br>YOU INSTALL HARDWARE</h1>
+      <h1 class="s-h1 highlight" style="margin-top:16px;">WITH THE APP<br>YOU EARN FOREVER</h1>`
+  },
+  {
+    tag: "The Math",
+    title: "$2/device/month. <span class='hl'>Simple and scalable.</span>",
+    body: "A 100-unit building with 2 entry points generates $200+ per month. 10 buildings: $2,000/month. 50 buildings: $10,000/month — automatically, without lifting a finger.",
+    stats: [
+      { val: "$200",   lbl: "100-unit building/mo" },
+      { val: "$2,000", lbl: "10 buildings/mo" },
+      { val: "Auto",   lbl: "Billed + collected" }
+    ]
+  },
+  {
+    tag: "Flexible Pricing",
+    title: "You set the margin. <span class='hl'>We set the floor.</span>",
+    body: "Wholesale platform access at $2/device/month. You define your retail price. The margin between wholesale and retail is yours — fully. No caps, no sharing.",
+    pills: [
+      { text: "Wholesale access", cls: "blue" },
+      { text: "You set retail price", cls: "green" },
+      { text: "Full margin yours", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Simple Deployment",
+    title: "15 minutes <span class='hl'>per building</span>",
+    body: "Connect hardware to GEO cloud. Bind devices. Configure building profile. Activate resident app. Done. No on-site IT, no complex configuration, no callbacks.",
+    cards: [
+      { icon: "1️⃣", name: "Connect hardware", desc: "Bind intercoms and cameras to GEO cloud" },
+      { icon: "2️⃣", name: "Configure building", desc: "Set units, residents, and access rules" },
+      { icon: "3️⃣", name: "Activate app", desc: "Residents download and start using immediately" }
+    ]
+  },
+  {
+    tag: "Scale",
+    title: "Every install is a <span class='hl'>new revenue stream</span>",
+    body: "Your portfolio of buildings becomes a subscription business. Revenue grows automatically as you add installations — without proportionally increasing your workload.",
+    stats: [
+      { val: "10→",   lbl: "Buildings this year" },
+      { val: "100→",  lbl: "Next year, same effort" },
+      { val: "Auto",  lbl: "Revenue compounds" }
+    ]
+  },
+  {
+    tag: "Partnership",
+    title: "Become an <span class='hl'>Evimiz Certified Partner</span>",
+    body: "Certified integrators get priority technical support, qualified lead sharing, co-marketing materials, and early access to new platform features.",
+    pills: [
+      { text: "Priority support", cls: "blue" },
+      { text: "Lead sharing", cls: "green" },
+      { text: "Co-marketing", cls: "purple" },
+      { text: "Early access", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Next Step",
+    title: "Install once. <span class='hl'>Earn forever.</span>",
+    body: "Let's start with your first GEO-enabled building. We'll walk you through the full setup and show you exactly what your recurring revenue looks like at scale.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
+    qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
+  }
+],
+es: [
+  {
+    tag: "GEO Platform · Integradores",
+    title: "Convertí cada instalación en <span class='hl'>ingresos mensuales recurrentes</span>",
+    body: "Evimiz GEO le da a los integradores una plataforma white-label completa para vender junto con el hardware — para que cada trabajo genere ingresos mucho después de que te vayas del edificio.",
+    stats: [
+      { val: "$2/mes", lbl: "Base por dispositivo" },
+      { val: "∞",      lbl: "Ingresos mensuales" },
+      { val: "15 min", lbl: "Configuración por edificio" }
+    ]
+  },
+  {
+    raw: `<div class="skyline-bg"></div><h1 class="s-h1" style="font-size:64px;line-height:1.1;position:relative;z-index:1;">LOS EDIFICIOS YA NO SON FÍSICOS<br><span class="highlight">SON PRODUCTOS DIGITALES</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">ESTO NO ES UN SISTEMA DE EDIFICIOS<br><span class="highlight">ESTO ES UNA CAPA DIGITAL DE INGRESOS</span></h1>`
+  },
+  {
+    tag: "El Límite",
+    title: "Los proyectos de hardware <span class='hl'>terminan en la entrega</span>",
+    body: "Instalás el sistema de portería, entregás las llaves, y la relación termina. Los ingresos se cortan. Cada nuevo trabajo tiene que empezar desde cero — siempre.",
+    cards: [
+      { icon: "🔚", name: "Ingreso único", desc: "El margen del hardware es tu único ingreso por trabajo" },
+      { icon: "🔄", name: "Captación constante", desc: "Necesitás nuevos clientes para mantener el flujo de caja" },
+      { icon: "📉", name: "Presión sobre el margen", desc: "Los precios del hardware se comprimen con la competencia" }
+    ]
+  },
+  {
+    tag: "La Oportunidad",
+    title: "Sumá software a <span class='hl'>cada instalación</span>",
+    body: "Las suscripciones a la plataforma multiplican el valor de vida de cada trabajo. Un edificio que instalaste hace dos años te sigue pagando cada mes — sin trabajo adicional.",
+    pills: [
+      { text: "Plataforma + hardware", cls: "blue" },
+      { text: "Ingresos residuales", cls: "green" },
+      { text: "Sin desarrollo", cls: "purple" }
+    ]
+  },
+  {
+    raw: `<h1 class="s-h1">UN<br><span class="highlight">SISTEMA CONECTADO</span></h1>
+      <div class="flow"><div>Hardware</div><span>→</span><div class="highlight">Plataforma</div><span>→</span><div>App Móvil</div></div>
+      <p class="s-body">Todo funciona junto en tiempo real</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">TU HOGAR<br><span class="highlight">EN TU BOLSILLO</span></h1>
+      <p class="s-body">Acceso, cámaras, visitas y seguridad — todo en una app</p>
+      <img src="assets/app-live.jpg" style="height:420px;border-radius:36px;box-shadow:0 0 80px rgba(77,163,255,0.35);transform:rotate(-2deg);margin-top:16px;" alt="Evimiz App">
+      <p class="micro">Uso diario. No ocasional.</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">MODELO DE PRODUCTO<br><span class="highlight">BASE + PREMIUM</span></h1>
+      <div class="pricing-grid">
+        <div class="pricing-card core">
+          <h2>Gratis (Base)</h2>
+          <div class="pricing-feature">Acceso a puertas</div>
+          <div class="pricing-feature">Atender llamadas</div>
+          <div class="pricing-feature">Video en vivo</div>
+          <div class="pricing-feature">Acceso familiar</div>
+          <div class="pricing-label">Adopción</div>
+        </div>
+        <div class="pricing-arrow">→</div>
+        <div class="pricing-card premium">
+          <h2>Premium</h2>
+          <div class="pricing-feature">Acceso de visitas</div>
+          <div class="pricing-feature">Reconocimiento facial</div>
+          <div class="pricing-feature">Archivo de video</div>
+          <div class="pricing-feature">Historial de acceso</div>
+          <div class="pricing-label revenue">Ingresos</div>
+        </div>
+      </div>
+      <p class="micro">La base genera uso — el premium genera ingresos</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">Y AQUÍ ES DONDE<br><span class="highlight">COMIENZA LA MONETIZACIÓN</span></h1>`
+  },
+  {
+    raw: `<h1 class="s-h1">DEL USO<br><span class="highlight">A LOS INGRESOS</span></h1>
+      <div class="flow-vertical">
+        <div class="flow-icon-step"><div class="ficon">👤</div>Residente</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">📱</div>App Móvil</div><div class="flow-arrow">↓</div>
+        <div class="flow-icon-step"><div class="ficon">👆</div>Acción</div><div class="flow-arrow">↓</div>
+        <div class="flow-step flow-revenue">💰 Ingresos</div>
+      </div>
+      <p class="s-body">El uso diario crea ingresos recurrentes</p>`
+  },
+  {
+    raw: `<h1 class="s-h1">SIN LA APP<br>INSTALÁS HARDWARE</h1>
+      <h1 class="s-h1 highlight" style="margin-top:16px;">CON LA APP<br>GANÁS PARA SIEMPRE</h1>`
+  },
+  {
+    tag: "Los Números",
+    title: "$2/dispositivo/mes. <span class='hl'>Simple y escalable.</span>",
+    body: "Un edificio de 100 unidades con 2 puntos de entrada genera $200+ por mes. 10 edificios: $2.000/mes. 50 edificios: $10.000/mes — de forma automática, sin trabajo extra.",
+    stats: [
+      { val: "$200",    lbl: "Edificio 100 u/mes" },
+      { val: "$2.000",  lbl: "10 edificios/mes" },
+      { val: "Auto",    lbl: "Cobrado + acreditado" }
+    ]
+  },
+  {
+    tag: "Precios Flexibles",
+    title: "Vos ponés el margen. <span class='hl'>Nosotros el piso.</span>",
+    body: "Acceso mayorista a la plataforma a $2/dispositivo/mes. Vos definís el precio de venta. La diferencia entre mayorista y minorista es tuya — sin topes ni compartición.",
+    pills: [
+      { text: "Acceso mayorista", cls: "blue" },
+      { text: "Precio de venta: tuyo", cls: "green" },
+      { text: "Margen completo", cls: "purple" }
+    ]
+  },
+  {
+    tag: "Deploy Simple",
+    title: "15 minutos <span class='hl'>por edificio</span>",
+    body: "Conectá el hardware a la nube GEO. Vinculá dispositivos. Configurá el perfil del edificio. Activá la app de residentes. Listo. Sin IT in situ, sin configuraciones complejas.",
+    cards: [
+      { icon: "1️⃣", name: "Conectá el hardware", desc: "Vinculá porteros y cámaras a la nube GEO" },
+      { icon: "2️⃣", name: "Configurá el edificio", desc: "Definí unidades, residentes y reglas de acceso" },
+      { icon: "3️⃣", name: "Activá la app", desc: "Los residentes descargan y empiezan a usar de inmediato" }
+    ]
+  },
+  {
+    tag: "Escala",
+    title: "Cada instalación es un <span class='hl'>nuevo flujo de ingresos</span>",
+    body: "Tu cartera de edificios se convierte en un negocio de suscripciones. Los ingresos crecen automáticamente a medida que sumás instalaciones — sin aumentar proporcionalmente tu carga de trabajo.",
+    stats: [
+      { val: "10→",   lbl: "Edificios este año" },
+      { val: "100→",  lbl: "El próximo, mismo esfuerzo" },
+      { val: "Auto",  lbl: "Ingresos compuestos" }
+    ]
+  },
+  {
+    tag: "Partnership",
+    title: "Convertite en <span class='hl'>Partner Certificado Evimiz</span>",
+    body: "Los integradores certificados obtienen soporte técnico prioritario, leads calificados, materiales de co-marketing y acceso anticipado a nuevas funciones de la plataforma.",
+    pills: [
+      { text: "Soporte prioritario", cls: "blue" },
+      { text: "Leads compartidos", cls: "green" },
+      { text: "Co-marketing", cls: "purple" },
+      { text: "Acceso anticipado", cls: "blue" }
+    ]
+  },
+  {
+    tag: "Próximo Paso",
+    title: "Instalá una vez. <span class='hl'>Ganás para siempre.</span>",
+    body: "Empecemos con tu primer edificio con GEO. Te guiamos por todo el proceso y te mostramos exactamente cómo se ve tu ingreso recurrente a escala.",
+    pills: [
+      { text: "geo.evimiz.ai", cls: "blue" },
+      { text: "support@evimiz.ai", cls: "purple" }
+    ],
+    note: "⭐ 4.8 · 19K ratings · App Store",
+    qr: "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://geo.evimiz.ai"
+  }
+]
+}
+
+}; // end content
+
+/* ──────────────────────────────
+   RENDER ENGINE
+────────────────────────────── */
+let current = 0;
+let slides = [];
+
+function buildSlideHTML(s) {
+  if (s.raw) return s.raw;
+
+  let top = '';
+  let panel = '';
+
+  if (!s.simple && s.tag) top += `<div class="s-tag">${s.tag}</div>`;
+  if (s.title) top += `<h1 class="s-h1">${s.title}</h1>`;
+  if (s.body)  top += `<p class="s-body">${s.body}</p>`;
+  if (s.note)  top += `<div class="s-note">${s.note}</div>`;
+
+  if (s.stats) {
+    panel += `<div class="s-stats">` +
+      s.stats.map(st => `<div><div class="s-stat-val">${st.val}</div><div class="s-stat-lbl">${st.lbl}</div></div>`).join('') +
+      `</div>`;
+  }
+
+  if (s.cards) {
+    panel += `<div class="s-cards">` +
+      s.cards.map(c => `
+        <div class="s-card">
+          <div class="s-card-icon">${c.icon}</div>
+          <div class="s-card-name">${c.name}</div>
+          <div class="s-card-desc">${c.desc}</div>
+        </div>`).join('') +
+      `</div>`;
+  }
+
+  if (s.pills) {
+    panel += `<div class="s-pills">` +
+      s.pills.map(p => `<div class="s-pill ${p.cls}">${p.text}</div>`).join('') +
+      `</div>`;
+  }
+
+  let result = top + (panel ? `<div class="s-panel">${panel}</div>` : '');
+  if (s.qr) result += `<div class="qr-block"><div class="qr-wrap"><img src="${s.qr}" width="120" height="120" alt="QR"></div></div>`;
+  return result;
+}
+
+function renderSlides() {
+  const seg  = document.getElementById('segment').value;
+  const lang = document.getElementById('lang').value;
+  const data = content[seg][lang];
+  const vp   = document.getElementById('slides-viewport');
+
+  vp.innerHTML = '';
+  slides = [];
+
+  data.forEach((s, i) => {
+    const isHero = s.raw || (!s.cards && !s.stats && !s.pills);
+    const typeClass = isHero ? 'slide-a' : 'slide-b';
+    const div = document.createElement('div');
+    div.className = 'slide ' + typeClass + (i === 0 ? ' active slide-cover' : '');
+    div.innerHTML = buildSlideHTML(s);
+    vp.appendChild(div);
+    slides.push(div);
+  });
+
+  current = 0;
+  updateUI();
+}
+
+function goTo(idx) {
+  if (idx < 0 || idx >= slides.length) return;
+  slides.forEach(s => s.classList.remove('active'));
+  current = idx;
+  setTimeout(() => {
+    slides[current].classList.add('active');
+    updateUI();
+  }, 50);
+  updateUI();
+}
+
+function go(dir) { goTo(current + dir); }
+
+function updateUI() {
+  const total = slides.length;
+  document.getElementById('slide-counter').textContent = `${current + 1} / ${total}`;
+  document.getElementById('progress-bar').style.width = `${(current + 1) / total * 100}%`;
+  document.getElementById('btn-prev').disabled = current === 0;
+  document.getElementById('btn-next').disabled = current === total - 1;
+
+  const dotsEl = document.getElementById('dots');
+  dotsEl.innerHTML = '';
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === current ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+}
+
+document.getElementById('segment').addEventListener('change', renderSlides);
+document.getElementById('lang').addEventListener('change', renderSlides);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+});
+
+renderSlides();
+</script>
+</body>
+</html>
