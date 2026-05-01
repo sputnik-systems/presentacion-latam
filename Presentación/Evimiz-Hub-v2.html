@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evimiz — Smart Intercom Platform for Buildings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #080818;
+      --bg-section: #0d0d22;
+      --bg-card: #14143a;
+      --accent: #7C6FFF;
+      --accent2: #4FC3F7;
+      --accent-hover: #6558ee;
+      --text: #ffffff;
+      --text-muted: #9090b8;
+      --text-faint: #6c6c8a;
+      --border: rgba(124,111,255,0.2);
+      --border-hover: rgba(124,111,255,0.5);
+      --max-width: 1200px;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; }
+
+    body {
+      font-family: var(--font);
+      background: radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.18) 0%, transparent 55%),
+                  radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.10) 0%, transparent 50%),
+                  var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 68px;
+      background: rgba(8,8,24,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .navbar-logo .e { color: #e84040; }
+    .navbar-logo img { height: 34px; width: auto; display: block; }
+
+    .navbar::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+      opacity: 0.6;
+    }
+
+    .lang-toggle {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(124,111,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 4px;
+    }
+
+    .lang-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
+    .lang-btn:hover:not(.active) { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 88px 40px 32px;
+      position: relative;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-width);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-logo { display: none; }
+
+    .hero-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      border: 1px solid rgba(124,111,255,0.4);
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    .hero-headline {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      text-align: center;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #c8c0ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    .hero-headline .accent-word {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+      color: var(--text-muted);
+      text-align: center;
+      max-width: 580px;
+      line-height: 1.65;
+      margin-bottom: 14px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+
+    .hero-directive {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease 0.38s forwards;
+    }
+
+    /* ─── CARDS GRID ─── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.7s ease 0.48s forwards;
+    }
+
+    .audience-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .audience-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    .audience-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(124,111,255,0.18);
+    }
+    .audience-card:hover::before { transform: scaleX(1); }
+
+    /* ── NEW: indicator (01 · 02 · 03) ── */
+    .card-indicator {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      opacity: 0.85;
+    }
+
+    /* ── NEW: SVG icon (replaces emoji) ── */
+    .card-icon-svg {
+      width: 44px;
+      height: 44px;
+      color: var(--accent);
+      display: block;
+      margin-top: 2px;
+    }
+    .card-icon-svg svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 1.75;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+      margin-top: 4px;
+    }
+
+    .card-tagline {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .card-description {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-metric {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      padding: 10px 0 4px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── NEW: methodology footnote ── */
+    .card-footnote {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      font-style: italic;
+    }
+
+    .card-pricing {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.15s ease;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: scale(1.02); }
+
+    /* ─── FOOTER BAR ─── */
+    .footer-bar {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.65s forwards;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-bar p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+    .footer-bar span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .footer-methodology {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s ease;
+    }
+    .footer-methodology:hover { color: var(--text-muted); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE HEIGHT ─── */
+    @media (max-height: 900px) {
+      .hero { padding: 72px 40px 16px; }
+      .hero-tag { margin-bottom: 14px; padding: 5px 14px; }
+      .hero-headline { font-size: clamp(1.7rem, 3.2vw, 2.6rem); margin-bottom: 12px; }
+      .hero-subtitle { margin-bottom: 8px; }
+      .hero-directive { margin-bottom: 18px; }
+      .cards-grid { gap: 12px; }
+      .audience-card { padding: 18px 18px; gap: 8px; }
+      .card-icon-svg { width: 36px; height: 36px; }
+      .card-metric { padding: 6px 0 3px; font-size: 1.2rem; }
+      .card-footnote { font-size: 0.68rem; padding-bottom: 6px; }
+      .footer-bar { margin-top: 16px; padding-top: 12px; }
+    }
+
+    @media (max-height: 750px) {
+      .hero { padding: 64px 40px 12px; }
+      .hero-tag { display: none; }
+      .hero-headline { font-size: clamp(1.5rem, 2.8vw, 2.2rem); margin-bottom: 10px; }
+      .hero-subtitle { font-size: 0.88rem; margin-bottom: 6px; }
+      .hero-directive { margin-bottom: 12px; }
+      .audience-card { padding: 14px 16px; gap: 6px; }
+      .card-icon-svg { width: 32px; height: 32px; }
+      .card-description { font-size: 0.82rem; }
+      .card-footnote { display: none; } /* hide on very short viewports */
+      .footer-bar { display: none; }
+    }
+
+    /* ─── RESPONSIVE WIDTH ─── */
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+      .hero { padding: 88px 20px 40px; min-height: auto; }
+      .navbar { padding: 0 20px; }
+      .hero-logo { display: block; margin-bottom: 16px; }
+      .hero-logo img { width: 120px; }
+      .hero-headline { font-size: 1.9rem; }
+      .hero-subtitle { font-size: 0.95rem; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-logo { display: none; }
+      .hero { padding: 80px 16px 32px; }
+      .hero-headline { font-size: 1.7rem; }
+      .audience-card { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" />
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <main class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-logo">
+        <img src="assets/logo-evimiz.png" alt="Evimiz" />
+      </div>
+
+      <div class="hero-tag">Smart Intercom Platform · 2025</div>
+
+      <h1 class="hero-headline" id="hero-headline">
+        Turn Buildings Into <span class="accent-word">Revenue-Generating</span><br />Digital Assets
+      </h1>
+
+      <p class="hero-subtitle" id="hero-subtitle">
+        The smart intercom platform that generates value for developers,
+        integrators, and property managers — all from one infrastructure.
+      </p>
+
+      <p class="hero-directive" id="hero-directive">
+        Select your role — see how Evimiz makes you money
+      </p>
+
+      <!-- Cards -->
+      <div class="cards-grid">
+
+        <!-- Card 1: Developers -->
+        <a href="Evimiz-Developers-v3.html" class="audience-card" id="card-developers">
+          <div class="card-indicator">01</div>
+          <div class="card-icon-svg" aria-hidden="true">
+            <!-- Lucide: building-2 -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+              <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+              <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+              <path d="M10 6h4"/>
+              <path d="M10 10h4"/>
+              <path d="M10 14h4"/>
+              <path d="M10 18h4"/>
+            </svg>
+          </div>
+          <div class="card-title" data-i18n="card1-title">For Real Estate Developers</div>
+          <div class="card-tagline" data-i18n="card1-tagline">Add $200K per project. Sell faster.</div>
+          <div class="card-description" data-i18n="card1-desc">
+            Add smart infrastructure that increases perceived value and closes deals.
+          </div>
+          <div class="card-metric" data-i18n="card1-metric">+$200K per 100-unit project</div>
+          <div class="card-footnote" data-i18n="card1-footnote">Modeled on 100-unit project · 60-month value horizon</div>
+          <div class="card-pricing" data-i18n="card-pricing">From $2.50/device/month</div>
+          <span class="btn-primary" data-i18n="btn1-cta">Add $200K to Your Next Project →</span>
+        </a>
+
+        <!-- Card 2: Integrators -->
+        <a href="Evimiz-Integrators-v3.html" class="audience-card" id="card-integrators">
+          <div class="card-indicator">02</div>
+          <div class="card-icon-svg" aria-hidden="true">
+            <!-- Lucide: plug-zap -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z"/>
+              <path d="m2 22 3-3"/>
+              <path d="M7.5 13.5 10 11"/>
+              <path d="M10.5 16.5 13 14"/>
+              <path d="m18 3-4 4h6l-4 4"/>
+            </svg>
+          </div>
+          <div class="card-title" data-i18n="card2-title">For CCTV Integrators</div>
+          <div class="card-tagline" data-i18n="card2-tagline">Build $10K/month recurring revenue.</div>
+          <div class="card-description" data-i18n="card2-desc">
+            Every install becomes a monthly subscription. Revenue grows automatically — from installed buildings.
+          </div>
+          <div class="card-metric" data-i18n="card2-metric">$10,000/month at scale</div>
+          <div class="card-footnote" data-i18n="card2-footnote">Modeled at 50 active building subscriptions</div>
+          <div class="card-pricing" data-i18n="card-pricing">From $2.50/device/month</div>
+          <span class="btn-primary" data-i18n="btn2-cta">Build Your $10K/Month Model →</span>
+        </a>
+
+        <!-- Card 3: Property Managers -->
+        <a href="Evimiz-Admins-v3.html" class="audience-card" id="card-admins">
+          <div class="card-indicator">03</div>
+          <div class="card-icon-svg" aria-hidden="true">
+            <!-- Lucide: clipboard-check -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              <path d="m9 14 2 2 4-4"/>
+            </svg>
+          </div>
+          <div class="card-title" data-i18n="card3-title">For Property Managers</div>
+          <div class="card-tagline" data-i18n="card3-tagline">Run your building without the headaches.</div>
+          <div class="card-description" data-i18n="card3-desc">
+            Save 10+ hours/week. 70% fewer calls. Reduce operational costs by 30–50%. Resolve issues remotely.
+          </div>
+          <div class="card-metric" data-i18n="card3-metric">70% fewer resident complaints</div>
+          <div class="card-footnote" data-i18n="card3-footnote">Aggregated across deployed projects</div>
+          <div class="card-pricing" data-i18n="card-pricing">From $2.50/device/month</div>
+          <span class="btn-primary" data-i18n="btn3-cta">Cut 70% of Daily Work →</span>
+        </a>
+
+      </div>
+
+      <!-- Footer bar -->
+      <div class="footer-bar">
+        <p id="footer-text">
+          <span>10,000+ buildings</span> &nbsp;·&nbsp;
+          <span>Russia · CIS · Turkey</span> &nbsp;·&nbsp;
+          <span>Millions of users</span>
+        </p>
+        <a href="#" class="footer-methodology" id="footer-methodology">Based on real deployment data — see methodology →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══ SCRIPTS ═══ -->
+  <script>
+    const translations = {
+      en: {
+        'hero-headline':  'Turn Buildings Into <span class="accent-word">Revenue-Generating</span><br />Digital Assets',
+        'hero-subtitle':  'The smart intercom platform that generates value for developers, integrators, and property managers — all from one infrastructure.',
+        'hero-directive': 'Select your role — see how Evimiz makes you money',
+        'card1-title':    'For Real Estate Developers',
+        'card1-tagline':  'Add $200K per project. Sell faster.',
+        'card1-desc':     'Add smart infrastructure that increases perceived value and closes deals.',
+        'card1-metric':   '+$200K per 100-unit project',
+        'card1-footnote': 'Modeled on 100-unit project · 60-month value horizon',
+        'btn1-cta':       'Add $200K to Your Next Project →',
+        'card2-title':    'For CCTV Integrators',
+        'card2-tagline':  'Build $10K/month recurring revenue.',
+        'card2-desc':     'Every install becomes a monthly subscription. Revenue grows automatically — from installed buildings.',
+        'card2-metric':   '$10,000/month at scale',
+        'card2-footnote': 'Modeled at 50 active building subscriptions',
+        'btn2-cta':       'Build Your $10K/Month Model →',
+        'card3-title':    'For Property Managers',
+        'card3-tagline':  'Run your building without the headaches.',
+        'card3-desc':     'Save 10+ hours/week. 70% fewer calls. Resolve issues remotely. Cut operational costs significantly.',
+        'card3-metric':   '70% fewer resident complaints',
+        'card3-footnote': 'Aggregated across deployed projects',
+        'btn3-cta':       'Cut 70% of Daily Work →',
+        'card-pricing':   'From $2.50/device/month',
+        'footer':         '<span>10,000+ buildings</span> &nbsp;·&nbsp; <span>Russia · CIS · Turkey</span> &nbsp;·&nbsp; <span>Millions of users</span>',
+        'methodology':    'Based on real deployment data — see methodology →',
+      },
+      es: {
+        'hero-headline':  'Convertí tus Edificios en <span class="accent-word">Activos Digitales</span><br />que Generan Ingresos',
+        'hero-subtitle':  'Una sola plataforma. Más ingresos para desarrolladores, integradores y administradores de edificios.',
+        'hero-directive': 'Elegí tu rol — mirá cómo Evimiz te genera dinero',
+        'card1-title':    'Para Desarrolladores Inmobiliarios',
+        'card1-tagline':  'Sumá hasta $200K por proyecto. Vendé más rápido.',
+        'card1-desc':     'Agregá tecnología inteligente que sube el valor percibido y ayuda a cerrar ventas.',
+        'card1-metric':   '+$200K por proyecto de 100 unidades',
+        'card1-footnote': 'Modelado sobre proyecto de 100 unidades · horizonte de 60 meses',
+        'btn1-cta':       'Sumá hasta $200K a tu próximo proyecto →',
+        'card2-title':    'Para Integradores CCTV',
+        'card2-tagline':  'Generá $10K/mes de ingresos fijos desde tus edificios.',
+        'card2-desc':     'Cada instalación genera ingresos mensuales automáticos. Más edificios = más ingresos, sin esfuerzo extra.',
+        'card2-metric':   '$10,000/mes a escala',
+        'card2-footnote': 'Modelado con 50 edificios activos en suscripción',
+        'btn2-cta':       'Empezá a generar $10K/mes →',
+        'card3-title':    'Para Administradoras de Edificios',
+        'card3-tagline':  'Ahorrá 30–50% en gastos. Controlá todo desde el celular.',
+        'card3-desc':     'Ahorrá 10+ horas por semana y reducí costos operativos un 30–50%. 70% menos reclamos. Manejá accesos y novedades desde el celular.',
+        'card3-metric':   'Reducí reclamos y conflictos en un 70%',
+        'card3-footnote': 'Promedio en proyectos ya implementados',
+        'btn3-cta':       'Reducí 70% del trabajo diario →',
+        'card-pricing':   'Desde $2.50/dispositivo/mes',
+        'footer':         '<span>10,000+ edificios</span> &nbsp;·&nbsp; <span>Rusia · CEI · Turquía</span> &nbsp;·&nbsp; <span>Millones de usuarios</span>',
+        'methodology':    'Basado en datos reales de implementación — ver metodología →',
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+
+      document.getElementById('hero-headline').innerHTML = t['hero-headline'];
+      document.getElementById('hero-subtitle').textContent = t['hero-subtitle'];
+      document.getElementById('hero-directive').textContent = t['hero-directive'];
+      document.getElementById('footer-text').innerHTML = t['footer'];
+      document.getElementById('footer-methodology').textContent = t['methodology'];
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) {
+          el.innerHTML = t[key];
+        }
+      });
+
+      document.documentElement.lang = lang;
+    }
+  </script>
+
+</body>
+</html>
