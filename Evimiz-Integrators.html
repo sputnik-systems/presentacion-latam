@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evimiz for Integrators — Recurring Revenue from Every Install</title>
+  <meta name="description" content="Add recurring monthly revenue to your CCTV and security business with Evimiz smart intercom. White-label platform for system integrators.">
+  <style>
+    /* ========== RESET ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    /* ========== CUSTOM PROPERTIES ========== */
+    :root {
+      --bg-dark: #0a0e1a;
+      --bg-section: #111827;
+      --bg-card: #1a2035;
+      --accent: #E31E24;
+      --accent-hover: #c9191f;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #2a3348;
+      --max-width: 1200px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ========== BASE ========== */
+    body {
+      font-family: var(--font);
+      background: var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* ========== LAYOUT ========== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section {
+      padding: 50px 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section:nth-child(even) {
+      background: var(--bg-section);
+    }
+
+    /* ========== TYPOGRAPHY ========== */
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      margin: 16px auto 0;
+      border-radius: 2px;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+
+    /* ========== GRID UTILITIES ========== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .cards-col .card {
+      padding: 20px 24px;
+    }
+    .cards-col .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .grid-with-image {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* ========== CARDS ========== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+    .card h3, .card h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .card-center { text-align: center; }
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .btn-large {
+      font-size: 1.15rem;
+      padding: 18px 48px;
+    }
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 34px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ========== STATS ========== */
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ========== FADE-IN ANIMATION ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 14, 26, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 0;
+      transition: background 0.3s ease;
+    }
+    .navbar-scrolled {
+      background: rgba(10, 14, 26, 0.95);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    img[src*="intercom.png"] {
+      border-radius: 12px;
+    }
+    img[src*="appstore.png"] {
+      mix-blend-mode: multiply;
+    }
+    img[src*="face-recognition.png"] {
+      border-radius: 16px;
+    }
+    img[src*="phone-apps.png"] {
+      clip-path: inset(1% 14% 1% 14% round 20px);
+      display: block;
+    }
+    .phone-image-wrap {
+      display: inline-block;
+    }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+    }
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .lang-toggle {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      margin-left: 8px;
+    }
+    .lang-toggle:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .nav-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 3px 10px;
+      opacity: 0.8;
+    }
+
+    /* ========== HERO ========== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #0f1729 50%, #131b2e 100%);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image img {
+      max-height: 500px;
+      filter: drop-shadow(0 20px 40px rgba(227, 30, 36, 0.15));
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hero-logo {
+      width: 200px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(227, 30, 36, 0.12);
+      border: 1px solid rgba(227, 30, 36, 0.3);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    .hero-content .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ========== PRICING BANNER ========== */
+    .pricing-banner {
+      margin-top: 2.5rem;
+      background: linear-gradient(135deg, var(--accent), #b91c1c);
+      border-radius: var(--radius);
+      padding: 24px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+    .pricing-amount {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+    .pricing-desc {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* ========== WL FEATURES ========== */
+    .wl-feature {
+      margin-bottom: 28px;
+    }
+    .wl-feature h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .wl-feature p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ========== MODEL CARD ========== */
+    .model-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 32px;
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 28px;
+      align-items: center;
+    }
+    .model-card img {
+      max-height: 280px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+    }
+    .model-card h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .model-card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* ========== MASCOT LAYOUT ========== */
+    .mascot-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .mascot-col {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .mascot-col img {
+      max-width: 280px;
+    }
+
+    /* ========== BUNDLE CARDS ========== */
+    .bundle-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .bundle-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: var(--accent);
+    }
+    .bundle-card .card-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+    .bundle-card h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .bundle-card p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* ========== CONTACT ========== */
+    .section-contact {
+      background: linear-gradient(135deg, #0f1729 0%, var(--bg-dark) 100%);
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .contact-image img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+    }
+    .contact-tagline {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+    }
+    .contact-icon {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logo {
+      height: 36px;
+      margin: 0 auto 12px;
+      opacity: 0.7;
+    }
+    .footer p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .hero-content h1 { font-size: 2.4rem; }
+      .section-title { font-size: 2rem; }
+      .grid-4, .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 60px 0; }
+      #hero { min-height: auto; padding-top: 100px; padding-bottom: 60px; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-image { order: -1; }
+      .hero-image img { max-height: 260px; }
+      .hero-content { align-items: center; }
+      .hero-cta { justify-content: center; }
+      .hero-content h1 { font-size: 2rem; }
+      .hero-badge { margin: 0 auto; }
+      .grid-2, .grid-3, .grid-with-image, .mascot-layout, .contact-layout, .model-card { grid-template-columns: 1fr; }
+      .grid-2x2 { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .contact-image { order: -1; }
+      .mascot-col img { max-width: 200px; margin: 0 auto; }
+      .model-card { padding: 24px; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 26, 0.97);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 12px;
+      }
+      .nav-links.active { display: flex; }
+      .nav-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="nav-logo">
+      <div class="nav-links">
+        <span class="nav-badge" data-i18n="nav-badge">For Integrators</span>
+        <a href="#problem" data-i18n="nav-problem">Problem</a>
+        <a href="#model" data-i18n="nav-model">Model</a>
+        <a href="#whitelabel" data-i18n="nav-whitelabel">White Label</a>
+        <a href="#upsell" data-i18n="nav-upsell">Upsell</a>
+        <a href="#install" data-i18n="nav-install">Install</a>
+        <a href="#bundle" data-i18n="nav-bundle">Bundle</a>
+        <a href="#contact" data-i18n="nav-contact">Contact</a>
+      </div>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ========== HERO ========== -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-image fade-in">
+            <div class="phone-image-wrap">
+              <img src="assets/phone-apps.png" alt="Evimiz white-label app">
+            </div>
+          </div>
+          <div class="hero-content fade-in">
+            <img src="assets/logo-evimiz.png" alt="Evimiz" class="hero-logo">
+            <div class="hero-badge" data-i18n="hero-badge">For CCTV Integrators &amp; Security Companies</div>
+            <h1 data-i18n-html="hero-h1">Turn Every Install<br>Into Monthly Revenue</h1>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">Stop earning once per project. Start building a recurring income with every intercom you install.</p>
+            <div class="hero-cta">
+              <a href="#contact" class="btn-primary btn-large" data-i18n="hero-cta1">Become a Partner</a>
+              <a href="#model" class="btn-outline" data-i18n="hero-cta2">See the Model</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PROBLEM ========== -->
+    <section id="problem" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="problem-title">The One-Time Payment Trap</h2>
+        <p class="section-subtitle" data-i18n="problem-subtitle">Project-based revenue is unpredictable. There's a better way.</p>
+        <div class="mascot-layout">
+          <div class="cards-col">
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-icon">🔧</div>
+              <h3 data-i18n="problem-c1-title">You finish the job, they forget you</h3>
+              <p data-i18n="problem-c1-text">No ongoing relationship after installation. Zero loyalty.</p>
+            </div>
+            <div class="card" style="margin-bottom: 16px;">
+              <div class="card-icon">📉</div>
+              <h3 data-i18n="problem-c2-title">Margins keep shrinking</h3>
+              <p data-i18n="problem-c2-text">Hardware competition drives prices down. Less profit per project.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🔁</div>
+              <h3 data-i18n="problem-c3-title">Always chasing the next project</h3>
+              <p data-i18n="problem-c3-text">Revenue is unpredictable. Every month starts at zero.</p>
+            </div>
+          </div>
+          <div class="mascot-col">
+            <img src="assets/mascot-window.png" alt="Problem mascot">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MODEL ========== -->
+    <section id="model" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="model-title">Earn Every Month. Automatically.</h2>
+        <p class="section-subtitle" data-i18n="model-subtitle">$2 USD per device per month — your markup on top</p>
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-number">$2/mo</div>
+            <div class="stat-label" data-i18n="model-s1">per device, baseline</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-i18n="model-s2-num">Your+</div>
+            <div class="stat-label" data-i18n="model-s2">you set the price</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">100</div>
+            <div class="stat-label" data-i18n="model-s3">= $200+/mo minimum</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">↑</div>
+            <div class="stat-label" data-i18n="model-s4">grows with every new install</div>
+          </div>
+        </div>
+        <div class="model-card">
+          <img src="assets/intercom.png" alt="Evimiz Intercom">
+          <div>
+            <h3 data-i18n="model-card-title">The More You Install, The More You Earn</h3>
+            <p data-i18n="model-card-text">Every intercom you connect becomes a monthly subscription. Your revenue grows automatically as your install base grows — no extra sales effort.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== WHITE LABEL ========== -->
+    <section id="whitelabel" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="wl-title">Your Brand. Their Loyalty to You.</h2>
+        <p class="section-subtitle" data-i18n="wl-subtitle">Clients subscribe to your product — not to Evimiz</p>
+        <div class="grid-2">
+          <div>
+            <div class="wl-feature">
+              <h4 data-i18n="wl-f1-title">🏷️ Fully white-labeled platform</h4>
+              <p data-i18n="wl-f1-text">Your name, your logo, your app in the App Store.</p>
+            </div>
+            <div class="wl-feature">
+              <h4 data-i18n="wl-f2-title">🔒 Clients don't know it's Evimiz</h4>
+              <p data-i18n="wl-f2-text">Full independence. If you switch providers, your brand stays.</p>
+            </div>
+            <div class="wl-feature">
+              <h4 data-i18n="wl-f3-title">📈 Build your own SaaS product</h4>
+              <p data-i18n="wl-f3-text">You're not a reseller — you're a product company.</p>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:center;">
+            <img src="assets/platform-ui.png" alt="Platform UI" style="border-radius: var(--radius); box-shadow: var(--shadow);">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== UPSELL ========== -->
+    <section id="upsell" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="upsell-title">Your Best Clients Are Already Yours</h2>
+        <p class="section-subtitle" data-i18n="upsell-subtitle">Every CCTV client you have is a warm lead for smart access</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3 data-i18n="upsell-c1-title">No new acquisition cost</h3>
+            <p data-i18n="upsell-c1-text">Sell to clients who already trust you. Zero cold outreach needed.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📦</div>
+            <h3 data-i18n="upsell-c2-title">Bundle with existing cameras</h3>
+            <p data-i18n="upsell-c2-text">Add intercom to camera installations. One project, two revenue streams.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔄</div>
+            <h3 data-i18n="upsell-c3-title">Upgrade old intercoms</h3>
+            <p data-i18n="upsell-c3-text">Every legacy intercom is an upgrade opportunity. Walk in with a solution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== INSTALL ========== -->
+    <section id="install" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="install-title">Plug &amp; Play. No Servers.</h2>
+        <p class="section-subtitle" data-i18n="install-subtitle">You focus on installation. We handle the cloud.</p>
+        <div class="grid-2x2">
+          <div class="card">
+            <div class="card-icon">☁️</div>
+            <h3 data-i18n="install-c1-title">Fully cloud-based</h3>
+            <p data-i18n="install-c1-text">No local servers to manage. Zero IT overhead for you or your client.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⚡</div>
+            <h3 data-i18n="install-c2-title">Pre-configured hardware</h3>
+            <p data-i18n="install-c2-text">Devices ship ready to connect. Activation takes minutes.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🛠️</div>
+            <h3 data-i18n="install-c3-title">Remote management</h3>
+            <p data-i18n="install-c3-text">Monitor and manage all installations from one dashboard.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📞</div>
+            <h3 data-i18n="install-c4-title">Technical support included</h3>
+            <p data-i18n="install-c4-text">We support you so you can support your clients.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== BUNDLE ========== -->
+    <section id="bundle" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="bundle-title">Cameras + Access + App = 3× the Deal</h2>
+        <p class="section-subtitle" data-i18n="bundle-subtitle">Bundle multiple products into one smart building offer</p>
+        <div class="grid-3">
+          <div class="bundle-card">
+            <div class="card-icon">📹</div>
+            <h3 data-i18n="bundle-c1-title">CCTV Cameras</h3>
+            <p data-i18n="bundle-c1-text">IZI cameras with HD, IR night vision, vandal-resistant. Your existing strength.</p>
+          </div>
+          <div class="bundle-card">
+            <div class="card-icon">🚪</div>
+            <h3 data-i18n="bundle-c2-title">Smart Intercom</h3>
+            <p data-i18n="bundle-c2-text">Evimiz intercoms with mobile access, video calls, NFC keys.</p>
+          </div>
+          <div class="bundle-card">
+            <div class="card-icon">📱</div>
+            <h3 data-i18n="bundle-c3-title">White-label App</h3>
+            <p data-i18n="bundle-c3-text">One app for residents — cameras, doors, access history. All under your brand.</p>
+          </div>
+        </div>
+        <div class="pricing-banner" style="margin-top: 2rem;">
+          <span class="pricing-desc" data-i18n="bundle-banner">Average deal value: 3× higher when bundled</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONTACT ========== -->
+    <section id="contact" class="section section-contact fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="contact-title">Ready to Build Recurring Revenue?</h2>
+        <div class="contact-layout">
+          <div class="contact-image">
+            <img src="assets/team-expo-a.jpg" alt="Evimiz team">
+          </div>
+          <div class="contact-info">
+            <p class="contact-tagline" data-i18n="contact-tagline">Join our partner network in Argentina. Let's talk about your current clients.</p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <img src="assets/icon-email.png" alt="Email" class="contact-icon">
+                <span>vadbaz1357@gmail.com</span>
+              </div>
+              <div class="contact-item">
+                <span style="font-size:1.5rem;">💬</span>
+                <span>WhatsApp: +54 9 351 233 64 20</span>
+              </div>
+              <div class="contact-item">
+                <span style="font-size:1.5rem;">🌐</span>
+                <span>evimiz.ai</span>
+              </div>
+            </div>
+            <a href="https://wa.me/5493512336420" target="_blank" class="btn-primary btn-large" data-i18n="contact-btn">Become a Partner</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="footer-logo">
+      <p data-i18n="footer-copy">© 2025 Evimiz. Smart Intercom for Modern Buildings.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection Observer — fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navLinks.classList.remove('active'); });
+    });
+
+    // ========== Keyboard slide navigation ==========
+    const sections = Array.from(document.querySelectorAll('section'));
+    let currentIndex = 0;
+    let isScrolling = false;
+
+    function goTo(index) {
+      if (isScrolling) return;
+      index = Math.max(0, Math.min(sections.length - 1, index));
+      currentIndex = index;
+      isScrolling = true;
+      const navHeight = document.querySelector('.navbar').offsetHeight;
+      const targetY = sections[index].offsetTop - navHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      setTimeout(() => { isScrolling = false; }, 900);
+    }
+
+    window.addEventListener('scroll', () => {
+      if (isScrolling) return;
+      const top = window.scrollY + 10;
+      const navHeight = document.querySelector('.navbar').offsetHeight;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop - navHeight <= top) { currentIndex = i; break; }
+      }
+    }, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      if ((e.key === ' ' && !e.shiftKey) || e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault(); goTo(currentIndex + 1);
+      } else if ((e.key === ' ' && e.shiftKey) || e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault(); goTo(currentIndex - 1);
+      }
+    });
+
+    // ========== i18n ==========
+    const translations = {
+      en: {
+        'nav-badge': 'For Integrators',
+        'nav-problem': 'Problem', 'nav-model': 'Model', 'nav-whitelabel': 'White Label',
+        'nav-upsell': 'Upsell', 'nav-install': 'Install', 'nav-bundle': 'Bundle', 'nav-contact': 'Contact',
+        'hero-badge': 'For CCTV Integrators & Security Companies',
+        'hero-h1': 'Turn Every Install<br>Into Monthly Revenue',
+        'hero-subtitle': 'Stop earning once per project. Start building a recurring income with every intercom you install.',
+        'hero-cta1': 'Become a Partner', 'hero-cta2': 'See the Model',
+        'problem-title': 'The One-Time Payment Trap',
+        'problem-subtitle': 'Project-based revenue is unpredictable. There\'s a better way.',
+        'problem-c1-title': 'You finish the job, they forget you',
+        'problem-c1-text': 'No ongoing relationship after installation. Zero loyalty.',
+        'problem-c2-title': 'Margins keep shrinking',
+        'problem-c2-text': 'Hardware competition drives prices down. Less profit per project.',
+        'problem-c3-title': 'Always chasing the next project',
+        'problem-c3-text': 'Revenue is unpredictable. Every month starts at zero.',
+        'model-title': 'Earn Every Month. Automatically.',
+        'model-subtitle': '$2 USD per device per month — your markup on top',
+        'model-s1': 'per device, baseline',
+        'model-s2-num': 'Your+', 'model-s2': 'you set the price',
+        'model-s3': '= $200+/mo minimum',
+        'model-s4': 'grows with every new install',
+        'model-card-title': 'The More You Install, The More You Earn',
+        'model-card-text': 'Every intercom you connect becomes a monthly subscription. Your revenue grows automatically as your install base grows — no extra sales effort.',
+        'wl-title': 'Your Brand. Their Loyalty to You.',
+        'wl-subtitle': 'Clients subscribe to your product — not to Evimiz',
+        'wl-f1-title': '🏷️ Fully white-labeled platform',
+        'wl-f1-text': 'Your name, your logo, your app in the App Store.',
+        'wl-f2-title': '🔒 Clients don\'t know it\'s Evimiz',
+        'wl-f2-text': 'Full independence. If you switch providers, your brand stays.',
+        'wl-f3-title': '📈 Build your own SaaS product',
+        'wl-f3-text': 'You\'re not a reseller — you\'re a product company.',
+        'upsell-title': 'Your Best Clients Are Already Yours',
+        'upsell-subtitle': 'Every CCTV client you have is a warm lead for smart access',
+        'upsell-c1-title': 'No new acquisition cost',
+        'upsell-c1-text': 'Sell to clients who already trust you. Zero cold outreach needed.',
+        'upsell-c2-title': 'Bundle with existing cameras',
+        'upsell-c2-text': 'Add intercom to camera installations. One project, two revenue streams.',
+        'upsell-c3-title': 'Upgrade old intercoms',
+        'upsell-c3-text': 'Every legacy intercom is an upgrade opportunity. Walk in with a solution.',
+        'install-title': 'Plug & Play. No Servers.',
+        'install-subtitle': 'You focus on installation. We handle the cloud.',
+        'install-c1-title': 'Fully cloud-based', 'install-c1-text': 'No local servers to manage. Zero IT overhead for you or your client.',
+        'install-c2-title': 'Pre-configured hardware', 'install-c2-text': 'Devices ship ready to connect. Activation takes minutes.',
+        'install-c3-title': 'Remote management', 'install-c3-text': 'Monitor and manage all installations from one dashboard.',
+        'install-c4-title': 'Technical support included', 'install-c4-text': 'We support you so you can support your clients.',
+        'bundle-title': 'Cameras + Access + App = 3× the Deal',
+        'bundle-subtitle': 'Bundle multiple products into one smart building offer',
+        'bundle-c1-title': 'CCTV Cameras',
+        'bundle-c1-text': 'IZI cameras with HD, IR night vision, vandal-resistant. Your existing strength.',
+        'bundle-c2-title': 'Smart Intercom',
+        'bundle-c2-text': 'Evimiz intercoms with mobile access, video calls, NFC keys.',
+        'bundle-c3-title': 'White-label App',
+        'bundle-c3-text': 'One app for residents — cameras, doors, access history. All under your brand.',
+        'bundle-banner': 'Average deal value: 3× higher when bundled',
+        'contact-title': 'Ready to Build Recurring Revenue?',
+        'contact-tagline': 'Join our partner network in Argentina. Let\'s talk about your current clients.',
+        'contact-btn': 'Become a Partner',
+        'footer-copy': '© 2025 Evimiz. Smart Intercom for Modern Buildings.'
+      },
+      es: {
+        'nav-badge': 'Para Integradores',
+        'nav-problem': 'Problema', 'nav-model': 'Modelo', 'nav-whitelabel': 'Marca Blanca',
+        'nav-upsell': 'Upsell', 'nav-install': 'Instalación', 'nav-bundle': 'Bundle', 'nav-contact': 'Contacto',
+        'hero-badge': 'Para Integradores CCTV y Empresas de Seguridad',
+        'hero-h1': 'Convierte Cada Instalación<br>en Ingreso Mensual',
+        'hero-subtitle': 'Deja de ganar una sola vez por proyecto. Empieza a construir ingresos recurrentes con cada intercomunicador que instales.',
+        'hero-cta1': 'Ser Socio', 'hero-cta2': 'Ver el Modelo',
+        'problem-title': 'La Trampa del Pago Único',
+        'problem-subtitle': 'Los ingresos por proyecto son impredecibles. Hay una mejor manera.',
+        'problem-c1-title': 'Terminas el trabajo y te olvidan',
+        'problem-c1-text': 'Sin relación continua tras la instalación. Cero lealtad.',
+        'problem-c2-title': 'Los márgenes siguen cayendo',
+        'problem-c2-text': 'La competencia en hardware baja los precios. Menos ganancias por proyecto.',
+        'problem-c3-title': 'Siempre buscando el próximo proyecto',
+        'problem-c3-text': 'Los ingresos son impredecibles. Cada mes empieza en cero.',
+        'model-title': 'Gana Cada Mes. Automáticamente.',
+        'model-subtitle': '$2 USD por dispositivo por mes — tu margen encima',
+        'model-s1': 'por dispositivo, base',
+        'model-s2-num': 'Tu+', 'model-s2': 'tú pones el precio',
+        'model-s3': '= $200+/mes mínimo',
+        'model-s4': 'crece con cada instalación nueva',
+        'model-card-title': 'Cuanto Más Instales, Más Ganas',
+        'model-card-text': 'Cada intercomunicador conectado se convierte en una suscripción mensual. Tus ingresos crecen automáticamente a medida que tu base de instalaciones crece — sin esfuerzo de ventas adicional.',
+        'wl-title': 'Tu Marca. Su Lealtad a Ti.',
+        'wl-subtitle': 'Los clientes se suscriben a tu producto, no a Evimiz',
+        'wl-f1-title': '🏷️ Plataforma completamente white-label',
+        'wl-f1-text': 'Tu nombre, tu logo, tu app en el App Store.',
+        'wl-f2-title': '🔒 Los clientes no saben que es Evimiz',
+        'wl-f2-text': 'Independencia total. Si cambias de proveedor, tu marca permanece.',
+        'wl-f3-title': '📈 Construye tu propio producto SaaS',
+        'wl-f3-text': 'No eres revendedor — eres una empresa de producto.',
+        'upsell-title': 'Tus Mejores Clientes Ya Son Tuyos',
+        'upsell-subtitle': 'Cada cliente de CCTV que tienes es un lead caliente para acceso inteligente',
+        'upsell-c1-title': 'Sin costo de adquisición nuevo',
+        'upsell-c1-text': 'Vende a clientes que ya confían en ti. Sin prospección en frío.',
+        'upsell-c2-title': 'Combina con cámaras existentes',
+        'upsell-c2-text': 'Agrega intercomunicador a instalaciones de cámaras. Un proyecto, dos fuentes de ingresos.',
+        'upsell-c3-title': 'Actualiza intercomunicadores viejos',
+        'upsell-c3-text': 'Cada intercomunicador viejo es una oportunidad de actualización. Llega con una solución.',
+        'install-title': 'Plug & Play. Sin Servidores.',
+        'install-subtitle': 'Tú te enfocas en la instalación. Nosotros manejamos la nube.',
+        'install-c1-title': '100% en la nube', 'install-c1-text': 'Sin servidores locales que administrar. Cero sobrecarga de IT para ti o tu cliente.',
+        'install-c2-title': 'Hardware preconfigurado', 'install-c2-text': 'Los dispositivos llegan listos para conectar. La activación toma minutos.',
+        'install-c3-title': 'Gestión remota', 'install-c3-text': 'Monitorea y gestiona todas las instalaciones desde un panel.',
+        'install-c4-title': 'Soporte técnico incluido', 'install-c4-text': 'Te apoyamos para que puedas apoyar a tus clientes.',
+        'bundle-title': 'Cámaras + Acceso + App = 3× el Negocio',
+        'bundle-subtitle': 'Combina múltiples productos en una oferta de edificio inteligente',
+        'bundle-c1-title': 'Cámaras CCTV',
+        'bundle-c1-text': 'Cámaras IZI con HD, visión nocturna IR, antivandalismo. Tu fortaleza existente.',
+        'bundle-c2-title': 'Intercomunicador Inteligente',
+        'bundle-c2-text': 'Intercomunicadores Evimiz con acceso móvil, videollamadas, llaves NFC.',
+        'bundle-c3-title': 'App White-Label',
+        'bundle-c3-text': 'Una app para residentes — cámaras, puertas, historial de acceso. Todo bajo tu marca.',
+        'bundle-banner': 'Valor promedio del negocio: 3× mayor cuando se combina',
+        'contact-title': '¿Listo para Construir Ingresos Recurrentes?',
+        'contact-tagline': 'Únete a nuestra red de socios en Argentina. Hablemos de tus clientes actuales.',
+        'contact-btn': 'Ser Socio',
+        'footer-copy': '© 2025 Evimiz. Intercomunicador Inteligente para Edificios Modernos.'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+      document.documentElement.lang = lang;
+      currentLang = lang;
+    }
+
+    function toggleLang() {
+      setLanguage(currentLang === 'en' ? 'es' : 'en');
+    }
+  </script>
+</body>
+</html>
