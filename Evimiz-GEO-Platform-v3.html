@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evimiz GEO Platform — Control & Monitoring for Building Portfolios (v3)</title>
+  <meta name="description" content="One unified platform to control access, monitor cameras, and manage operations across your entire building portfolio.">
+  <style>
+    /* ========== RESET ========== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; scroll-padding-top: 80px; }
+    .section { scroll-margin-top: 80px; }
+    html::-webkit-scrollbar { display: none; }
+
+    /* ========== CUSTOM PROPERTIES ========== */
+    :root {
+      --bg-dark: #080818;
+      --bg-section: #0d0d22;
+      --bg-card: #14143a;
+      --accent: #7C6FFF;
+      --accent2: #4FC3F7;
+      --accent-hover: #6558ee;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: rgba(124,111,255,0.2);
+      --max-width: 1200px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* ========== BASE ========== */
+    body {
+      font-family: var(--font);
+      background: radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.12) 0%, transparent 55%), radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.07) 0%, transparent 50%), var(--bg-dark);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* ========== LAYOUT ========== */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section {
+      padding: 80px 0 60px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section:nth-child(even) {
+      background: var(--bg-section);
+    }
+
+    /* ========== TYPOGRAPHY ========== */
+    .section-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      margin: 16px auto 0;
+      border-radius: 2px;
+    }
+    .section-title .hl {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 760px;
+      margin: 0 auto 3rem;
+    }
+
+    /* ========== GRID UTILITIES ========== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .cards-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cards-col .card {
+      padding: 16px 20px;
+    }
+    .grid-with-image {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    /* ========== CARDS ========== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: rgba(124,111,255,0.45);
+    }
+    .card h3, .card h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .card-center { text-align: center; }
+    .card-icon-svg {
+      display: flex;
+      width: 2.5rem; height: 2.5rem;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    .card-icon-svg .icon { width: 100%; height: 100%; }
+    .cards-col .card-icon-svg { width: 1.6rem; height: 1.6rem; margin-bottom: 6px; }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .btn-large {
+      font-size: 1.15rem;
+      padding: 18px 48px;
+    }
+    .btn-outline {
+      display: inline-block;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 12px 34px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ========== STATS ========== */
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      opacity: 0.8;
+    }
+
+    /* ========== FADE-IN ANIMATION ========== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ========== NAVBAR ========== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(10, 14, 26, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 12px 0;
+      transition: background 0.3s ease, opacity 0.4s ease;
+    }
+    .navbar.hidden { opacity: 0; pointer-events: none; }
+    .navbar-scrolled {
+      background: rgba(10, 14, 26, 0.95);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    img[src*="intercom.png"] { border-radius: 12px; }
+    img[src*="face-recognition.png"] { border-radius: 16px; }
+    img[src*="phone-apps.png"] { clip-path: inset(1% 14% 1% 14% round 20px); display: block; }
+    .nav-logo {
+      height: 44px;
+      width: auto;
+    }
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.nav-active { color: var(--accent); font-weight: 600; }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .lang-toggle {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s ease;
+      margin-left: 8px;
+    }
+    .lang-toggle:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+    .nav-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      padding: 3px 10px;
+      opacity: 0.8;
+    }
+
+    /* ========== HERO ========== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      background: radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.18) 0%, transparent 55%), radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.10) 0%, transparent 50%), var(--bg-dark);
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-image img {
+      max-height: 460px;
+      filter: drop-shadow(0 20px 40px rgba(124,111,255,0.18));
+    }
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(124,111,255,0.12);
+      border: 1px solid rgba(124,111,255,0.3);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+    .hero-content h1 .hl {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-content .hero-subtitle {
+      font-size: 1.18rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .hero-stat .stat-number { font-size: 1.6rem; }
+    .hero-stat .stat-label { font-size: 0.75rem; }
+
+    /* ========== MASCOT LAYOUT ========== */
+    .mascot-layout {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .mascot-col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .mascot-col img {
+      max-width: 280px;
+      max-height: 320px;
+    }
+
+    /* ========== DASHBOARD GRID ========== */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .dashboard-image img {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-height: 460px;
+      object-fit: cover;
+    }
+    .dashboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .dashboard-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .dashboard-item-icon {
+      display: flex;
+      width: 1.8rem; height: 1.8rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .dashboard-item-icon .icon { width: 100%; height: 100%; }
+    .dashboard-item h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .dashboard-item p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    /* ========== MODEL (Core / Premium) ========== */
+    .model-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .model-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .model-card.premium {
+      border-color: rgba(79,195,247,0.5);
+      background: linear-gradient(135deg, rgba(79,195,247,0.05) 0%, rgba(124,111,255,0.05) 100%), var(--bg-card);
+    }
+    .model-tier {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .model-card.premium .model-tier { color: var(--accent2); }
+    .model-name {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    .model-price {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+    .model-price b { color: var(--text); font-weight: 700; }
+    .model-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .model-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .model-list li svg {
+      width: 1.1rem; height: 1.1rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .model-tag {
+      align-self: flex-start;
+      margin-top: auto;
+      padding-top: 14px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .model-card.premium .model-tag { color: var(--accent2); font-style: normal; font-weight: 600; }
+
+    /* ========== MONETIZATION FLOW ========== */
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+    .flow-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .flow-step::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -14px;
+      width: 12px;
+      height: 2px;
+      background: var(--accent);
+      transform: translateY(-50%);
+    }
+    .flow-step:last-child::after { display: none; }
+    .flow-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      text-transform: uppercase;
+    }
+    .flow-icon-svg {
+      width: 2.4rem; height: 2.4rem;
+      color: var(--accent);
+      display: flex;
+    }
+    .flow-icon-svg .icon { width: 100%; height: 100%; }
+    .flow-step h4 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .flow-step p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .flow-step.revenue {
+      border-color: rgba(79,195,247,0.5);
+      background: linear-gradient(135deg, rgba(79,195,247,0.08), rgba(124,111,255,0.05));
+    }
+    .flow-step.revenue .flow-icon-svg { color: var(--accent2); }
+
+    /* ========== IMPACT (4 stats) ========== */
+    .impact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 22px;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .impact-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124,111,255,0.5);
+    }
+    .impact-icon {
+      width: 2.2rem; height: 2.2rem;
+      color: var(--accent);
+      margin: 0 auto 12px;
+    }
+    .impact-icon .icon { width: 100%; height: 100%; }
+
+    /* ========== SCALE TABLE ========== */
+    .scale-table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+    .scale-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+    .scale-table th, .scale-table td {
+      padding: 18px 22px;
+      text-align: left;
+      border-bottom: 1px solid rgba(124,111,255,0.1);
+    }
+    .scale-table th {
+      background: rgba(124,111,255,0.08);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .scale-table tr:last-child td { border-bottom: none; }
+    .scale-table tbody tr:hover { background: rgba(124,111,255,0.04); }
+    .scale-table .num {
+      font-weight: 700;
+      color: var(--text);
+    }
+    .scale-table .highlight-cell {
+      color: var(--accent2);
+      font-weight: 800;
+    }
+    .scale-banner {
+      background: linear-gradient(135deg, rgba(124,111,255,0.12) 0%, rgba(79,195,247,0.06) 100%);
+      border: 1px solid rgba(124,111,255,0.35);
+      border-radius: var(--radius);
+      padding: 18px 28px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 24px;
+    }
+    /* ========== MANIFESTO BANNER (slide bridge) ========== */
+    .manifesto-banner {
+      background: linear-gradient(135deg, rgba(124,111,255,0.16) 0%, rgba(79,195,247,0.08) 100%);
+      border-top: 1px solid rgba(124,111,255,0.35);
+      border-bottom: 1px solid rgba(124,111,255,0.35);
+      padding: 56px 24px;
+      text-align: center;
+    }
+    .manifesto-banner .manifesto-quote {
+      font-size: 1.9rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      max-width: 900px;
+      margin: 0 auto 12px;
+    }
+    .manifesto-banner .manifesto-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      .manifesto-banner { padding: 40px 18px; }
+      .manifesto-banner .manifesto-quote { font-size: 1.4rem; }
+    }
+    /* ========== HERO TRUST STRIP ========== */
+    .hero-trust {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(124,111,255,0.08);
+      border: 1px solid rgba(124,111,255,0.25);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .trust-badge svg.icon {
+      width: 14px;
+      height: 14px;
+      color: var(--accent);
+    }
+
+    /* ========== DEPLOY (numbered steps) ========== */
+    .deploy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .deploy-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .deploy-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124,111,255,0.5);
+    }
+    .deploy-num {
+      position: absolute;
+      top: -16px;
+      left: 24px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .deploy-icon {
+      width: 2rem; height: 2rem;
+      color: var(--accent);
+      margin: 8px 0 14px;
+    }
+    .deploy-icon .icon { width: 100%; height: 100%; }
+    .deploy-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .deploy-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .deploy-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.35);
+      color: #4ade80;
+      border-radius: var(--radius-sm);
+      padding: 12px 22px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 28px;
+    }
+    .deploy-time svg { width: 1rem; height: 1rem; }
+    .deploy-time-wrap { text-align: center; }
+
+    /* ========== BRIDGE ========== */
+    .bridge-top { text-align: center; max-width: 800px; margin: 0 auto; }
+    .bridge-badge { display: inline-block; background: rgba(124,111,255,0.13); border: 1px solid rgba(124,111,255,0.38); color: var(--accent); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 18px; border-radius: 50px; margin-bottom: 20px; }
+    .bridge-title { font-size: 2rem; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 0; }
+    .bridge-title .hl { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .bridge-flow { display: flex; align-items: stretch; gap: 0; width: 100%; max-width: 880px; margin: 0 auto; }
+    .bridge-role { flex: 1; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 20px 22px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: border-color 0.25s; }
+    .bridge-role:hover { border-color: rgba(124,111,255,0.55); }
+    .bridge-role-icon { font-size: 1.8rem; }
+    .bridge-role-name { font-size: 0.95rem; font-weight: 700; }
+    .bridge-role-desc { font-size: 0.82rem; color: var(--accent2); font-weight: 500; line-height: 1.4; }
+    .bridge-arrow { flex: 0 0 50px; display: flex; align-items: center; justify-content: center; position: relative; }
+    .bridge-arrow::before { content: ''; position: absolute; top: 50%; left: 4px; right: 4px; height: 1px; background: linear-gradient(90deg, rgba(124,111,255,0.45), rgba(79,195,247,0.45)); transform: translateY(-50%); }
+    .bridge-arrow-head { position: relative; z-index: 1; background: var(--bg-section); padding: 0 4px; color: var(--accent2); font-size: 0.95rem; }
+    .bridge-bottom { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .bridge-pill { background: linear-gradient(135deg, rgba(124,111,255,0.18), rgba(79,195,247,0.1)); border: 1px solid rgba(124,111,255,0.42); border-radius: 50px; padding: 9px 24px; font-size: 0.83rem; font-weight: 700; color: var(--accent2); letter-spacing: 0.02em; }
+    .bridge-cta { font-size: 0.92rem; color: var(--text-muted); font-style: italic; }
+
+    /* ========== CONTACT ========== */
+    .section-contact {
+      background: linear-gradient(135deg, var(--bg-section) 0%, var(--bg-dark) 100%);
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .contact-qr {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .contact-qr img {
+      border-radius: var(--radius);
+      background: #fff;
+      padding: 14px;
+      width: 220px;
+      height: 220px;
+      box-shadow: 0 10px 40px rgba(124,111,255,0.25);
+    }
+    .contact-tagline {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+    }
+    .contact-icon {
+      height: 32px;
+      width: 32px;
+      object-fit: contain;
+    }
+    .contact-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,111,255,0.08);
+      border: 1px solid rgba(124,111,255,0.3);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      color: var(--text);
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .contact-rating svg { width: 1rem; height: 1rem; color: #fbbf24; }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 40px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .footer-logo {
+      height: 36px;
+      margin: 0 auto 12px;
+      opacity: 0.7;
+    }
+    .footer p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1024px) {
+      .hero-content h1 { font-size: 2.4rem; }
+      .section-title { font-size: 2rem; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .flow-steps { grid-template-columns: repeat(2, 1fr); }
+      .flow-step::after { display: none; }
+    }
+    @media (max-width: 768px) {
+      .section { padding: 60px 0; }
+      #hero { min-height: auto; padding-top: 100px; padding-bottom: 60px; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-image { order: -1; }
+      .hero-image img { max-height: 260px; }
+      .hero-content { align-items: center; }
+      .hero-cta { justify-content: center; }
+      .hero-content h1 { font-size: 2rem; }
+      .hero-badge { margin: 0 auto; }
+      .hero-stats { justify-content: center; }
+      .grid-2, .grid-3, .grid-with-image, .mascot-layout, .contact-layout,
+      .dashboard-grid, .model-grid, .deploy-grid {
+        grid-template-columns: 1fr;
+      }
+      .flow-steps { grid-template-columns: 1fr; }
+      .contact-qr { order: -1; }
+      .mascot-col img { max-width: 200px; margin: 0 auto; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 14, 26, 0.97);
+        flex-direction: column;
+        padding: 16px 24px;
+        gap: 12px;
+      }
+      .nav-links.active { display: flex; }
+      .nav-toggle { display: block; }
+      .scale-table th, .scale-table td { padding: 12px 14px; font-size: 0.88rem; }
+    }
+
+    /* ===== BOTTOM SLIDE NAV ===== */
+    .slide-nav {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(13,13,34,0.88); backdrop-filter: blur(14px);
+      border: 1px solid rgba(124,111,255,0.25); border-radius: 50px;
+      padding: 10px 22px; z-index: 999; user-select: none;
+      transition: opacity 0.4s ease;
+    }
+    .slide-nav.hidden { opacity: 0; pointer-events: none; }
+    .slide-nav-btn {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.1rem; cursor: pointer; padding: 4px 10px;
+      border-radius: 6px; transition: color 0.2s, background 0.2s;
+    }
+    .slide-nav-btn:hover { color: var(--text); background: rgba(124,111,255,0.15); }
+    .slide-nav-dots { display: flex; gap: 6px; align-items: center; }
+    .slide-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.22); cursor: pointer;
+      transition: background 0.25s, width 0.25s, border-radius 0.25s; flex-shrink: 0;
+    }
+    .slide-dot.active { background: var(--accent); width: 20px; border-radius: 4px; }
+    .slide-nav-counter { color: var(--text-muted); font-size: 0.82rem; min-width: 44px; text-align: center; }
+
+    /* ========== SVG ICONS (Lucide) ========== */
+    .icon {
+      display: inline-block; vertical-align: middle;
+      width: 1em; height: 1em;
+      stroke: currentColor; stroke-width: 1.75;
+      stroke-linecap: round; stroke-linejoin: round;
+      fill: none; flex-shrink: 0;
+    }
+    .icon-bridge { width: 1.8rem; height: 1.8rem; color: var(--accent); }
+    .icon-inline { width: 1.05rem; height: 1.05rem; vertical-align: -3px; margin-right: 8px; color: var(--accent); }
+    .icon-pill { width: 1rem; height: 1rem; vertical-align: -2px; margin-right: 8px; color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <!-- ========== SVG SPRITE (Lucide icons) ========== -->
+  <svg style="display:none;" aria-hidden="true">
+    <symbol id="icon-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></symbol>
+    <symbol id="icon-megaphone" viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="icon-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+    <symbol id="icon-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="icon-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="icon-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+    <symbol id="icon-coins" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></symbol>
+    <symbol id="icon-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></symbol>
+    <symbol id="icon-trending-up" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+    <symbol id="icon-trending-down" viewBox="0 0 24 24"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></symbol>
+    <symbol id="icon-video" viewBox="0 0 24 24"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></symbol>
+    <symbol id="icon-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 0 9Z"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+    <symbol id="icon-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol>
+    <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+    <symbol id="icon-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+    <symbol id="icon-layout-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></symbol>
+    <symbol id="icon-activity" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+    <symbol id="icon-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+    <symbol id="icon-bar-chart" viewBox="0 0 24 24"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></symbol>
+    <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="icon-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="icon-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  </svg>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="nav-logo">
+      <div class="nav-links">
+        <span class="nav-badge" data-i18n="nav-badge">GEO Platform</span>
+        <a href="#problem" data-i18n="nav-problem">Problem</a>
+        <a href="#remote" data-i18n="nav-remote">Remote</a>
+        <a href="#notifications" data-i18n="nav-notif">Comms</a>
+        <a href="#dashboard" data-i18n="nav-dashboard">Dashboard</a>
+        <a href="#model" data-i18n="nav-model">Model</a>
+        <a href="#monetization" data-i18n="nav-monet">Monetize</a>
+        <a href="#impact" data-i18n="nav-impact">Impact</a>
+        <a href="#scale" data-i18n="nav-scale">Scale</a>
+        <a href="#deploy" data-i18n="nav-deploy">Deploy</a>
+        <a href="#bridge" data-i18n="nav-bridge">Platform</a>
+        <a href="#contact" data-i18n="nav-contact">Contact</a>
+      </div>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+      <button class="nav-toggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ========== 1 · HERO ========== -->
+    <section id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-image fade-in">
+            <img src="assets/intercom.png" alt="Evimiz GEO Platform">
+          </div>
+          <div class="hero-content fade-in">
+            <div class="hero-badge" data-i18n="hero-badge">GEO Platform · For CTOs & Tech Directors</div>
+            <h1 data-i18n-html="hero-h1">Control & Monitoring for your <span class="hl">entire building portfolio</span></h1>
+            <p class="hero-subtitle" data-i18n="hero-subtitle">One unified platform to manage access, cameras, residents and operations across every building you run — with the ROI math to justify scale.</p>
+            <div class="hero-cta">
+              <a href="#contact" class="btn-primary btn-large" data-i18n="hero-cta1">Schedule Demo · 30 min</a>
+              <a href="#problem" class="btn-outline" data-i18n="hero-cta2">How It Works</a>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <div class="stat-number" data-i18n="hero-s1n">40–60%</div>
+                <div class="stat-label" data-i18n="hero-s1l">Less routine work</div>
+              </div>
+              <div class="hero-stat">
+                <div class="stat-number" data-i18n="hero-s2n">15 min</div>
+                <div class="stat-label" data-i18n="hero-s2l">Setup per building</div>
+              </div>
+              <div class="hero-stat">
+                <div class="stat-number" data-i18n="hero-s3n">$2.50/mo</div>
+                <div class="stat-label" data-i18n="hero-s3l">Per device wholesale</div>
+              </div>
+            </div>
+            <div class="hero-trust">
+              <span class="trust-badge">
+                <svg class="icon"><use href="#icon-star"/></svg>
+                <span data-i18n="hero-rating">4.8 · 19K ratings · App Store</span>
+              </span>
+              <span class="trust-badge">
+                <svg class="icon"><use href="#icon-globe"/></svg>
+                <span data-i18n="hero-proof">10,000+ buildings — Russia · CIS · Turkey</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 2 · PROBLEM ========== -->
+    <section id="problem" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="problem-title">Operations teams drown in routine tasks</h2>
+        <p class="section-subtitle" data-i18n="problem-subtitle">Lost keys, no visibility, constant resident calls. Across 50+ buildings, the cost compounds fast.</p>
+        <div class="mascot-layout">
+          <div class="cards-col">
+            <div class="card">
+              <div class="card-icon-svg"><svg class="icon"><use href="#icon-key"/></svg></div>
+              <h3 data-i18n="problem-c1-title">Lost keys, shared codes</h3>
+              <p data-i18n="problem-c1-text">11pm Saturday: a resident locks themselves out, the on-call manager can't reach a locksmith. Codes leak through chat groups. Every incident is a manual workflow with no audit trail.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon-svg"><svg class="icon"><use href="#icon-eye"/></svg></div>
+              <h3 data-i18n="problem-c2-title">No portfolio visibility</h3>
+              <p data-i18n="problem-c2-text">An incident in Building 12 sat in the WhatsApp chat for three days because nobody saw it. Across 50+ buildings you can't prioritize, escalate, or report on SLAs.</p>
+            </div>
+            <div class="card">
+              <div class="card-icon-svg"><svg class="icon"><use href="#icon-phone"/></svg></div>
+              <h3 data-i18n="problem-c3-title">Endless inbound calls</h3>
+              <p data-i18n="problem-c3-text">Half your operations team's hours go to access requests that should be self-service. Headcount scales linearly with portfolio — that's the trap.</p>
+            </div>
+          </div>
+          <div class="mascot-col">
+            <img src="assets/mascot-window.png" alt="Operations team overwhelmed">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 3 · REMOTE ========== -->
+    <section id="remote" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="remote-title">Remote control over every door, every camera</h2>
+        <p class="section-subtitle" data-i18n="remote-subtitle">Manage access, watch cameras, audit history — across the whole portfolio, from anywhere.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon-svg"><svg class="icon"><use href="#icon-smartphone"/></svg></div>
+            <h3 data-i18n="remote-c1-title">Remote door unlock</h3>
+            <p data-i18n="remote-c1-text">Open any door in any building from a web dashboard or mobile app. Approve deliveries, contractors, emergency services.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon-svg"><svg class="icon"><use href="#icon-video"/></svg></div>
+            <h3 data-i18n="remote-c2-title">Live cameras + archive</h3>
+            <p data-i18n="remote-c2-text">HD live feeds with cloud archive. Pull footage by date, door, or resident in seconds — no DVR scrub, no on-site visit.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon-svg"><svg class="icon"><use href="#icon-clipboard"/></svg></div>
+            <h3 data-i18n="remote-c3-title">Full access history</h3>
+            <p data-i18n="remote-c3-text">Every entry timestamped, every action logged. Disputes resolved with data — not arguments.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 4 · NOTIFICATIONS ========== -->
+    <section id="notifications" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="notif-title">Direct channel to every resident — and your ops team</h2>
+        <p class="section-subtitle" data-i18n="notif-subtitle">Push notifications replace bulletin boards and unanswered group chats. Alerts route to the right person, fast.</p>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon-svg"><svg class="icon"><use href="#icon-bell"/></svg></div>
+            <h3 data-i18n="notif-c1-title">Resident push notifications</h3>
+            <p data-i18n="notif-c1-text">Building announcements, payment reminders, emergency alerts — delivered instantly to every resident's phone.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon-svg"><svg class="icon"><use href="#icon-zap"/></svg></div>
+            <h3 data-i18n="notif-c2-title">Smart ops alerts</h3>
+            <p data-i18n="notif-c2-text">Only get pinged when action is needed. Filter by building, severity, or category. Less noise, faster response.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon-svg"><svg class="icon"><use href="#icon-message-circle"/></svg></div>
+            <h3 data-i18n="notif-c3-title">Two-way communication</h3>
+            <p data-i18n="notif-c3-text">Residents log incidents, request access, message staff — everything traceable, nothing lost in WhatsApp threads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 5 · DASHBOARD ========== -->
+    <section id="dashboard" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="dash-title">Real-time dashboard across every building</h2>
+        <p class="section-subtitle" data-i18n="dash-subtitle">Live access logs, incident queue, multi-building view — available to your team from any browser, any device.</p>
+        <div class="dashboard-grid">
+          <div class="dashboard-image">
+            <img src="assets/platform-ui.png" alt="Evimiz GEO Platform dashboard">
+          </div>
+          <div class="dashboard-list">
+            <div class="dashboard-item">
+              <div class="dashboard-item-icon"><svg class="icon"><use href="#icon-activity"/></svg></div>
+              <div>
+                <h4 data-i18n="dash-i1-title">Live access logs</h4>
+                <p data-i18n="dash-i1-text">Stream of every door event across the portfolio — filterable by building, time, door, or resident.</p>
+              </div>
+            </div>
+            <div class="dashboard-item">
+              <div class="dashboard-item-icon"><svg class="icon"><use href="#icon-list-checks"/></svg></div>
+              <div>
+                <h4 data-i18n="dash-i2-title">Incident tracker</h4>
+                <p data-i18n="dash-i2-text">Open issues, assigned staff, SLA timers. Know exactly what's pending and who owns it — no more lost tickets.</p>
+              </div>
+            </div>
+            <div class="dashboard-item">
+              <div class="dashboard-item-icon"><svg class="icon"><use href="#icon-layout-dashboard"/></svg></div>
+              <div>
+                <h4 data-i18n="dash-i3-title">Multi-building view</h4>
+                <p data-i18n="dash-i3-text">One screen across the entire portfolio. Drill into any building for full operational detail in two clicks.</p>
+              </div>
+            </div>
+            <div class="dashboard-item">
+              <div class="dashboard-item-icon"><svg class="icon"><use href="#icon-bar-chart"/></svg></div>
+              <div>
+                <h4 data-i18n="dash-i4-title">Operational reporting</h4>
+                <p data-i18n="dash-i4-text">Exportable reports for owners, auditors, regulators. Prove SLA compliance with data.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== MANIFESTO BANNER (transition into Model) ========== -->
+    <aside class="manifesto-banner fade-in">
+      <p class="manifesto-quote" data-i18n-html="manifesto-quote">Buildings are no longer physical. They're <span class="hl">digital products</span>.</p>
+      <p class="manifesto-sub" data-i18n="manifesto-sub">And that changes everything: how they're sold, how they're managed, and what they're worth.</p>
+    </aside>
+
+    <!-- ========== 6 · MODEL ========== -->
+    <section id="model" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n-html="model-title">Product model: <span class="hl">Core free, Premium pays</span></h2>
+        <p class="section-subtitle" data-i18n="model-subtitle">Core drives daily adoption — Premium drives revenue that subsidizes the platform cost.</p>
+        <div class="model-grid">
+          <div class="model-card">
+            <div class="model-tier" data-i18n="model-core-tier">Core</div>
+            <div class="model-name" data-i18n="model-core-name">Free for residents</div>
+            <div class="model-price" data-i18n-html="model-core-price"><b>$0</b> per resident — drives daily app usage</div>
+            <ul class="model-list">
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-core-1">Door access</span></li>
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-core-2">Answer intercom calls</span></li>
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-core-3">Live video feed</span></li>
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-core-4">Family member access</span></li>
+            </ul>
+            <div class="model-tag" data-i18n="model-core-tag">Adoption layer · 100% of residents</div>
+          </div>
+          <div class="model-card premium">
+            <div class="model-tier" data-i18n="model-prem-tier">Premium</div>
+            <div class="model-name" data-i18n="model-prem-name">Paid features</div>
+            <div class="model-price" data-i18n-html="model-prem-price"><b>Subscription</b> per resident — drives recurring revenue</div>
+            <ul class="model-list">
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-prem-1">Guest access codes</span></li>
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-prem-2">Face recognition</span></li>
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-prem-3">Video archive (cloud)</span></li>
+              <li><svg><use href="#icon-check"/></svg><span data-i18n="model-prem-4">Full access history</span></li>
+            </ul>
+            <div class="model-tag" data-i18n="model-prem-tag">Revenue layer · 15–30% conversion</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 7 · MONETIZATION ========== -->
+    <section id="monetization" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n-html="monet-title">From daily usage to <span class="hl">recurring revenue</span></h2>
+        <p class="section-subtitle" data-i18n="monet-subtitle">Every resident who uses the app daily becomes a candidate for premium upgrade. The flow is automatic.</p>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-num" data-i18n="monet-n1">Step 1</div>
+            <div class="flow-icon-svg"><svg class="icon"><use href="#icon-users"/></svg></div>
+            <h4 data-i18n="monet-s1-title">Resident</h4>
+            <p data-i18n="monet-s1-text">Onboarded automatically when you bind a building.</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num" data-i18n="monet-n2">Step 2</div>
+            <div class="flow-icon-svg"><svg class="icon"><use href="#icon-smartphone"/></svg></div>
+            <h4 data-i18n="monet-s2-title">Daily app usage</h4>
+            <p data-i18n="monet-s2-text">Core features drive app opens — intercom, doors, cameras.</p>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num" data-i18n="monet-n3">Step 3</div>
+            <div class="flow-icon-svg"><svg class="icon"><use href="#icon-zap"/></svg></div>
+            <h4 data-i18n="monet-s3-title">Premium upgrade</h4>
+            <p data-i18n="monet-s3-text">In-app prompts convert engaged users to paid tiers.</p>
+          </div>
+          <div class="flow-step revenue">
+            <div class="flow-num" data-i18n="monet-n4">Result</div>
+            <div class="flow-icon-svg"><svg class="icon"><use href="#icon-coins"/></svg></div>
+            <h4 data-i18n="monet-s4-title">Recurring margin</h4>
+            <p data-i18n="monet-s4-text">Net cost drops below zero as conversion climbs.</p>
+          </div>
+        </div>
+        <div class="scale-banner" style="margin-top:32px;">
+          <svg class="icon icon-pill" style="color:var(--accent2);"><use href="#icon-trending-up"/></svg>
+          <span data-i18n="monet-banner">Wholesale platform: $2.50/device/month. You set the retail margin — billing and collection handled automatically.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 8 · IMPACT ========== -->
+    <section id="impact" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="impact-title">Real ROI numbers from operating portfolios</h2>
+        <p class="section-subtitle" data-i18n="impact-subtitle">Reported by management companies running Evimiz GEO across CIS, Turkey, and LATAM deployments.</p>
+        <div class="grid-4">
+          <div class="impact-card">
+            <div class="impact-icon"><svg class="icon"><use href="#icon-trending-down"/></svg></div>
+            <div class="stat-number" data-i18n="impact-s1n">60%</div>
+            <div class="stat-label" data-i18n="impact-s1l">Fewer inbound calls</div>
+            <div class="stat-sub" data-i18n="impact-s1s">In first 3 months of operation</div>
+          </div>
+          <div class="impact-card">
+            <div class="impact-icon"><svg class="icon"><use href="#icon-clock"/></svg></div>
+            <div class="stat-number" data-i18n="impact-s2n">3×</div>
+            <div class="stat-label" data-i18n="impact-s2l">Faster issue resolution</div>
+            <div class="stat-sub" data-i18n="impact-s2s">Median time-to-close per ticket</div>
+          </div>
+          <div class="impact-card">
+            <div class="impact-icon"><svg class="icon"><use href="#icon-trophy"/></svg></div>
+            <div class="stat-number" data-i18n="impact-s3n">40%</div>
+            <div class="stat-label" data-i18n="impact-s3l">Lower complaint rate</div>
+            <div class="stat-sub" data-i18n="impact-s3s">Higher owner retention scores</div>
+          </div>
+          <div class="impact-card">
+            <div class="impact-icon"><svg class="icon"><use href="#icon-trending-up"/></svg></div>
+            <div class="stat-number" data-i18n="impact-s4n">+ARPU</div>
+            <div class="stat-label" data-i18n="impact-s4l">Premium upgrades</div>
+            <div class="stat-sub" data-i18n="impact-s4s">15–30% of residents convert</div>
+          </div>
+        </div>
+        <div class="scale-banner">
+          <svg class="icon icon-pill" style="color:#fff;"><use href="#icon-zap"/></svg>
+          <span data-i18n="impact-banner">40–60% reduction in routine operational workload within the first 3 months — staff redirected to revenue-generating service.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 9 · SCALE ========== -->
+    <section id="scale" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n-html="scale-title">Portfolio math: <span class="hl">numbers that compound</span></h2>
+        <p class="section-subtitle" data-i18n="scale-subtitle">$2.50/device wholesale × devices per building × buildings. Headcount stays flat. Revenue scales linearly.</p>
+        <div class="scale-table-wrap">
+          <table class="scale-table">
+            <thead>
+              <tr>
+                <th data-i18n="scale-th1">Portfolio size</th>
+                <th data-i18n="scale-th2">Devices</th>
+                <th data-i18n="scale-th3">Monthly platform revenue</th>
+                <th data-i18n="scale-th4">Annual ARR</th>
+                <th data-i18n="scale-th5">Ops headcount needed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="num" data-i18n="scale-r1-1">50 buildings</td>
+                <td data-i18n="scale-r1-2">~5,000</td>
+                <td class="num" data-i18n="scale-r1-3">$12,500/mo</td>
+                <td class="num" data-i18n="scale-r1-4">$150,000</td>
+                <td data-i18n="scale-r1-5">2–3 staff</td>
+              </tr>
+              <tr>
+                <td class="num" data-i18n="scale-r2-1">100 buildings</td>
+                <td data-i18n="scale-r2-2">~10,000</td>
+                <td class="num" data-i18n="scale-r2-3">$25,000/mo</td>
+                <td class="num" data-i18n="scale-r2-4">$300,000</td>
+                <td data-i18n="scale-r2-5">3–4 staff</td>
+              </tr>
+              <tr>
+                <td class="num highlight-cell" data-i18n="scale-r3-1">500 buildings</td>
+                <td class="highlight-cell" data-i18n="scale-r3-2">~50,000</td>
+                <td class="num highlight-cell" data-i18n="scale-r3-3">$125,000/mo</td>
+                <td class="num highlight-cell" data-i18n="scale-r3-4">$1.5M</td>
+                <td class="highlight-cell" data-i18n="scale-r3-5">5–6 staff</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="scale-banner">
+          <svg class="icon icon-pill" style="color:var(--accent2);"><use href="#icon-trending-up"/></svg>
+          <span data-i18n="scale-banner">10× the buildings, 2× the headcount. The platform absorbs operational complexity that used to require linear hiring.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 10 · DEPLOY ========== -->
+    <section id="deploy" class="section fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="deploy-title">15-minute setup, certified partners, zero downtime</h2>
+        <p class="section-subtitle" data-i18n="deploy-subtitle">No on-site IT, no construction, no training overhead. Local certified integrators handle the rollout.</p>
+        <div class="deploy-grid" style="margin-top:48px;">
+          <div class="deploy-card">
+            <div class="deploy-num">1</div>
+            <div class="deploy-icon"><svg class="icon"><use href="#icon-link"/></svg></div>
+            <h3 data-i18n="deploy-c1-title">Connect hardware</h3>
+            <p data-i18n="deploy-c1-text">Bind intercoms and cameras to GEO cloud. Existing systems can stay — Evimiz works alongside or replaces them.</p>
+          </div>
+          <div class="deploy-card">
+            <div class="deploy-num">2</div>
+            <div class="deploy-icon"><svg class="icon"><use href="#icon-settings"/></svg></div>
+            <h3 data-i18n="deploy-c2-title">Configure building</h3>
+            <p data-i18n="deploy-c2-text">Units, residents, access rules, staff roles — all configured from the dashboard. No developer required.</p>
+          </div>
+          <div class="deploy-card">
+            <div class="deploy-num">3</div>
+            <div class="deploy-icon"><svg class="icon"><use href="#icon-smartphone"/></svg></div>
+            <h3 data-i18n="deploy-c3-title">Activate residents</h3>
+            <p data-i18n="deploy-c3-text">Residents download the app and start using it the same day. Operational from day one.</p>
+          </div>
+        </div>
+        <div class="deploy-time-wrap">
+          <span class="deploy-time">
+            <svg class="icon"><use href="#icon-zap"/></svg>
+            <span data-i18n="deploy-time">Up and running per building in under 15 minutes. Full portfolio onboarded in weeks, not quarters.</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 11 · BRIDGE ========== -->
+    <section id="bridge" class="section fade-in">
+      <div class="container" style="display:flex;flex-direction:column;align-items:center;gap:40px;">
+        <div class="bridge-top">
+          <div class="bridge-badge" data-i18n="bridge-badge">Connected Ecosystem</div>
+          <h2 class="bridge-title" data-i18n-html="bridge-title">One <span class="hl">unified platform</span> for your whole team — and everyone you work with.</h2>
+        </div>
+        <div class="bridge-flow">
+          <div class="bridge-role">
+            <div class="bridge-role-icon"><svg class="icon icon-bridge"><use href="#icon-building"/></svg></div>
+            <div class="bridge-role-name" data-i18n="bridge-r1-name">Developers</div>
+            <div class="bridge-role-desc" data-i18n="bridge-r1-desc">Integrate at design phase</div>
+          </div>
+          <div class="bridge-arrow"><span class="bridge-arrow-head">→</span></div>
+          <div class="bridge-role">
+            <div class="bridge-role-icon"><svg class="icon icon-bridge"><use href="#icon-wrench"/></svg></div>
+            <div class="bridge-role-name" data-i18n="bridge-r2-name">Integrators</div>
+            <div class="bridge-role-desc" data-i18n="bridge-r2-desc">Monetize every install</div>
+          </div>
+          <div class="bridge-arrow"><span class="bridge-arrow-head">→</span></div>
+          <div class="bridge-role">
+            <div class="bridge-role-icon"><svg class="icon icon-bridge"><use href="#icon-briefcase"/></svg></div>
+            <div class="bridge-role-name" data-i18n="bridge-r3-name">Operators</div>
+            <div class="bridge-role-desc" data-i18n="bridge-r3-desc">Control & visibility at scale</div>
+          </div>
+        </div>
+        <div class="bridge-bottom">
+          <div class="bridge-pill"><svg class="icon icon-pill"><use href="#icon-zap"/></svg><span data-i18n="bridge-pill">Evimiz GEO Platform — one system from blueprint to building manager</span></div>
+          <div class="bridge-cta" data-i18n="bridge-cta">Same data layer. Same APIs. Same monetization. No silos.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 12 · CONTACT ========== -->
+    <section id="contact" class="section section-contact fade-in">
+      <div class="container">
+        <h2 class="section-title" data-i18n="contact-title">Ready to scale your portfolio without scaling headcount?</h2>
+        <p class="section-subtitle" data-i18n="contact-subtitle">30 minutes is all it takes to walk through your portfolio numbers and the technical rollout plan.</p>
+        <div class="contact-layout">
+          <div class="contact-qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://geo.evimiz.ai" alt="QR code geo.evimiz.ai">
+          </div>
+          <div class="contact-info">
+            <p class="contact-tagline" data-i18n="contact-tagline">Let's run the numbers for your portfolio together.</p>
+            <div class="contact-details">
+              <div class="contact-item">
+                <img src="assets/icon-email.png" alt="Email" class="contact-icon">
+                <span>vadbaz1357@gmail.com</span>
+              </div>
+              <div class="contact-item">
+                <svg class="icon" style="width:1.6rem;height:1.6rem;color:var(--accent);"><use href="#icon-message-circle"/></svg>
+                <span>WhatsApp: +54 9 351 233 64 20</span>
+              </div>
+              <div class="contact-item">
+                <svg class="icon" style="width:1.6rem;height:1.6rem;color:var(--accent);"><use href="#icon-globe"/></svg>
+                <span>geo.evimiz.ai</span>
+              </div>
+            </div>
+            <a href="https://wa.me/5493512336420" target="_blank" class="btn-primary btn-large" data-i18n="contact-btn">Schedule Demo</a>
+            <div>
+              <span class="contact-rating">
+                <svg class="icon"><use href="#icon-star"/></svg>
+                <span data-i18n="contact-rating">4.8 · 19K ratings · App Store</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <img src="assets/logo-evimiz.png" alt="Evimiz" class="footer-logo">
+      <p data-i18n="footer-copy">© 2026 Evimiz GEO Platform. Smart Building Operations at Scale.</p>
+    </div>
+  </footer>
+
+  <!-- ========== SLIDE NAV ========== -->
+  <div class="slide-nav">
+    <button class="slide-nav-btn" id="prevBtn">←</button>
+    <div class="slide-nav-dots" id="slideDots"></div>
+    <span class="slide-nav-counter" id="slideCounter">1 / 12</span>
+    <button class="slide-nav-btn" id="nextBtn">→</button>
+  </div>
+
+  <script>
+    // ========== Intersection Observer — fade-in ==========
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ========== Navbar scroll effect ==========
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
+    });
+
+    // ========== Mobile menu toggle ==========
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    navToggle.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => { navLinks.classList.remove('active'); });
+    });
+
+    // ========== Keyboard slide navigation ==========
+    const sections = Array.from(document.querySelectorAll('section'));
+    let currentIndex = 0;
+    let isScrolling = false;
+
+    function goTo(index) {
+      if (isScrolling) return;
+      index = Math.max(0, Math.min(sections.length - 1, index));
+      currentIndex = index;
+      isScrolling = true;
+      const navHeight = navbar.offsetHeight;
+      const targetY = sections[index].offsetTop - navHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      setTimeout(() => { isScrolling = false; }, 900);
+    }
+
+    window.addEventListener('scroll', () => {
+      if (isScrolling) return;
+      const top = window.scrollY + 10;
+      const navHeight = navbar.offsetHeight;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (sections[i].offsetTop - navHeight <= top) { currentIndex = i; break; }
+      }
+    }, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      if ((e.key === ' ' && !e.shiftKey) || e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault(); goTo(currentIndex + 1);
+      } else if ((e.key === ' ' && e.shiftKey) || e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault(); goTo(currentIndex - 1);
+      }
+    });
+
+    // ========== i18n ==========
+    const translations = {
+      en: {
+        'nav-badge': 'GEO Platform',
+        'nav-problem': 'Problem', 'nav-remote': 'Remote', 'nav-notif': 'Comms',
+        'nav-dashboard': 'Dashboard', 'nav-model': 'Model', 'nav-monet': 'Monetize',
+        'nav-impact': 'Impact', 'nav-scale': 'Scale', 'nav-deploy': 'Deploy',
+        'nav-bridge': 'Platform', 'nav-contact': 'Contact',
+
+        'hero-badge': 'GEO Platform · For CTOs & Tech Directors',
+        'hero-h1': 'Control & Monitoring for your <span class="hl">entire building portfolio</span>',
+        'hero-subtitle': 'One unified platform to manage access, cameras, residents and operations across every building you run — with the ROI math to justify scale.',
+        'hero-cta1': 'Schedule Demo · 30 min', 'hero-cta2': 'How It Works',
+        'hero-rating': '4.8 · 19K ratings · App Store',
+        'hero-proof': '10,000+ buildings — Russia · CIS · Turkey',
+        'hero-s1n': '40–60%', 'hero-s1l': 'Less routine work',
+        'hero-s2n': '15 min', 'hero-s2l': 'Setup per building',
+        'hero-s3n': '$2.50/mo', 'hero-s3l': 'Per device wholesale',
+        'manifesto-quote': 'Buildings are no longer physical. They\'re <span class="hl">digital products</span>.',
+        'manifesto-sub': 'And that changes everything: how they\'re sold, how they\'re managed, and what they\'re worth.',
+
+        'problem-title': 'Operations teams drown in routine tasks',
+        'problem-subtitle': 'Lost keys, no visibility, constant resident calls. Across 50+ buildings, the cost compounds fast.',
+        'problem-c1-title': 'Lost keys, shared codes',
+        'problem-c1-text': '11pm Saturday: a resident locks themselves out, the on-call manager can\'t reach a locksmith. Codes leak through chat groups. Every incident is a manual workflow with no audit trail.',
+        'problem-c2-title': 'No portfolio visibility',
+        'problem-c2-text': 'An incident in Building 12 sat in the WhatsApp chat for three days because nobody saw it. Across 50+ buildings you can\'t prioritize, escalate, or report on SLAs.',
+        'problem-c3-title': 'Endless inbound calls',
+        'problem-c3-text': 'Half your operations team\'s hours go to access requests that should be self-service. Headcount scales linearly with portfolio — that\'s the trap.',
+
+        'remote-title': 'Remote control over every door, every camera',
+        'remote-subtitle': 'Manage access, watch cameras, audit history — across the whole portfolio, from anywhere.',
+        'remote-c1-title': 'Remote door unlock',
+        'remote-c1-text': 'Open any door in any building from a web dashboard or mobile app. Approve deliveries, contractors, emergency services.',
+        'remote-c2-title': 'Live cameras + archive',
+        'remote-c2-text': 'HD live feeds with cloud archive. Pull footage by date, door, or resident in seconds — no DVR scrub, no on-site visit.',
+        'remote-c3-title': 'Full access history',
+        'remote-c3-text': 'Every entry timestamped, every action logged. Disputes resolved with data — not arguments.',
+
+        'notif-title': 'Direct channel to every resident — and your ops team',
+        'notif-subtitle': 'Push notifications replace bulletin boards and unanswered group chats. Alerts route to the right person, fast.',
+        'notif-c1-title': 'Resident push notifications',
+        'notif-c1-text': 'Building announcements, payment reminders, emergency alerts — delivered instantly to every resident\'s phone.',
+        'notif-c2-title': 'Smart ops alerts',
+        'notif-c2-text': 'Only get pinged when action is needed. Filter by building, severity, or category. Less noise, faster response.',
+        'notif-c3-title': 'Two-way communication',
+        'notif-c3-text': 'Residents log incidents, request access, message staff — everything traceable, nothing lost in WhatsApp threads.',
+
+        'dash-title': 'Real-time dashboard across every building',
+        'dash-subtitle': 'Live access logs, incident queue, multi-building view — available to your team from any browser, any device.',
+        'dash-i1-title': 'Live access logs',
+        'dash-i1-text': 'Stream of every door event across the portfolio — filterable by building, time, door, or resident.',
+        'dash-i2-title': 'Incident tracker',
+        'dash-i2-text': 'Open issues, assigned staff, SLA timers. Know exactly what\'s pending and who owns it — no more lost tickets.',
+        'dash-i3-title': 'Multi-building view',
+        'dash-i3-text': 'One screen across the entire portfolio. Drill into any building for full operational detail in two clicks.',
+        'dash-i4-title': 'Operational reporting',
+        'dash-i4-text': 'Exportable reports for owners, auditors, regulators. Prove SLA compliance with data.',
+
+        'model-title': 'Product model: <span class="hl">Core free, Premium pays</span>',
+        'model-subtitle': 'Core drives daily adoption — Premium drives revenue that subsidizes the platform cost.',
+        'model-core-tier': 'Core',
+        'model-core-name': 'Free for residents',
+        'model-core-price': '<b>$0</b> per resident — drives daily app usage',
+        'model-core-1': 'Door access',
+        'model-core-2': 'Answer intercom calls',
+        'model-core-3': 'Live video feed',
+        'model-core-4': 'Family member access',
+        'model-core-tag': 'Adoption layer · 100% of residents',
+        'model-prem-tier': 'Premium',
+        'model-prem-name': 'Paid features',
+        'model-prem-price': '<b>Subscription</b> per resident — drives recurring revenue',
+        'model-prem-1': 'Guest access codes',
+        'model-prem-2': 'Face recognition',
+        'model-prem-3': 'Video archive (cloud)',
+        'model-prem-4': 'Full access history',
+        'model-prem-tag': 'Revenue layer · 15–30% conversion',
+
+        'monet-title': 'From daily usage to <span class="hl">recurring revenue</span>',
+        'monet-subtitle': 'Every resident who uses the app daily becomes a candidate for premium upgrade. The flow is automatic.',
+        'monet-n1': 'Step 1', 'monet-n2': 'Step 2', 'monet-n3': 'Step 3', 'monet-n4': 'Result',
+        'monet-s1-title': 'Resident',
+        'monet-s1-text': 'Onboarded automatically when you bind a building.',
+        'monet-s2-title': 'Daily app usage',
+        'monet-s2-text': 'Core features drive app opens — intercom, doors, cameras.',
+        'monet-s3-title': 'Premium upgrade',
+        'monet-s3-text': 'In-app prompts convert engaged users to paid tiers.',
+        'monet-s4-title': 'Recurring margin',
+        'monet-s4-text': 'Net cost drops below zero as conversion climbs.',
+        'monet-banner': 'Wholesale platform: $2.50/device/month. You set the retail margin — billing and collection handled automatically.',
+
+        'impact-title': 'Real ROI numbers from operating portfolios',
+        'impact-subtitle': 'Reported by management companies running Evimiz GEO across CIS, Turkey, and LATAM deployments.',
+        'impact-s1n': '60%', 'impact-s1l': 'Fewer inbound calls', 'impact-s1s': 'In first 3 months of operation',
+        'impact-s2n': '3×', 'impact-s2l': 'Faster issue resolution', 'impact-s2s': 'Median time-to-close per ticket',
+        'impact-s3n': '40%', 'impact-s3l': 'Lower complaint rate', 'impact-s3s': 'Higher owner retention scores',
+        'impact-s4n': '+ARPU', 'impact-s4l': 'Premium upgrades', 'impact-s4s': '15–30% of residents convert',
+        'impact-banner': '40–60% reduction in routine operational workload within the first 3 months — staff redirected to revenue-generating service.',
+
+        'scale-title': 'Portfolio math: <span class="hl">numbers that compound</span>',
+        'scale-subtitle': '$2.50/device wholesale × devices per building × buildings. Headcount stays flat. Revenue scales linearly.',
+        'scale-th1': 'Portfolio size', 'scale-th2': 'Devices', 'scale-th3': 'Monthly platform revenue', 'scale-th4': 'Annual ARR', 'scale-th5': 'Ops headcount needed',
+        'scale-r1-1': '50 buildings', 'scale-r1-2': '~5,000', 'scale-r1-3': '$12,500/mo', 'scale-r1-4': '$150,000', 'scale-r1-5': '2–3 staff',
+        'scale-r2-1': '100 buildings', 'scale-r2-2': '~10,000', 'scale-r2-3': '$25,000/mo', 'scale-r2-4': '$300,000', 'scale-r2-5': '3–4 staff',
+        'scale-r3-1': '500 buildings', 'scale-r3-2': '~50,000', 'scale-r3-3': '$125,000/mo', 'scale-r3-4': '$1.5M', 'scale-r3-5': '5–6 staff',
+        'scale-banner': '10× the buildings, 2× the headcount. The platform absorbs operational complexity that used to require linear hiring.',
+
+        'deploy-title': '15-minute setup, certified partners, zero downtime',
+        'deploy-subtitle': 'No on-site IT, no construction, no training overhead. Local certified integrators handle the rollout.',
+        'deploy-c1-title': 'Connect hardware',
+        'deploy-c1-text': 'Bind intercoms and cameras to GEO cloud. Existing systems can stay — Evimiz works alongside or replaces them.',
+        'deploy-c2-title': 'Configure building',
+        'deploy-c2-text': 'Units, residents, access rules, staff roles — all configured from the dashboard. No developer required.',
+        'deploy-c3-title': 'Activate residents',
+        'deploy-c3-text': 'Residents download the app and start using it the same day. Operational from day one.',
+        'deploy-time': 'Up and running per building in under 15 minutes. Full portfolio onboarded in weeks, not quarters.',
+
+        'bridge-badge': 'Connected Ecosystem',
+        'bridge-title': 'One <span class="hl">unified platform</span> for your whole team — and everyone you work with.',
+        'bridge-r1-name': 'Developers', 'bridge-r1-desc': 'Integrate at design phase',
+        'bridge-r2-name': 'Integrators', 'bridge-r2-desc': 'Monetize every install',
+        'bridge-r3-name': 'Operators', 'bridge-r3-desc': 'Control & visibility at scale',
+        'bridge-pill': 'Evimiz GEO Platform — one system from blueprint to building manager',
+        'bridge-cta': 'Same data layer. Same APIs. Same monetization. No silos.',
+
+        'contact-title': 'Ready to scale your portfolio without scaling headcount?',
+        'contact-subtitle': '30 minutes is all it takes to walk through your portfolio numbers and the technical rollout plan.',
+        'contact-tagline': 'Let\'s run the numbers for your portfolio together.',
+        'contact-btn': 'Schedule Demo',
+        'contact-rating': '4.8 · 19K ratings · App Store',
+
+        'footer-copy': '© 2026 Evimiz GEO Platform. Smart Building Operations at Scale.'
+      },
+      es: {
+        'nav-badge': 'Plataforma GEO',
+        'nav-problem': 'Problema', 'nav-remote': 'Remoto', 'nav-notif': 'Comunic.',
+        'nav-dashboard': 'Dashboard', 'nav-model': 'Modelo', 'nav-monet': 'Monetizar',
+        'nav-impact': 'Impacto', 'nav-scale': 'Escala', 'nav-deploy': 'Despliegue',
+        'nav-bridge': 'Plataforma', 'nav-contact': 'Contacto',
+
+        'hero-badge': 'Plataforma GEO · Para CTOs y Directores Técnicos',
+        'hero-h1': 'Control y monitoreo para <span class="hl">toda tu cartera de edificios</span>',
+        'hero-subtitle': 'Una plataforma unificada para gestionar accesos, cámaras, residentes y operaciones en cada edificio — con los números de ROI que justifican escalar.',
+        'hero-cta1': 'Reservar Demo · 30 min', 'hero-cta2': 'Cómo Funciona',
+        'hero-rating': '4.8 · 19K calificaciones · App Store',
+        'hero-proof': '10,000+ edificios — Rusia · CEI · Turquía',
+        'hero-s1n': '40–60%', 'hero-s1l': 'Menos tareas rutinarias',
+        'hero-s2n': '15 min', 'hero-s2l': 'Setup por edificio',
+        'hero-s3n': '$2.50/mes', 'hero-s3l': 'Por dispositivo mayorista',
+        'manifesto-quote': 'Los edificios ya no son físicos. Son <span class="hl">productos digitales</span>.',
+        'manifesto-sub': 'Y eso lo cambia todo: cómo se venden, cómo se gestionan y cuánto valen.',
+
+        'problem-title': 'Los equipos de operaciones se ahogan en tareas rutinarias',
+        'problem-subtitle': 'Llaves perdidas, sin visibilidad, llamados constantes. Con 50+ edificios, el costo se multiplica rápido.',
+        'problem-c1-title': 'Llaves perdidas, códigos compartidos',
+        'problem-c1-text': '11 de la noche, sábado: un residente queda afuera, el on-call no encuentra cerrajero. Los códigos se filtran por chats. Cada incidente es un trámite manual sin rastreo.',
+        'problem-c2-title': 'Sin visibilidad de la cartera',
+        'problem-c2-text': 'Un incidente en el Edificio 12 quedó perdido en el chat de WhatsApp por tres días porque nadie lo vio. Con 50+ edificios no podés priorizar, escalar ni reportar SLAs.',
+        'problem-c3-title': 'Llamados sin fin',
+        'problem-c3-text': 'La mitad de las horas de tu equipo se va en pedidos de acceso que deberían ser self-service. La dotación crece linealmente con la cartera — esa es la trampa.',
+
+        'remote-title': 'Control remoto sobre cada puerta, cada cámara',
+        'remote-subtitle': 'Gestioná accesos, ves cámaras, auditás historial — en toda la cartera, desde cualquier lugar.',
+        'remote-c1-title': 'Apertura remota de puertas',
+        'remote-c1-text': 'Abrí cualquier puerta de cualquier edificio desde el dashboard web o app móvil. Aprobá entregas, contratistas, emergencias.',
+        'remote-c2-title': 'Cámaras en vivo + archivo',
+        'remote-c2-text': 'Streams HD con archivo en la nube. Encontrá grabación por fecha, puerta o residente en segundos — sin DVR, sin visita presencial.',
+        'remote-c3-title': 'Historial completo de accesos',
+        'remote-c3-text': 'Cada entrada con marca de tiempo, cada acción registrada. Las disputas se resuelven con datos — no con discusiones.',
+
+        'notif-title': 'Canal directo con cada residente — y con tu equipo',
+        'notif-subtitle': 'Las notificaciones push reemplazan carteleras y chats grupales sin respuesta. Las alertas llegan a quien corresponde, rápido.',
+        'notif-c1-title': 'Notificaciones push a residentes',
+        'notif-c1-text': 'Comunicados del edificio, recordatorios de pago, alertas de emergencia — al instante en el celular de cada residente.',
+        'notif-c2-title': 'Alertas operativas inteligentes',
+        'notif-c2-text': 'Solo te avisa cuando hay que actuar. Filtrá por edificio, gravedad o categoría. Menos ruido, respuesta más rápida.',
+        'notif-c3-title': 'Comunicación bidireccional',
+        'notif-c3-text': 'Los residentes reportan incidentes, piden acceso, escriben al equipo — todo trazable, nada perdido en WhatsApp.',
+
+        'dash-title': 'Dashboard en tiempo real para toda la cartera',
+        'dash-subtitle': 'Logs de acceso en vivo, cola de incidentes, vista multi-edificio — disponibles para tu equipo desde cualquier navegador.',
+        'dash-i1-title': 'Logs de acceso en vivo',
+        'dash-i1-text': 'Stream de cada evento de puerta en toda la cartera — filtrable por edificio, hora, puerta o residente.',
+        'dash-i2-title': 'Seguimiento de incidentes',
+        'dash-i2-text': 'Issues abiertos, personal asignado, timers de SLA. Sabés exactamente qué está pendiente y quién lo tiene — no se pierde nada.',
+        'dash-i3-title': 'Vista multi-edificio',
+        'dash-i3-text': 'Una pantalla con toda la cartera. Entrá a cualquier edificio para ver el detalle operativo en dos clics.',
+        'dash-i4-title': 'Reportes operativos',
+        'dash-i4-text': 'Reportes exportables para propietarios, auditores, reguladores. Demostrás cumplimiento de SLA con datos.',
+
+        'model-title': 'Modelo de producto: <span class="hl">Base gratis, Premium paga</span>',
+        'model-subtitle': 'Base genera adopción diaria — Premium genera ingresos que cubren el costo de la plataforma.',
+        'model-core-tier': 'Base',
+        'model-core-name': 'Gratis para residentes',
+        'model-core-price': '<b>$0</b> por residente — genera uso diario',
+        'model-core-1': 'Acceso a puertas',
+        'model-core-2': 'Atender llamadas del portero',
+        'model-core-3': 'Video en vivo',
+        'model-core-4': 'Acceso para familiares',
+        'model-core-tag': 'Capa de adopción · 100% de residentes',
+        'model-prem-tier': 'Premium',
+        'model-prem-name': 'Funciones pagas',
+        'model-prem-price': '<b>Suscripción</b> por residente — genera ingresos recurrentes',
+        'model-prem-1': 'Códigos de acceso para visitas',
+        'model-prem-2': 'Reconocimiento facial',
+        'model-prem-3': 'Archivo de video (nube)',
+        'model-prem-4': 'Historial de acceso completo',
+        'model-prem-tag': 'Capa de ingresos · 15–30% de conversión',
+
+        'monet-title': 'Del uso diario a los <span class="hl">ingresos recurrentes</span>',
+        'monet-subtitle': 'Cada residente que usa la app a diario es candidato a upgrade premium. El flujo es automático.',
+        'monet-n1': 'Paso 1', 'monet-n2': 'Paso 2', 'monet-n3': 'Paso 3', 'monet-n4': 'Resultado',
+        'monet-s1-title': 'Residente',
+        'monet-s1-text': 'Onboarding automático cuando vinculás un edificio.',
+        'monet-s2-title': 'Uso diario de la app',
+        'monet-s2-text': 'La capa Base genera aperturas de app — portero, puertas, cámaras.',
+        'monet-s3-title': 'Upgrade a premium',
+        'monet-s3-text': 'Prompts in-app convierten usuarios activos en planes pagos.',
+        'monet-s4-title': 'Margen recurrente',
+        'monet-s4-text': 'El costo neto baja a cero a medida que sube la conversión.',
+        'monet-banner': 'Plataforma mayorista: $2.50/dispositivo/mes. Vos definís el margen retail — la facturación y cobro se hacen automáticos.',
+
+        'impact-title': 'Números reales de ROI desde carteras en producción',
+        'impact-subtitle': 'Reportado por administradoras que operan Evimiz GEO en CEI, Turquía y despliegues LATAM.',
+        'impact-s1n': '60%', 'impact-s1l': 'Menos llamadas entrantes', 'impact-s1s': 'En los primeros 3 meses de operación',
+        'impact-s2n': '3×', 'impact-s2l': 'Resolución más rápida', 'impact-s2s': 'Tiempo mediano de cierre por ticket',
+        'impact-s3n': '40%', 'impact-s3l': 'Menos quejas', 'impact-s3s': 'Mayor retención de propietarios',
+        'impact-s4n': '+ARPU', 'impact-s4l': 'Upgrades premium', 'impact-s4s': '15–30% de residentes convierte',
+        'impact-banner': '40–60% de reducción en la carga operativa rutinaria en los primeros 3 meses — el equipo se redirige a servicio que genera ingresos.',
+
+        'scale-title': 'Matemática de cartera: <span class="hl">números que se acumulan</span>',
+        'scale-subtitle': '$2.50/dispositivo mayorista × dispositivos por edificio × edificios. La dotación se mantiene plana. Los ingresos escalan linealmente.',
+        'scale-th1': 'Tamaño de cartera', 'scale-th2': 'Dispositivos', 'scale-th3': 'Ingreso mensual de plataforma', 'scale-th4': 'ARR anual', 'scale-th5': 'Dotación necesaria',
+        'scale-r1-1': '50 edificios', 'scale-r1-2': '~5.000', 'scale-r1-3': '$12.500/mes', 'scale-r1-4': '$150.000', 'scale-r1-5': '2–3 personas',
+        'scale-r2-1': '100 edificios', 'scale-r2-2': '~10.000', 'scale-r2-3': '$25.000/mes', 'scale-r2-4': '$300.000', 'scale-r2-5': '3–4 personas',
+        'scale-r3-1': '500 edificios', 'scale-r3-2': '~50.000', 'scale-r3-3': '$125.000/mes', 'scale-r3-4': '$1,5M', 'scale-r3-5': '5–6 personas',
+        'scale-banner': '10× los edificios, 2× la dotación. La plataforma absorbe la complejidad operativa que antes requería contratar linealmente.',
+
+        'deploy-title': 'Setup en 15 minutos, partners certificados, sin downtime',
+        'deploy-subtitle': 'Sin IT en sitio, sin obras, sin capacitaciones largas. Integradores locales certificados se ocupan del rollout.',
+        'deploy-c1-title': 'Conectar hardware',
+        'deploy-c1-text': 'Vinculás porteros y cámaras a la nube de GEO. Los sistemas existentes pueden quedar — Evimiz convive o reemplaza, vos elegís.',
+        'deploy-c2-title': 'Configurar el edificio',
+        'deploy-c2-text': 'Unidades, residentes, reglas de acceso, roles del equipo — todo desde el dashboard. Sin desarrollador.',
+        'deploy-c3-title': 'Activar a los residentes',
+        'deploy-c3-text': 'Los residentes bajan la app y la usan el mismo día. Operativo desde el día uno.',
+        'deploy-time': 'En funcionamiento por edificio en menos de 15 minutos. Toda la cartera onboarded en semanas, no en trimestres.',
+
+        'bridge-badge': 'Ecosistema Conectado',
+        'bridge-title': 'Una <span class="hl">plataforma unificada</span> para todo tu equipo — y para todos con los que trabajás.',
+        'bridge-r1-name': 'Desarrolladores', 'bridge-r1-desc': 'Integran desde el diseño',
+        'bridge-r2-name': 'Integradores', 'bridge-r2-desc': 'Monetizan cada instalación',
+        'bridge-r3-name': 'Operadores', 'bridge-r3-desc': 'Control y visibilidad a escala',
+        'bridge-pill': 'Plataforma Evimiz GEO — un solo sistema, del plano al administrador del edificio',
+        'bridge-cta': 'Misma capa de datos. Mismas APIs. Misma monetización. Sin silos.',
+
+        'contact-title': '¿Listo para escalar tu cartera sin escalar la dotación?',
+        'contact-subtitle': '30 minutos es todo lo que necesitás para repasar los números de tu cartera y el plan de rollout técnico.',
+        'contact-tagline': 'Repasamos juntos los números de tu cartera.',
+        'contact-btn': 'Reservar Demo',
+        'contact-rating': '4,8 · 19K ratings · App Store',
+
+        'footer-copy': '© 2026 Evimiz GEO Platform. Operación de Edificios Inteligente a Escala.'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLanguage(lang) {
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+      document.documentElement.lang = lang;
+      currentLang = lang;
+    }
+
+    function toggleLang() {
+      setLanguage(currentLang === 'en' ? 'es' : 'en');
+    }
+
+    // ========== Slide nav ==========
+    const sectionIds = sections.map(s => s.id);
+
+    function updateSlideNav(idx) {
+      document.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+      document.getElementById('slideCounter').textContent = (idx + 1) + ' / ' + sections.length;
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('nav-active', a.getAttribute('href') === '#' + sectionIds[idx]);
+      });
+    }
+
+    function initSlideNav() {
+      const dotsEl = document.getElementById('slideDots');
+      sections.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(dot);
+      });
+      document.getElementById('prevBtn').addEventListener('click', () => goTo(currentIndex - 1));
+      document.getElementById('nextBtn').addEventListener('click', () => goTo(currentIndex + 1));
+      const navObs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { currentIndex = sectionIds.indexOf(entry.target.id); updateSlideNav(currentIndex); }
+        });
+      }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+      sections.forEach(el => navObs.observe(el));
+    }
+
+    // ========== Idle hide for nav + slide-nav ==========
+    let hideNavTimer;
+    function showNav() {
+      const sn = document.querySelector('.slide-nav');
+      if (sn) sn.classList.remove('hidden');
+      navbar.classList.remove('hidden');
+      clearTimeout(hideNavTimer);
+      hideNavTimer = setTimeout(() => {
+        const sn2 = document.querySelector('.slide-nav');
+        if (sn2) sn2.classList.add('hidden');
+        navbar.classList.add('hidden');
+      }, 2500);
+    }
+    document.addEventListener('mousemove', showNav);
+    document.addEventListener('keydown', showNav);
+    document.addEventListener('scroll', showNav, { passive: true });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage('en');
+      initSlideNav();
+      showNav();
+    });
+  </script>
+
+</body>
+</html>
