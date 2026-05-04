@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evimiz Product Tour — Guided Walkthrough</title>
+<meta name="description" content="A guided walkthrough of the Evimiz platform: access, monitoring, devices, multi-property and integrations.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  /* ========== RESET ========== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ========== TOKENS (v4) ========== */
+  :root {
+    --bg-dark: #080818;
+    --bg-section: #0d0d22;
+    --bg-card: #14143a;
+    --accent: #7C6FFF;
+    --accent2: #4FC3F7;
+    --accent-hover: #6558ee;
+    --green: #3ecf8e;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: rgba(124,111,255,0.2);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    --max-width: 1200px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.18), transparent 50%),
+      radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.10), transparent 50%),
+      var(--bg-dark);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* ========== TOP NAVBAR (glassmorphism) ========== */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(124,111,255,0.12);
+    transition: background 0.3s ease, opacity 0.4s ease;
+  }
+  .navbar.hidden { opacity: 0; pointer-events: none; }
+  .navbar-scrolled { background: rgba(10,14,26,0.95); }
+  .nav-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    padding: 3px 10px;
+    opacity: 0.85;
+    letter-spacing: 0.04em;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .nav-tagline {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .lang-toggle {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s ease;
+  }
+  .lang-toggle:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ========== SLIDES VIEWPORT ========== */
+  #slides-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding-top: 70px;
+    padding-bottom: 90px;
+  }
+
+  .slide {
+    position: absolute;
+    top: 70px;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: 100%;
+    max-width: 1080px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 28px 48px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    z-index: 0;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+    z-index: 1;
+  }
+
+  /* ========== TEXT ELEMENTS ========== */
+  .s-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(124,111,255,0.4);
+    background: rgba(124,111,255,0.1);
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .s-h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .s-h1 .hl {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .s-body {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 560px;
+    margin-bottom: 24px;
+  }
+  .micro {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+  .demo-tagline {
+    margin-top: 18px;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  /* ========== SPLIT LAYOUT ========== */
+  .demo-split {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    width: 100%;
+    max-width: 1080px;
+    text-align: left;
+  }
+  .demo-text { flex: 1; text-align: left; }
+  .demo-text .s-tag { margin-bottom: 14px; }
+  .demo-text .s-h1 { font-size: 30px; margin-bottom: 12px; line-height: 1.18; }
+  .demo-text .s-body { font-size: 15px; margin-bottom: 0; max-width: 100%; }
+
+  /* ========== FEATURE LIST ========== */
+  .demo-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .demo-feature {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .demo-feature-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .demo-feature-icon .card-icon-svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+  }
+  .demo-feature-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .demo-feature-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* ========== BROWSER FRAME ========== */
+  .browser-wrap {
+    flex-shrink: 0;
+    width: 580px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #0d1117;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 60px rgba(124,111,255,0.18), 0 24px 60px rgba(0,0,0,0.45);
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .bdot { width: 10px; height: 10px; border-radius: 50%; }
+  .bdot.r { background: #ff5f57; }
+  .bdot.y { background: #febc2e; }
+  .bdot.g { background: #28c840; }
+  .burl {
+    flex: 1;
+    height: 20px;
+    margin: 0 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 5px;
+  }
+  .browser-wrap img {
+    width: 100%;
+    display: block;
+    max-height: 400px;
+    object-fit: cover;
+    object-position: top;
+  }
+  .browser-wrap .browser-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 320px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    background: linear-gradient(135deg, rgba(124,111,255,0.06), rgba(79,195,247,0.04));
+  }
+
+  /* ========== PILLS ========== */
+  .s-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    justify-content: center;
+  }
+  .s-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+  .s-pill.purple { color: var(--accent);  border-color: rgba(124,111,255,0.4);  background: rgba(124,111,255,0.1); }
+  .s-pill.blue   { color: var(--accent2); border-color: rgba(79,195,247,0.4);   background: rgba(79,195,247,0.08); }
+  .s-pill.green  { color: var(--green);   border-color: rgba(62,207,142,0.4);   background: rgba(62,207,142,0.08); }
+
+  /* ========== KEY MESSAGE (Closing) ========== */
+  .key-contrast {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 760px;
+    text-align: center;
+  }
+  .key-line {
+    font-size: 44px;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+  .key-line.dim { opacity: 0.32; }
+  .key-line.bright {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .key-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin: 18px auto;
+    opacity: 0.7;
+  }
+
+  /* ========== BRIDGE GRID ========== */
+  .bridge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    width: 100%;
+    max-width: 920px;
+    margin-top: 14px;
+  }
+  .bridge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 22px 20px;
+    text-align: left;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .bridge-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(124,111,255,0.55);
+    box-shadow: var(--shadow);
+    color: var(--text);
+  }
+  .bridge-card-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(124,111,255,0.12);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bridge-card-icon .card-icon-svg {
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+  }
+  .bridge-card-role {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .bridge-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .bridge-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .bridge-card-link {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== CONTACT SLIDE ========== */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 760px;
+    margin: 12px auto 0;
+    text-align: left;
+  }
+  .contact-qr {
+    background: #fff;
+    padding: 12px;
+    border-radius: var(--radius);
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .contact-qr img { width: 100%; height: 100%; }
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .contact-tagline {
+    font-size: 1.05rem;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .contact-item .card-icon-svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .contact-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px 26px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(124,111,255,0.35);
+    color: #fff;
+  }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 11px 24px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    text-decoration: none;
+  }
+  .btn-outline:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary .card-icon-svg,
+  .btn-outline .card-icon-svg {
+    width: 16px;
+    height: 16px;
+  }
+  .contact-footer {
+    margin-top: 22px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    opacity: 0.65;
+    text-align: center;
+  }
+
+  /* ========== BOTTOM SLIDE NAV ========== */
+  .slide-nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(13,13,34,0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: 999px;
+    padding: 10px 16px;
+    z-index: 99;
+    user-select: none;
+    transition: opacity 0.4s ease;
+  }
+  .slide-nav.hidden { opacity: 0; pointer-events: none; }
+  .slide-nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .slide-nav-btn:hover:not(:disabled) {
+    color: var(--text);
+    background: rgba(124,111,255,0.18);
+  }
+  .slide-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .slide-nav-dots { display: flex; gap: 6px; align-items: center; }
+  .slide-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    cursor: pointer;
+    transition: background 0.25s ease, width 0.25s ease, border-radius 0.25s ease;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .slide-dot.active {
+    background: var(--accent);
+    width: 20px;
+    border-radius: 4px;
+  }
+  .slide-nav-counter {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    min-width: 50px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== ICONS (Lucide) ========== */
+  .card-icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    flex-shrink: 0;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 920px) {
+    .demo-split { flex-direction: column; gap: 24px; }
+    .browser-wrap { width: 100%; max-width: 560px; }
+    .demo-text { text-align: center; }
+    .demo-text .s-h1 br { display: none; }
+    .bridge-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; text-align: center; }
+    .contact-qr { margin: 0 auto; }
+    .nav-tagline { display: none; }
+    .s-h1 { font-size: 36px; }
+    .key-line { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SVG SPRITE (Lucide icons) ========== -->
+<svg style="display:none;" aria-hidden="true">
+  <symbol id="icon-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="icon-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="icon-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="icon-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="icon-trending-up" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+  <symbol id="icon-video" viewBox="0 0 24 24"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></symbol>
+  <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="icon-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol>
+  <symbol id="icon-building-2" viewBox="0 0 24 24"><path d="M6 22V2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v20"/><path d="M6 12h12"/><path d="M6 7h12"/><path d="M6 17h12"/><path d="M2 22h20"/></symbol>
+  <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+  <symbol id="icon-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="icon-unlock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol>
+  <symbol id="icon-door-open" viewBox="0 0 24 24"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"/></symbol>
+  <symbol id="icon-wifi" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" x2="12.01" y1="20" y2="20"/></symbol>
+  <symbol id="icon-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol>
+  <symbol id="icon-activity" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+  <symbol id="icon-refresh-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+  <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="icon-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+</svg>
+
+<!-- ========== TOP NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-left">
+      <span class="nav-logo">Evimiz</span>
+      <span class="nav-badge" data-i18n="nav-badge">Product Tour</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-tagline" data-i18n="nav-tagline">Guided platform walkthrough</span>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== SLIDES ========== -->
+<div id="slides-viewport">
+
+  <!-- 1 — Opening -->
+  <div class="slide active">
+    <div class="s-tag" data-i18n="s1-tag">Evimiz GEO Platform</div>
+    <h1 class="s-h1" style="font-size:52px;" data-i18n-html="s1-h1">Everything is managed<br><span class="hl">in one platform</span></h1>
+    <p class="s-body" data-i18n="s1-body">Access, cameras, users, and devices — all in one place.</p>
+    <div class="s-pills" style="margin-top:28px;">
+      <div class="s-pill purple" data-i18n="s1-p1">Access control</div>
+      <div class="s-pill blue" data-i18n="s1-p2">Live monitoring</div>
+      <div class="s-pill green" data-i18n="s1-p3">Multi-property</div>
+    </div>
+  </div>
+
+  <!-- 2 — Overview / Dashboard -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s2-tag">Dashboard</div>
+        <h1 class="s-h1" data-i18n-html="s2-h1">A complete view<br><span class="hl">of your property</span></h1>
+        <p class="s-body" data-i18n="s2-body">One screen. All your infrastructure — buildings, entrances, devices, and users — visible at a glance.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-building"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f1-name">Buildings</div>
+              <div class="demo-feature-desc" data-i18n="s2-f1-desc">All properties in one centralized view</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-door-open"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f2-name">Entrances</div>
+              <div class="demo-feature-desc" data-i18n="s2-f2-desc">Every access point, live status</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-wifi"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f3-name">Devices</div>
+              <div class="demo-feature-desc" data-i18n="s2-f3-desc">Hardware health and connectivity</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-user"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f4-name">Users</div>
+              <div class="demo-feature-desc" data-i18n="s2-f4-desc">Residents and staff in one place</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s2-tagline">Full control from a single interface</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="12-english-dashboard.png" data-img-en="12-english-dashboard.png" data-img-es="es-dashboard.png" alt="Dashboard" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Dashboard preview</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — Access Management -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s3-tag">Access Management</div>
+        <h1 class="s-h1" data-i18n-html="s3-h1">Control<br><span class="hl">who can enter</span></h1>
+        <p class="s-body" data-i18n="s3-body">Add, remove and configure users instantly. Assign permissions by role, unit, or entrance — no manual paperwork.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-plus"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s3-f1-name">Add and remove users</div>
+              <div class="demo-feature-desc" data-i18n="s3-f1-desc">Changes take effect immediately</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-lock"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s3-f2-name">Assign permissions</div>
+              <div class="demo-feature-desc" data-i18n="s3-f2-desc">By role, unit, entrance, or schedule</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-settings"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s3-f3-name">Manage access rights</div>
+              <div class="demo-feature-desc" data-i18n="s3-f3-desc">Full granular control over every user</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s3-tagline">No manual processes</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="05-residents-en.png" data-img-en="05-residents-en.png" data-img-es="es-residents.png" alt="Residents" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Residents view</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 — Live Monitoring -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s4-tag">Live Monitoring</div>
+        <h1 class="s-h1" data-i18n-html="s4-h1">See everything<br><span class="hl">live</span></h1>
+        <p class="s-body" data-i18n="s4-body">Real-time video feeds from all cameras across all properties. No switching between systems — it's all here.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-radio"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s4-f1-name">Live video feeds</div>
+              <div class="demo-feature-desc" data-i18n="s4-f1-desc">Stream any camera instantly</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-camera"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s4-f2-name">Multiple camera views</div>
+              <div class="demo-feature-desc" data-i18n="s4-f2-desc">All entrances, one dashboard</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-zap"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s4-f3-name">Instant visibility</div>
+              <div class="demo-feature-desc" data-i18n="s4-f3-desc">No delay, no refresh needed</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s4-tagline">Know what's happening at any moment</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="13-call-quality.png" data-img-en="13-call-quality.png" data-img-es="es-call-quality.png" alt="Live monitoring" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Live cameras</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 — Events & Logs -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s5-tag">Events & Logs</div>
+        <h1 class="s-h1" data-i18n-html="s5-h1">Track<br><span class="hl">every action</span></h1>
+        <p class="s-body" data-i18n="s5-body">Every entry, every door open, every user change — logged automatically with timestamp and context.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-clipboard"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s5-f1-name">Entry history</div>
+              <div class="demo-feature-desc" data-i18n="s5-f1-desc">Full record of who entered and when</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-clock"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s5-f2-name">Event timeline</div>
+              <div class="demo-feature-desc" data-i18n="s5-f2-desc">Chronological view of all system events</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-search"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s5-f3-name">Full transparency</div>
+              <div class="demo-feature-desc" data-i18n="s5-f3-desc">Searchable, filterable, exportable</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s5-tagline">Everything is recorded automatically</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="15-pro-house-detail.png" data-img-en="15-pro-house-detail.png" data-img-es="es-point-detail.png" alt="Events log" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Event log</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 — Device Management -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s6-tag">Device Management</div>
+        <h1 class="s-h1" data-i18n-html="s6-h1">Manage all devices<br><span class="hl">remotely</span></h1>
+        <p class="s-body" data-i18n="s6-body">Monitor and control every device across all your properties — from one platform, without stepping on site.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-smartphone"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s6-f1-name">Intercoms</div>
+              <div class="demo-feature-desc" data-i18n="s6-f1-desc">Monitor status and configure remotely</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-camera"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s6-f2-name">Cameras</div>
+              <div class="demo-feature-desc" data-i18n="s6-f2-desc">Live feed and health check for every unit</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-key"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s6-f3-name">Access points</div>
+              <div class="demo-feature-desc" data-i18n="s6-f3-desc">Control every entry point in real time</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s6-tagline">No on-site intervention needed</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="14-installation-points-tab.png" data-img-en="14-installation-points-tab.png" data-img-es="es-installation-points.png" alt="Devices" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Device management</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 — Remote Control -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s7-tag">Remote Control</div>
+        <h1 class="s-h1" data-i18n-html="s7-h1">Operate the system<br><span class="hl">in real time</span></h1>
+        <p class="s-body" data-i18n="s7-body">Open doors, restart devices, update access rights — all from the platform, without being on site.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-unlock"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s7-f1-name">Open doors</div>
+              <div class="demo-feature-desc" data-i18n="s7-f1-desc">Unlock any entrance remotely, instantly</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-refresh-ccw"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s7-f2-name">Restart devices</div>
+              <div class="demo-feature-desc" data-i18n="s7-f2-desc">Reboot hardware without a site visit</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-zap"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s7-f3-name">Update access instantly</div>
+              <div class="demo-feature-desc" data-i18n="s7-f3-desc">Changes apply in seconds, not hours</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s7-tagline">Instant response when needed</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="09-mobile-push-en.png" data-img-en="09-mobile-push-en.png" data-img-es="es-mobile-push.png" alt="Remote control" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Remote control</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 — Multi-Property -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s8-tag">Scale</div>
+        <h1 class="s-h1" data-i18n-html="s8-h1">Manage multiple buildings<br><span class="hl">in one place</span></h1>
+        <p class="s-body" data-i18n="s8-body">One platform for 1 building or 100. Add new properties in minutes — users, devices, and access rules scale with you.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-building-2"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s8-f1-name">Centralized system</div>
+              <div class="demo-feature-desc" data-i18n="s8-f1-desc">All buildings, one login, one view</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-trending-up"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s8-f2-name">Scalable across projects</div>
+              <div class="demo-feature-desc" data-i18n="s8-f2-desc">Add properties without extra infrastructure</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s8-tagline">Built to grow with your portfolio</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="12-english-dashboard.png" data-img-en="12-english-dashboard.png" data-img-es="es-dashboard.png" alt="Multi-property dashboard" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>Multi-property</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 — Integrations -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s9-tag">Integrations</div>
+        <h1 class="s-h1" data-i18n-html="s9-h1">Connect with<br><span class="hl">your existing systems</span></h1>
+        <p class="s-body" data-i18n="s9-body">Evimiz GEO Platform connects to your tech stack via open API — CRM, ERP, billing, or any third-party service.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-link"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s9-f1-name">API access</div>
+              <div class="demo-feature-desc" data-i18n="s9-f1-desc">REST API for full custom integration</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-database"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s9-f2-name">CRM integrations</div>
+              <div class="demo-feature-desc" data-i18n="s9-f2-desc">Sync residents and contracts automatically</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-globe"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s9-f3-name">Third-party services</div>
+              <div class="demo-feature-desc" data-i18n="s9-f3-desc">Connect billing, ITSM, and more</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s9-tagline">Seamlessly fits into your ecosystem</p>
+      </div>
+      <div class="browser-wrap">
+        <div class="browser-bar"><div class="bdot r"></div><div class="bdot y"></div><div class="bdot g"></div><div class="burl"></div></div>
+        <img src="07-mobile-branding-en.png" data-img-en="07-mobile-branding-en.png" data-img-es="es-mobile-branding.png" alt="Integrations" onerror="this.onerror=null;this.outerHTML='<div class=\'browser-fallback\'>API integrations</div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 — Closing summary -->
+  <div class="slide">
+    <div class="key-contrast">
+      <div class="key-line dim" data-i18n="s10-l1">Simple to manage.</div>
+      <div class="key-divider"></div>
+      <div class="key-line bright" data-i18n="s10-l2">Powerful to operate.</div>
+    </div>
+    <div class="s-pills" style="margin-top:36px;">
+      <div class="s-pill purple" data-i18n="s10-p1">Access control</div>
+      <div class="s-pill purple" data-i18n="s10-p2">Live monitoring</div>
+      <div class="s-pill purple" data-i18n="s10-p3">Remote control</div>
+      <div class="s-pill blue" data-i18n="s10-p4">Event logs</div>
+      <div class="s-pill blue" data-i18n="s10-p5">Device management</div>
+      <div class="s-pill blue" data-i18n="s10-p6">Multi-property</div>
+      <div class="s-pill green" data-i18n="s10-p7">API integration</div>
+      <div class="s-pill green" data-i18n="s10-p8">Full transparency</div>
+      <div class="s-pill green" data-i18n="s10-p9">Built to scale</div>
+    </div>
+    <p class="micro" style="margin-top:28px;font-size:15px;" data-i18n="s10-micro">Evimiz gives you full control over your infrastructure</p>
+  </div>
+
+  <!-- 11 — Bridge -->
+  <div class="slide">
+    <div class="s-tag" data-i18n="s11-tag">Connected Ecosystem</div>
+    <h1 class="s-h1" data-i18n-html="s11-h1">One <span class="hl">unified platform</span> for your whole team</h1>
+    <p class="s-body" data-i18n="s11-body">Want to go deeper? Pick the pitch tailored to your role.</p>
+    <div class="bridge-grid">
+      <a class="bridge-card" href="Evimiz-Developers-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-building"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s11-c1-role">For Developers</div>
+        <div class="bridge-card-title" data-i18n="s11-c1-title">How smart access increases property value</div>
+        <div class="bridge-card-desc" data-i18n="s11-c1-desc">Integrate at design phase. Higher resale, faster lease-up.</div>
+        <div class="bridge-card-link" data-i18n="s11-c1-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-Admins-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-briefcase"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s11-c2-role">For Admins</div>
+        <div class="bridge-card-title" data-i18n="s11-c2-title">Run buildings without headaches</div>
+        <div class="bridge-card-desc" data-i18n="s11-c2-desc">Less routine work, fewer calls, full audit trail.</div>
+        <div class="bridge-card-link" data-i18n="s11-c2-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-Integrators-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-wrench"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s11-c3-role">For Integrators</div>
+        <div class="bridge-card-title" data-i18n="s11-c3-title">Turn installs into recurring revenue</div>
+        <div class="bridge-card-desc" data-i18n="s11-c3-desc">Wholesale pricing, white-label option, partner support.</div>
+        <div class="bridge-card-link" data-i18n="s11-c3-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-GEO-Platform-v3.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-target"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s11-c4-role">For Portfolio Owners</div>
+        <div class="bridge-card-title" data-i18n="s11-c4-title">Control & monitoring at portfolio scale</div>
+        <div class="bridge-card-desc" data-i18n="s11-c4-desc">Unified view across every building. ROI math included.</div>
+        <div class="bridge-card-link" data-i18n="s11-c4-link">Open pitch →</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 12 — Contact -->
+  <div class="slide">
+    <div class="s-tag" data-i18n="s12-tag">Let's Talk</div>
+    <h1 class="s-h1" data-i18n-html="s12-h1">Let's <span class="hl">talk</span></h1>
+    <p class="s-body" data-i18n="s12-body">Schedule a personalized demo for your team and use case.</p>
+
+    <div class="contact-grid">
+      <div class="contact-qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://evimiz.ai" alt="QR evimiz.ai">
+      </div>
+      <div class="contact-info">
+        <p class="contact-tagline" data-i18n="s12-tagline">30 minutes is all it takes to walk through your use case.</p>
+        <div class="contact-list">
+          <div class="contact-item">
+            <svg class="card-icon-svg"><use href="#icon-mail"/></svg>
+            <span>demo@evimiz.ai</span>
+          </div>
+          <div class="contact-item">
+            <svg class="card-icon-svg"><use href="#icon-message-circle"/></svg>
+            <span>WhatsApp: +54 9 351 233 64 20</span>
+          </div>
+          <div class="contact-item">
+            <svg class="card-icon-svg"><use href="#icon-globe"/></svg>
+            <span>evimiz.ai</span>
+          </div>
+        </div>
+        <div class="contact-buttons">
+          <a class="btn-primary" href="mailto:demo@evimiz.ai">
+            <svg class="card-icon-svg"><use href="#icon-calendar"/></svg>
+            <span data-i18n="s12-btn1">Schedule Demo</span>
+          </a>
+          <a class="btn-outline" href="https://wa.me/5493512336420" target="_blank">
+            <svg class="card-icon-svg"><use href="#icon-message-circle"/></svg>
+            <span data-i18n="s12-btn2">Talk on WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="contact-footer" data-i18n="s12-footer">© 2026 Evimiz · demo@evimiz.ai · evimiz.ai</p>
+  </div>
+
+</div>
+
+<!-- ========== BOTTOM SLIDE NAV ========== -->
+<div class="slide-nav" id="slideNav">
+  <button class="slide-nav-btn" id="prevBtn" aria-label="Previous">←</button>
+  <div class="slide-nav-dots" id="slideDots"></div>
+  <span class="slide-nav-counter" id="slideCounter">1 / 12</span>
+  <button class="slide-nav-btn" id="nextBtn" aria-label="Next">→</button>
+</div>
+
+<script>
+  // ========== TRANSLATIONS ==========
+  const translations = {
+    en: {
+      'nav-badge': 'Product Tour',
+      'nav-tagline': 'Guided platform walkthrough',
+
+      's1-tag': 'Evimiz GEO Platform',
+      's1-h1': 'Everything is managed<br><span class="hl">in one platform</span>',
+      's1-body': 'Access, cameras, users, and devices — all in one place.',
+      's1-p1': 'Access control',
+      's1-p2': 'Live monitoring',
+      's1-p3': 'Multi-property',
+
+      's2-tag': 'Dashboard',
+      's2-h1': 'A complete view<br><span class="hl">of your property</span>',
+      's2-body': 'One screen. All your infrastructure — buildings, entrances, devices, and users — visible at a glance.',
+      's2-f1-name': 'Buildings', 's2-f1-desc': 'All properties in one centralized view',
+      's2-f2-name': 'Entrances', 's2-f2-desc': 'Every access point, live status',
+      's2-f3-name': 'Devices', 's2-f3-desc': 'Hardware health and connectivity',
+      's2-f4-name': 'Users', 's2-f4-desc': 'Residents and staff in one place',
+      's2-tagline': 'Full control from a single interface',
+
+      's3-tag': 'Access Management',
+      's3-h1': 'Control<br><span class="hl">who can enter</span>',
+      's3-body': 'Add, remove and configure users instantly. Assign permissions by role, unit, or entrance — no manual paperwork.',
+      's3-f1-name': 'Add and remove users', 's3-f1-desc': 'Changes take effect immediately',
+      's3-f2-name': 'Assign permissions', 's3-f2-desc': 'By role, unit, entrance, or schedule',
+      's3-f3-name': 'Manage access rights', 's3-f3-desc': 'Full granular control over every user',
+      's3-tagline': 'No manual processes',
+
+      's4-tag': 'Live Monitoring',
+      's4-h1': 'See everything<br><span class="hl">live</span>',
+      's4-body': 'Real-time video feeds from all cameras across all properties. No switching between systems — it\'s all here.',
+      's4-f1-name': 'Live video feeds', 's4-f1-desc': 'Stream any camera instantly',
+      's4-f2-name': 'Multiple camera views', 's4-f2-desc': 'All entrances, one dashboard',
+      's4-f3-name': 'Instant visibility', 's4-f3-desc': 'No delay, no refresh needed',
+      's4-tagline': 'Know what\'s happening at any moment',
+
+      's5-tag': 'Events & Logs',
+      's5-h1': 'Track<br><span class="hl">every action</span>',
+      's5-body': 'Every entry, every door open, every user change — logged automatically with timestamp and context.',
+      's5-f1-name': 'Entry history', 's5-f1-desc': 'Full record of who entered and when',
+      's5-f2-name': 'Event timeline', 's5-f2-desc': 'Chronological view of all system events',
+      's5-f3-name': 'Full transparency', 's5-f3-desc': 'Searchable, filterable, exportable',
+      's5-tagline': 'Everything is recorded automatically',
+
+      's6-tag': 'Device Management',
+      's6-h1': 'Manage all devices<br><span class="hl">remotely</span>',
+      's6-body': 'Monitor and control every device across all your properties — from one platform, without stepping on site.',
+      's6-f1-name': 'Intercoms', 's6-f1-desc': 'Monitor status and configure remotely',
+      's6-f2-name': 'Cameras', 's6-f2-desc': 'Live feed and health check for every unit',
+      's6-f3-name': 'Access points', 's6-f3-desc': 'Control every entry point in real time',
+      's6-tagline': 'No on-site intervention needed',
+
+      's7-tag': 'Remote Control',
+      's7-h1': 'Operate the system<br><span class="hl">in real time</span>',
+      's7-body': 'Open doors, restart devices, update access rights — all from the platform, without being on site.',
+      's7-f1-name': 'Open doors', 's7-f1-desc': 'Unlock any entrance remotely, instantly',
+      's7-f2-name': 'Restart devices', 's7-f2-desc': 'Reboot hardware without a site visit',
+      's7-f3-name': 'Update access instantly', 's7-f3-desc': 'Changes apply in seconds, not hours',
+      's7-tagline': 'Instant response when needed',
+
+      's8-tag': 'Scale',
+      's8-h1': 'Manage multiple buildings<br><span class="hl">in one place</span>',
+      's8-body': 'One platform for 1 building or 100. Add new properties in minutes — users, devices, and access rules scale with you.',
+      's8-f1-name': 'Centralized system', 's8-f1-desc': 'All buildings, one login, one view',
+      's8-f2-name': 'Scalable across projects', 's8-f2-desc': 'Add properties without extra infrastructure',
+      's8-tagline': 'Built to grow with your portfolio',
+
+      's9-tag': 'Integrations',
+      's9-h1': 'Connect with<br><span class="hl">your existing systems</span>',
+      's9-body': 'Evimiz GEO Platform connects to your tech stack via open API — CRM, ERP, billing, or any third-party service.',
+      's9-f1-name': 'API access', 's9-f1-desc': 'REST API for full custom integration',
+      's9-f2-name': 'CRM integrations', 's9-f2-desc': 'Sync residents and contracts automatically',
+      's9-f3-name': 'Third-party services', 's9-f3-desc': 'Connect billing, ITSM, and more',
+      's9-tagline': 'Seamlessly fits into your ecosystem',
+
+      's10-l1': 'Simple to manage.',
+      's10-l2': 'Powerful to operate.',
+      's10-p1': 'Access control', 's10-p2': 'Live monitoring', 's10-p3': 'Remote control',
+      's10-p4': 'Event logs', 's10-p5': 'Device management', 's10-p6': 'Multi-property',
+      's10-p7': 'API integration', 's10-p8': 'Full transparency', 's10-p9': 'Built to scale',
+      's10-micro': 'Evimiz gives you full control over your infrastructure',
+
+      's11-tag': 'Connected Ecosystem',
+      's11-h1': 'One <span class="hl">unified platform</span> for your whole team',
+      's11-body': 'Want to go deeper? Pick the pitch tailored to your role.',
+      's11-c1-role': 'For Developers',
+      's11-c1-title': 'How smart access increases property value',
+      's11-c1-desc': 'Integrate at design phase. Higher resale, faster lease-up.',
+      's11-c1-link': 'Open pitch →',
+      's11-c2-role': 'For Admins',
+      's11-c2-title': 'Run buildings without headaches',
+      's11-c2-desc': 'Less routine work, fewer calls, full audit trail.',
+      's11-c2-link': 'Open pitch →',
+      's11-c3-role': 'For Integrators',
+      's11-c3-title': 'Turn installs into recurring revenue',
+      's11-c3-desc': 'Wholesale pricing, white-label option, partner support.',
+      's11-c3-link': 'Open pitch →',
+      's11-c4-role': 'For Portfolio Owners',
+      's11-c4-title': 'Control & monitoring at portfolio scale',
+      's11-c4-desc': 'Unified view across every building. ROI math included.',
+      's11-c4-link': 'Open pitch →',
+
+      's12-tag': 'Let\'s Talk',
+      's12-h1': 'Let\'s <span class="hl">talk</span>',
+      's12-body': 'Schedule a personalized demo for your team and use case.',
+      's12-tagline': '30 minutes is all it takes to walk through your use case.',
+      's12-btn1': 'Schedule Demo',
+      's12-btn2': 'Talk on WhatsApp',
+      's12-footer': '© 2026 Evimiz · demo@evimiz.ai · evimiz.ai'
+    },
+
+    es: {
+      'nav-badge': 'Tour del Producto',
+      'nav-tagline': 'Recorrido guiado de la plataforma',
+
+      's1-tag': 'Evimiz GEO Platform',
+      's1-h1': 'Todo se gestiona<br><span class="hl">en una sola plataforma</span>',
+      's1-body': 'Accesos, cámaras, usuarios y dispositivos — todo en un solo lugar.',
+      's1-p1': 'Control de acceso',
+      's1-p2': 'Monitoreo en vivo',
+      's1-p3': 'Multi-propiedad',
+
+      's2-tag': 'Dashboard',
+      's2-h1': 'Una vista completa<br><span class="hl">de tu propiedad</span>',
+      's2-body': 'Una sola pantalla. Toda tu infraestructura — edificios, entradas, dispositivos y usuarios — visible de un vistazo.',
+      's2-f1-name': 'Edificios', 's2-f1-desc': 'Todas las propiedades en una vista centralizada',
+      's2-f2-name': 'Entradas', 's2-f2-desc': 'Cada punto de acceso, estado en vivo',
+      's2-f3-name': 'Dispositivos', 's2-f3-desc': 'Estado y conectividad del hardware',
+      's2-f4-name': 'Usuarios', 's2-f4-desc': 'Residentes y personal en un solo lugar',
+      's2-tagline': 'Control total desde una sola interfaz',
+
+      's3-tag': 'Gestión de Acceso',
+      's3-h1': 'Controla<br><span class="hl">quién puede ingresar</span>',
+      's3-body': 'Agrega, elimina y configura usuarios al instante. Asigna permisos por rol, unidad o entrada — sin papeleo manual.',
+      's3-f1-name': 'Agrega y elimina usuarios', 's3-f1-desc': 'Los cambios se aplican de inmediato',
+      's3-f2-name': 'Asigna permisos', 's3-f2-desc': 'Por rol, unidad, entrada u horario',
+      's3-f3-name': 'Gestiona accesos', 's3-f3-desc': 'Control granular sobre cada usuario',
+      's3-tagline': 'Sin procesos manuales',
+
+      's4-tag': 'Monitoreo en Vivo',
+      's4-h1': 'Visualiza todo<br><span class="hl">en tiempo real</span>',
+      's4-body': 'Video en vivo de todas las cámaras en todas las propiedades. Sin cambiar entre sistemas — todo está aquí.',
+      's4-f1-name': 'Video en vivo', 's4-f1-desc': 'Transmite cualquier cámara al instante',
+      's4-f2-name': 'Múltiples cámaras', 's4-f2-desc': 'Todas las entradas, un solo dashboard',
+      's4-f3-name': 'Visibilidad inmediata', 's4-f3-desc': 'Sin demora, sin actualizaciones manuales',
+      's4-tagline': 'Sabe lo que está pasando en todo momento',
+
+      's5-tag': 'Eventos y Registros',
+      's5-h1': 'Rastrea<br><span class="hl">cada acción</span>',
+      's5-body': 'Cada entrada, cada apertura, cada cambio de usuario — registrado automáticamente con fecha, hora y contexto.',
+      's5-f1-name': 'Historial de entradas', 's5-f1-desc': 'Registro completo de quién entró y cuándo',
+      's5-f2-name': 'Línea de tiempo', 's5-f2-desc': 'Vista cronológica de todo el sistema',
+      's5-f3-name': 'Transparencia total', 's5-f3-desc': 'Buscable, filtrable y exportable',
+      's5-tagline': 'Todo queda registrado automáticamente',
+
+      's6-tag': 'Gestión de Dispositivos',
+      's6-h1': 'Gestiona todos los dispositivos<br><span class="hl">de forma remota</span>',
+      's6-body': 'Monitorea y controla cada dispositivo en todas tus propiedades — desde una sola plataforma, sin ir al lugar.',
+      's6-f1-name': 'Intercomunicadores', 's6-f1-desc': 'Monitorea estado y configura de forma remota',
+      's6-f2-name': 'Cámaras', 's6-f2-desc': 'Video en vivo y verificación de cada unidad',
+      's6-f3-name': 'Puntos de acceso', 's6-f3-desc': 'Controla cada entrada en tiempo real',
+      's6-tagline': 'Sin necesidad de intervención en sitio',
+
+      's7-tag': 'Control Remoto',
+      's7-h1': 'Opera el sistema<br><span class="hl">en tiempo real</span>',
+      's7-body': 'Abre puertas, reinicia dispositivos, actualiza accesos — todo desde la plataforma, sin necesidad de ir al lugar.',
+      's7-f1-name': 'Abre puertas', 's7-f1-desc': 'Desbloquea cualquier entrada de forma remota',
+      's7-f2-name': 'Reinicia dispositivos', 's7-f2-desc': 'Reinicia el hardware sin visita presencial',
+      's7-f3-name': 'Actualiza accesos al instante', 's7-f3-desc': 'Los cambios se aplican en segundos',
+      's7-tagline': 'Respuesta inmediata cuando se necesita',
+
+      's8-tag': 'Escala',
+      's8-h1': 'Gestiona múltiples edificios<br><span class="hl">desde un solo lugar</span>',
+      's8-body': 'Una plataforma para 1 edificio o 100. Agrega nuevas propiedades en minutos — usuarios, dispositivos y reglas de acceso escalan contigo.',
+      's8-f1-name': 'Sistema centralizado', 's8-f1-desc': 'Todos los edificios, un solo acceso, una vista',
+      's8-f2-name': 'Escalable para distintos proyectos', 's8-f2-desc': 'Agrega propiedades sin infraestructura adicional',
+      's8-tagline': 'Diseñado para crecer con tu operación',
+
+      's9-tag': 'Integraciones',
+      's9-h1': 'Conecta con<br><span class="hl">tus sistemas existentes</span>',
+      's9-body': 'Evimiz GEO Platform se conecta a tu stack tecnológico mediante API abierta — CRM, ERP, facturación o cualquier servicio de terceros.',
+      's9-f1-name': 'Acceso a API', 's9-f1-desc': 'REST API para integración personalizada',
+      's9-f2-name': 'Integraciones con CRM', 's9-f2-desc': 'Sincroniza residentes y contratos',
+      's9-f3-name': 'Servicios de terceros', 's9-f3-desc': 'Conecta facturación, ITSM y más',
+      's9-tagline': 'Se integra fácilmente a tu ecosistema',
+
+      's10-l1': 'Simple de gestionar.',
+      's10-l2': 'Poderoso para operar.',
+      's10-p1': 'Control de acceso', 's10-p2': 'Monitoreo en vivo', 's10-p3': 'Control remoto',
+      's10-p4': 'Registro de eventos', 's10-p5': 'Gestión de dispositivos', 's10-p6': 'Multi-propiedad',
+      's10-p7': 'Integración API', 's10-p8': 'Transparencia total', 's10-p9': 'Diseñado para escalar',
+      's10-micro': 'Evimiz te da control total sobre tu infraestructura',
+
+      's11-tag': 'Ecosistema Conectado',
+      's11-h1': 'Una <span class="hl">plataforma unificada</span> para todo tu equipo',
+      's11-body': '¿Querés profundizar? Elegí la presentación adaptada a tu rol.',
+      's11-c1-role': 'Para Desarrolladores',
+      's11-c1-title': 'Cómo el acceso inteligente aumenta el valor de la propiedad',
+      's11-c1-desc': 'Integración desde el diseño. Mayor reventa, ocupación más rápida.',
+      's11-c1-link': 'Ver presentación →',
+      's11-c2-role': 'Para Administradores',
+      's11-c2-title': 'Gestiona edificios sin dolores de cabeza',
+      's11-c2-desc': 'Menos rutina, menos llamadas, registro completo de auditoría.',
+      's11-c2-link': 'Ver presentación →',
+      's11-c3-role': 'Para Integradores',
+      's11-c3-title': 'Convertí cada instalación en ingresos recurrentes',
+      's11-c3-desc': 'Precios mayoristas, opción white-label, soporte de partners.',
+      's11-c3-link': 'Ver presentación →',
+      's11-c4-role': 'Para Owners de Portafolio',
+      's11-c4-title': 'Control y monitoreo a escala de portafolio',
+      's11-c4-desc': 'Vista unificada de cada edificio. Cálculo de ROI incluido.',
+      's11-c4-link': 'Ver presentación →',
+
+      's12-tag': 'Hablemos',
+      's12-h1': '<span class="hl">Hablemos</span>',
+      's12-body': 'Coordiná una demo personalizada para tu equipo y caso de uso.',
+      's12-tagline': '30 minutos alcanzan para recorrer tu caso de uso.',
+      's12-btn1': 'Agendar Demo',
+      's12-btn2': 'Hablar por WhatsApp',
+      's12-footer': '© 2026 Evimiz · demo@evimiz.ai · evimiz.ai'
+    }
+  };
+
+  let currentLang = 'en';
+
+  function setLanguage(lang) {
+    const t = translations[lang];
+    if (!t) return;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+    document.querySelectorAll('img[data-img-en]').forEach(el => {
+      const src = el.getAttribute(lang === 'es' ? 'data-img-es' : 'data-img-en');
+      if (src) el.setAttribute('src', src);
+    });
+    document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+    document.documentElement.lang = lang;
+    currentLang = lang;
+  }
+
+  function toggleLang() {
+    setLanguage(currentLang === 'en' ? 'es' : 'en');
+    showNav();
+  }
+
+  // ========== CAROUSEL ENGINE ==========
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    slides[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    updateUI();
+    showNav();
+  }
+  function go(dir) { goTo(current + dir); }
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    document.querySelectorAll('.slide-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current)
+    );
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  function buildDots() {
+    const dotsEl = document.getElementById('slideDots');
+    dotsEl.innerHTML = '';
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+  }
+
+  // ========== AUTO-HIDE NAV ==========
+  let hideNavTimer;
+  function showNav() {
+    const sn = document.getElementById('slideNav');
+    const navbar = document.getElementById('navbar');
+    sn.classList.remove('hidden');
+    navbar.classList.remove('hidden');
+    clearTimeout(hideNavTimer);
+    hideNavTimer = setTimeout(() => {
+      sn.classList.add('hidden');
+      navbar.classList.add('hidden');
+    }, 2500);
+  }
+
+  document.addEventListener('mousemove', showNav);
+  document.addEventListener('keydown', e => {
+    showNav();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') go(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   || e.key === 'PageUp')   go(-1);
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End')  goTo(slides.length - 1);
+  });
+  document.addEventListener('click', showNav);
+  document.addEventListener('touchstart', showNav, { passive: true });
+
+  // ========== INIT ==========
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('prevBtn').addEventListener('click', () => go(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => go(1));
+    buildDots();
+    setLanguage('en');
+    updateUI();
+    showNav();
+  });
+</script>
+</body>
+</html>

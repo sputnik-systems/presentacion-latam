@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evimiz Hardware — Smart Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== DESIGN SYSTEM TOKENS (mirrored from Figma) ===== */
+:root{
+  /* Surfaces */
+  --bg-canvas:#FBFBF8;
+  --bg-surface:#FFFFFF;
+  --bg-elevated:#F4F3EE;
+  --bg-inverse:#0A0B0E;
+
+  /* Borders */
+  --border-subtle:#EAE7DF;
+  --border-strong:#0F1115;
+
+  /* Ink */
+  --ink-primary:#0F1115;
+  --ink-secondary:#5C6068;
+  --ink-tertiary:#9CA0A8;
+  --ink-inverse:#FFFFFF;
+
+  /* Accent (single, used sparingly) */
+  --accent:#1652F0;
+  --accent-hover:#0E3FCC;
+  --accent-tint:#EBF1FF;
+
+  /* Status */
+  --positive:#00A86B;
+  --negative:#E11D48;
+
+  /* Radii */
+  --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px;
+
+  /* Spacing */
+  --s-4:4px; --s-8:8px; --s-12:12px; --s-16:16px; --s-24:24px;
+  --s-32:32px; --s-48:48px; --s-64:64px; --s-96:96px; --s-128:128px;
+
+  /* Type */
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:var(--font);
+  background:var(--bg-canvas);
+  color:var(--ink-primary);
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-feature-settings:"ss01","cv01";
+}
+
+body.show-en .lang-es{display:none}
+body.show-es .lang-en{display:none}
+
+/* ===== Top progress bar (thin, subtle) ===== */
+#progress{
+  position:fixed;top:0;left:0;height:2px;
+  background:var(--accent);
+  transition:width 0.4s ease;z-index:100;
+}
+
+/* ===== Lang toggle ===== */
+#lang-bar{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);
+  display:flex;gap:0;
+  background:var(--bg-surface);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-pill);padding:3px;
+  z-index:200;opacity:0;
+  transition:opacity 0.4s ease;
+}
+#lang-bar button{
+  background:none;border:none;color:var(--ink-tertiary);
+  font-family:var(--font);
+  font-size:12px;font-weight:600;padding:6px 16px;
+  border-radius:var(--r-pill);cursor:pointer;
+  letter-spacing:0.04em;
+  transition:all 0.2s;
+}
+#lang-bar button.active{background:var(--ink-primary);color:var(--ink-inverse)}
+
+/* ===== Nav dots ===== */
+#nav{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;gap:10px;z-index:200;
+  opacity:0;transition:opacity 0.4s ease;
+}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--ink-tertiary);opacity:0.4;cursor:pointer;
+  transition:all 0.3s;
+}
+.dot.active{background:var(--accent);opacity:1;width:22px;border-radius:3px}
+
+#slide-num{
+  position:fixed;bottom:36px;right:48px;
+  font-size:12px;font-weight:600;color:var(--ink-tertiary);
+  letter-spacing:0.08em;
+  z-index:200;opacity:0;transition:opacity 0.4s ease;
+}
+
+/* ===== Slides ===== */
+.slides{width:100%;height:100vh;position:relative}
+.slide{
+  position:absolute;inset:0;
+  padding:96px 120px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease;
+  display:flex;flex-direction:column;
+  background:var(--bg-canvas);
+}
+.slide.active{opacity:1;pointer-events:all}
+
+/* ===== Slide chrome: header (logo + indicator) ===== */
+.slide-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:auto;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--accent);
+}
+.logo-text{font-size:20px;font-weight:800;letter-spacing:-0.03em;color:var(--ink-primary)}
+.slide-id{
+  font-size:13px;font-weight:500;color:var(--ink-tertiary);
+  letter-spacing:0.04em;
+}
+
+/* ===== Type ramp ===== */
+.eyebrow{
+  display:inline-block;
+  font-size:13px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--accent);
+}
+.headline{
+  font-size:clamp(3rem,7.5vw,8rem);
+  font-weight:800;line-height:0.95;
+  letter-spacing:-0.035em;
+  color:var(--ink-primary);
+}
+.headline-md{
+  font-size:clamp(2.4rem,4.5vw,4.5rem);
+  font-weight:800;line-height:1.0;
+  letter-spacing:-0.03em;
+  color:var(--ink-primary);
+}
+.headline-sm{
+  font-size:clamp(1.8rem,3.2vw,3rem);
+  font-weight:700;line-height:1.05;
+  letter-spacing:-0.025em;
+  color:var(--ink-primary);
+}
+.lede{
+  font-size:clamp(1.05rem,1.5vw,1.5rem);
+  font-weight:400;line-height:1.5;
+  letter-spacing:-0.01em;
+  color:var(--ink-secondary);
+  max-width:60ch;
+}
+.value-line{
+  font-size:1.05rem;font-weight:500;
+  color:var(--accent);
+}
+
+.accent{color:var(--accent)}
+
+/* ===== Footer with tagline ===== */
+.slide-footer{
+  margin-top:auto;
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding-top:32px;
+}
+.footer-tag{
+  font-size:13px;font-weight:500;
+  color:var(--ink-tertiary);letter-spacing:0.02em;
+}
+
+/* ===== Chips row (Hero, etc.) ===== */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:14px;font-weight:500;
+  background:var(--bg-surface);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-pill);
+  padding:10px 18px;
+  color:var(--ink-primary);
+}
+
+/* ===== Section title (for grid/pair/compare slides) ===== */
+.section-title{
+  display:flex;flex-direction:column;gap:16px;
+  margin-top:80px;
+  margin-bottom:48px;
+  max-width:780px;
+}
+.section-title.center{align-items:flex-start}
+
+/* ===== Slide layouts ===== */
+
+/* HERO */
+.layout-hero .center{
+  display:flex;flex-direction:column;gap:32px;
+  flex:1;justify-content:center;
+}
+.layout-hero .headline{max-width:18ch}
+
+/* COMPARISON */
+.layout-compare .compare-row{
+  display:grid;grid-template-columns:1fr auto 1fr;
+  gap:48px;align-items:stretch;
+  margin-top:48px;
+}
+.compare-card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-lg);
+  padding:48px;
+  display:flex;flex-direction:column;gap:20px;
+}
+.compare-card.old{
+  background:var(--bg-elevated);
+  border-color:transparent;
+}
+.compare-card.new{
+  border-color:var(--accent);
+}
+.compare-tag{
+  font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
+  padding:6px 14px;border-radius:var(--r-pill);
+  display:inline-block;align-self:flex-start;
+}
+.compare-card.old .compare-tag{
+  background:var(--ink-tertiary);color:var(--ink-inverse);
+}
+.compare-card.new .compare-tag{
+  background:var(--accent);color:var(--ink-inverse);
+}
+.compare-card h3{
+  font-size:32px;font-weight:700;line-height:1.1;
+  letter-spacing:-0.02em;color:var(--ink-primary);
+}
+.compare-card.old h3{color:var(--ink-secondary)}
+.compare-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:auto}
+.compare-list li{
+  font-size:15px;font-weight:500;
+  color:var(--ink-secondary);
+  padding-left:20px;position:relative;
+}
+.compare-card.old .compare-list li::before{
+  content:"—";position:absolute;left:0;color:var(--ink-tertiary);font-weight:600;
+}
+.compare-card.new .compare-list li::before{
+  content:"→";position:absolute;left:0;color:var(--accent);font-weight:700;
+}
+.compare-card.new .compare-list li{color:var(--ink-primary)}
+.compare-divider{
+  align-self:center;color:var(--ink-tertiary);
+  font-size:11px;font-weight:600;letter-spacing:0.2em;
+  writing-mode:vertical-rl;transform:rotate(180deg);
+}
+
+/* PRODUCT DETAIL */
+.layout-product .product-row{
+  display:grid;grid-template-columns:1.1fr 1fr;
+  gap:80px;align-items:center;flex:1;
+}
+.product-image{
+  background:#44739F; /* matches Evimiz banner bg */
+  border-radius:var(--r-lg);
+  aspect-ratio:1.1/1;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+.product-image img{
+  width:100%;height:100%;
+  object-fit:contain;
+  display:block;
+}
+.product-content{display:flex;flex-direction:column;gap:24px}
+.product-content .headline-md{max-width:14ch}
+.product-specs{
+  display:flex;flex-direction:column;gap:0;
+  border-top:1px solid var(--border-subtle);
+  margin-top:8px;
+}
+.product-specs .spec{
+  display:flex;align-items:baseline;gap:24px;
+  padding:18px 0;
+  border-bottom:1px solid var(--border-subtle);
+}
+.spec-num{
+  font-size:13px;font-weight:600;color:var(--ink-tertiary);
+  letter-spacing:0.05em;flex-shrink:0;width:32px;
+}
+.spec-text{
+  font-size:18px;font-weight:500;color:var(--ink-primary);
+  line-height:1.4;
+}
+
+/* PRODUCT PAIR (cameras) */
+.layout-pair .pair-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:32px;flex:1;
+  align-content:center;
+}
+.pair-card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-lg);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:border-color 0.3s, transform 0.3s;
+}
+.pair-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-4px);
+}
+.pair-image{
+  background:#44739F; /* matches camera PNG baked-in bg, blends seamlessly */
+  height:280px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.pair-image img{
+  width:100%;height:100%;
+  object-fit:cover;
+}
+.pair-body{
+  padding:32px 36px 36px;
+  display:flex;flex-direction:column;gap:14px;flex:1;
+}
+.pair-body h3{
+  font-size:24px;font-weight:700;letter-spacing:-0.02em;
+  color:var(--ink-primary);
+}
+.pair-list{list-style:none;display:flex;flex-direction:column;gap:8px;flex:1}
+.pair-list li{
+  font-size:14px;font-weight:500;color:var(--ink-secondary);
+  padding-left:16px;position:relative;
+}
+.pair-list li::before{
+  content:"·";position:absolute;left:4px;color:var(--accent);
+  font-weight:800;font-size:18px;line-height:14px;
+}
+.pair-value{
+  font-size:13px;font-weight:600;color:var(--accent);
+  letter-spacing:0.02em;margin-top:4px;
+}
+
+/* FEATURE GRID */
+.layout-grid .grid-wrap{
+  display:grid;
+  gap:24px;flex:1;align-content:center;
+}
+.layout-grid.cols-3 .grid-wrap{grid-template-columns:repeat(3,1fr)}
+.layout-grid.cols-4 .grid-wrap{grid-template-columns:repeat(4,1fr)}
+
+.feat-card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-lg);
+  padding:36px 32px;
+  display:flex;flex-direction:column;gap:14px;
+  transition:border-color 0.3s, transform 0.3s;
+  min-height:260px;
+}
+.feat-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-4px);
+}
+.feat-num{
+  font-size:13px;font-weight:600;color:var(--accent);
+  letter-spacing:0.08em;
+}
+.feat-card h4{
+  font-size:22px;font-weight:700;letter-spacing:-0.02em;
+  color:var(--ink-primary);line-height:1.15;
+}
+.feat-card p{
+  font-size:15px;font-weight:400;line-height:1.55;
+  color:var(--ink-secondary);
+  margin-top:auto;
+}
+
+/* CTA */
+.layout-cta{justify-content:center;align-items:center;text-align:center}
+.cta-content{
+  display:flex;flex-direction:column;gap:32px;align-items:center;
+  max-width:920px;
+}
+.cta-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:18px 40px;
+  background:var(--accent);
+  color:var(--ink-inverse);
+  border-radius:var(--r-pill);
+  font-family:var(--font);
+  font-size:17px;font-weight:600;letter-spacing:-0.01em;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:background 0.2s, transform 0.2s;
+  margin-top:16px;
+}
+.cta-btn:hover{background:var(--accent-hover);transform:translateY(-2px)}
+.cta-btn .arrow{font-size:20px;transition:transform 0.2s}
+.cta-btn:hover .arrow{transform:translateX(4px)}
+
+.stats-row{
+  display:flex;justify-content:center;gap:80px;
+  flex-wrap:wrap;margin-top:48px;
+  padding-top:48px;border-top:1px solid var(--border-subtle);
+  width:100%;
+}
+.stat{display:flex;flex-direction:column;gap:6px;align-items:center}
+.stat-val{
+  font-size:48px;font-weight:800;letter-spacing:-0.03em;
+  color:var(--ink-primary);
+}
+.stat-lbl{
+  font-size:13px;font-weight:500;color:var(--ink-tertiary);
+  letter-spacing:0.04em;
+}
+</style>
+</head>
+<body class="show-en">
+
+<div id="progress"></div>
+
+<div id="lang-bar">
+  <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+  <button id="btn-es" onclick="setLang('es')">ES</button>
+</div>
+
+<div id="nav"></div>
+<div id="slide-num"></div>
+
+<div class="slides" id="slides">
+
+  <!-- ── SLIDE 1 — HERO ── -->
+  <div class="slide layout-hero active">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">01 / 11</div>
+    </div>
+    <div class="center">
+      <span class="eyebrow">
+        <span class="lang-en">Smart Security Hardware</span>
+        <span class="lang-es">Hardware de Seguridad Inteligente</span>
+      </span>
+      <h1 class="headline">
+        <span class="lang-en">Digital infrastructure<br>for <span class="accent">modern buildings.</span></span>
+        <span class="lang-es">Infraestructura digital<br>para <span class="accent">edificios modernos.</span></span>
+      </h1>
+      <p class="lede">
+        <span class="lang-en">Intercoms, cameras and access systems — fully integrated in a single platform built for B2B.</span>
+        <span class="lang-es">Intercomunicadores, cámaras y accesos — totalmente integrados en una sola plataforma B2B.</span>
+      </p>
+      <div class="chips">
+        <div class="chip"><span class="lang-en">Mobile App</span><span class="lang-es">App móvil</span></div>
+        <div class="chip">NFC · BLE · PIN</div>
+        <div class="chip"><span class="lang-en">Full HD video</span><span class="lang-es">Video Full HD</span></div>
+        <div class="chip"><span class="lang-en">Cloud storage</span><span class="lang-es">Almacenamiento en nube</span></div>
+        <div class="chip"><span class="lang-en">AI motion alerts</span><span class="lang-es">Alertas IA</span></div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-tag">
+        <span class="lang-en">B2B hardware platform</span>
+        <span class="lang-es">Plataforma B2B de hardware</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 2 — COMPARISON ── -->
+  <div class="slide layout-compare">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">02 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">Why upgrade</span>
+        <span class="lang-es">Por qué actualizar</span>
+      </span>
+      <h2 class="headline-md">
+        <span class="lang-en">From legacy hardware<br>to a <span class="accent">connected stack.</span></span>
+        <span class="lang-es">Del hardware tradicional<br>al <span class="accent">stack conectado.</span></span>
+      </h2>
+    </div>
+    <div class="compare-row">
+      <div class="compare-card old">
+        <span class="compare-tag">
+          <span class="lang-en">Old intercom</span>
+          <span class="lang-es">Intercomunicador antiguo</span>
+        </span>
+        <h3>
+          <span class="lang-en">Closed, manual,<br>offline.</span>
+          <span class="lang-es">Cerrado, manual,<br>offline.</span>
+        </h3>
+        <ul class="compare-list">
+          <li><span class="lang-en">Physical keys only</span><span class="lang-es">Solo llaves físicas</span></li>
+          <li><span class="lang-en">No remote access</span><span class="lang-es">Sin acceso remoto</span></li>
+          <li><span class="lang-en">No video archive</span><span class="lang-es">Sin archivo de video</span></li>
+          <li><span class="lang-en">Vendor-locked maintenance</span><span class="lang-es">Mantenimiento cerrado</span></li>
+        </ul>
+      </div>
+      <div class="compare-divider">
+        <span class="lang-en">VS</span>
+        <span class="lang-es">VS</span>
+      </div>
+      <div class="compare-card new">
+        <span class="compare-tag">Evimiz</span>
+        <h3>
+          <span class="lang-en">Open, mobile,<br>real-time.</span>
+          <span class="lang-es">Abierto, móvil,<br>en tiempo real.</span>
+        </h3>
+        <ul class="compare-list">
+          <li><span class="lang-en">NFC, BLE, PIN, mobile app</span><span class="lang-es">NFC, BLE, PIN, app móvil</span></li>
+          <li><span class="lang-en">Remote control from anywhere</span><span class="lang-es">Control remoto desde cualquier lugar</span></li>
+          <li><span class="lang-en">24/7 cloud video archive</span><span class="lang-es">Archivo de video 24/7 en nube</span></li>
+          <li><span class="lang-en">Open API · Vendor-agnostic</span><span class="lang-es">API abierta · Sin lock-in</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-tag">
+        <span class="lang-en">Comparison · Old vs Evimiz</span>
+        <span class="lang-es">Comparación · Antiguo vs Evimiz</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 3 — PRODUCT DETAIL: SMART INTERCOM ── -->
+  <div class="slide layout-product">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">03 / 11</div>
+    </div>
+    <div class="product-row">
+      <div class="product-image">
+        <img src="assets/intercom-banner-en.jpg"
+             id="intercom-img"
+             data-img-en="assets/intercom-banner-en.jpg"
+             data-img-es="assets/intercom-banner-es.jpg"
+             alt="Evimiz Smart Intercom"
+             style="width:100%;height:100%;object-fit:cover;object-position:right center;">
+      </div>
+      <div class="product-content">
+        <span class="eyebrow">
+          <span class="lang-en">Smart Intercom</span>
+          <span class="lang-es">Intercomunicador inteligente</span>
+        </span>
+        <h2 class="headline-md">
+          <span class="lang-en">A doorbell<br>with a <span class="accent">platform.</span></span>
+          <span class="lang-es">Un timbre<br>con <span class="accent">plataforma.</span></span>
+        </h2>
+        <div class="product-specs">
+          <div class="spec">
+            <span class="spec-num">01</span>
+            <span class="spec-text"><span class="lang-en">HD video calls to mobile app</span><span class="lang-es">Videollamadas HD a la app móvil</span></span>
+          </div>
+          <div class="spec">
+            <span class="spec-num">02</span>
+            <span class="spec-text"><span class="lang-en">Remote door access from anywhere</span><span class="lang-es">Acceso remoto desde cualquier lugar</span></span>
+          </div>
+          <div class="spec">
+            <span class="spec-num">03</span>
+            <span class="spec-text"><span class="lang-en">Native sync with Evimiz platform</span><span class="lang-es">Sincronización nativa con plataforma Evimiz</span></span>
+          </div>
+        </div>
+        <p class="value-line">
+          <span class="lang-en">→ Seamless entry experience for residents.</span>
+          <span class="lang-es">→ Acceso simple y sin fricción para residentes.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 4 — CAMERAS: BASIC + DUAL LIGHT ── -->
+  <div class="slide layout-pair">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">04 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">IP Cameras · Series 1 of 3</span>
+        <span class="lang-es">Cámaras IP · Serie 1 de 3</span>
+      </span>
+      <h2 class="headline-sm">
+        <span class="lang-en"><span class="accent">Basic</span> & Dual Light</span>
+        <span class="lang-es">Serie <span class="accent">Basic</span> y Dual Light</span>
+      </h2>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-basic-series.png" alt="Basic Series Camera"></div>
+        <div class="pair-body">
+          <h3><span class="lang-en">Basic Series</span><span class="lang-es">Serie Basic</span></h3>
+          <ul class="pair-list">
+            <li><span class="lang-en">Full HD resolution</span><span class="lang-es">Resolución Full HD</span></li>
+            <li><span class="lang-en">Cloud & local recording</span><span class="lang-es">Grabación en nube y local</span></li>
+            <li><span class="lang-en">Native platform integration</span><span class="lang-es">Integración nativa con plataforma</span></li>
+          </ul>
+          <span class="pair-value">
+            <span class="lang-en">→ Real-time visibility & control</span>
+            <span class="lang-es">→ Visibilidad y control en tiempo real</span>
+          </span>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-dual-light.png" alt="Dual Light Camera"></div>
+        <div class="pair-body">
+          <h3>Dual Light</h3>
+          <ul class="pair-list">
+            <li><span class="lang-en">Full HD color at night</span><span class="lang-es">Full HD color de noche</span></li>
+            <li><span class="lang-en">AI motion detection</span><span class="lang-es">Detección de movimiento con IA</span></li>
+            <li><span class="lang-en">Native platform integration</span><span class="lang-es">Integración nativa con plataforma</span></li>
+          </ul>
+          <span class="pair-value">
+            <span class="lang-en">→ See in color, even in darkness</span>
+            <span class="lang-es">→ Ve en color, incluso en oscuridad</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 5 — CAMERAS: ZOOM + STROBE ── -->
+  <div class="slide layout-pair">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">05 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">IP Cameras · Series 2 of 3</span>
+        <span class="lang-es">Cámaras IP · Serie 2 de 3</span>
+      </span>
+      <h2 class="headline-sm">
+        <span class="lang-en"><span class="accent">ZOOM</span> & Strobe</span>
+        <span class="lang-es">Serie <span class="accent">ZOOM</span> y Strobe</span>
+      </h2>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-zoom-series.png" alt="ZOOM Series Camera"></div>
+        <div class="pair-body">
+          <h3><span class="lang-en">ZOOM Series</span><span class="lang-es">Serie ZOOM</span></h3>
+          <ul class="pair-list">
+            <li><span class="lang-en">10× optical zoom</span><span class="lang-es">Zoom óptico hasta 10×</span></li>
+            <li><span class="lang-en">Wide-angle perimeter coverage</span><span class="lang-es">Cobertura perimetral gran angular</span></li>
+            <li><span class="lang-en">Native platform integration</span><span class="lang-es">Integración nativa con plataforma</span></li>
+          </ul>
+          <span class="pair-value">
+            <span class="lang-en">→ Cover the whole perimeter, in detail</span>
+            <span class="lang-es">→ Cubre todo el perímetro, en detalle</span>
+          </span>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-strobe.png" alt="Strobe Camera"></div>
+        <div class="pair-body">
+          <h3>Strobe</h3>
+          <ul class="pair-list">
+            <li><span class="lang-en">LED alarm deterrent lights</span><span class="lang-es">Luces LED de disuasión</span></li>
+            <li><span class="lang-en">AI motion detection</span><span class="lang-es">Detección de movimiento con IA</span></li>
+            <li><span class="lang-en">Native platform integration</span><span class="lang-es">Integración nativa con plataforma</span></li>
+          </ul>
+          <span class="pair-value">
+            <span class="lang-en">→ Active deterrence, not just recording</span>
+            <span class="lang-es">→ Disuasión activa, no solo grabación</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 6 — CAMERAS: PTZ + MOTORIZED IR ── -->
+  <div class="slide layout-pair">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">06 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">IP Cameras · Series 3 of 3</span>
+        <span class="lang-es">Cámaras IP · Serie 3 de 3</span>
+      </span>
+      <h2 class="headline-sm">
+        <span class="lang-en"><span class="accent">PTZ</span> & Motorized IR</span>
+        <span class="lang-es">Serie <span class="accent">PTZ</span> y Motorized IR</span>
+      </h2>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-ptz-with-zoom.png" alt="PTZ Camera"></div>
+        <div class="pair-body">
+          <h3>PTZ Power ZOOM</h3>
+          <ul class="pair-list">
+            <li><span class="lang-en">20× optical zoom</span><span class="lang-es">Zoom óptico 20×</span></li>
+            <li><span class="lang-en">360° pan & tilt</span><span class="lang-es">Rotación 360° pan y tilt</span></li>
+            <li><span class="lang-en">Native platform integration</span><span class="lang-es">Integración nativa con plataforma</span></li>
+          </ul>
+          <span class="pair-value">
+            <span class="lang-en">→ Track and inspect from one camera</span>
+            <span class="lang-es">→ Sigue e inspecciona con una sola cámara</span>
+          </span>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-motorized-ir-series.png" alt="Motorized IR Camera"></div>
+        <div class="pair-body">
+          <h3>Motorized IR</h3>
+          <ul class="pair-list">
+            <li><span class="lang-en">Auto lens adjustment</span><span class="lang-es">Ajuste automático del lente</span></li>
+            <li><span class="lang-en">Long-range infrared vision</span><span class="lang-es">Visión infrarroja de largo alcance</span></li>
+            <li><span class="lang-en">Native platform integration</span><span class="lang-es">Integración nativa con plataforma</span></li>
+          </ul>
+          <span class="pair-value">
+            <span class="lang-en">→ Total clarity at any distance, day or night</span>
+            <span class="lang-es">→ Claridad total a cualquier distancia, día o noche</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 7 — HARDWARE ECOSYSTEM (3 cards) ── -->
+  <div class="slide layout-grid cols-3">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">07 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">Hardware Ecosystem</span>
+        <span class="lang-es">Ecosistema de Hardware</span>
+      </span>
+      <h2 class="headline-md">
+        <span class="lang-en">Every device,<br>built to <span class="accent">work as one.</span></span>
+        <span class="lang-es">Cada dispositivo,<br>creado para <span class="accent">funcionar como uno.</span></span>
+      </h2>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <h4><span class="lang-en">Smart Intercoms</span><span class="lang-es">Intercomunicadores inteligentes</span></h4>
+        <p><span class="lang-en">HD video, mobile access, NFC and BLE keys for residents and visitors.</span><span class="lang-es">Video HD, acceso móvil, llaves NFC y BLE para residentes y visitantes.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <h4><span class="lang-en">IP Cameras</span><span class="lang-es">Cámaras IP</span></h4>
+        <p><span class="lang-en">6 series, 24/7 recording, AI alerts and encrypted cloud archive.</span><span class="lang-es">6 series, grabación 24/7, alertas IA y archivo en nube cifrado.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <h4><span class="lang-en">Access devices</span><span class="lang-es">Dispositivos de acceso</span></h4>
+        <p><span class="lang-en">Fully synchronized with the platform and resident mobile app.</span><span class="lang-es">Totalmente sincronizado con la plataforma y la app móvil.</span></p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-tag">
+        <span class="lang-en">→ Designed to work as a single system, from day one.</span>
+        <span class="lang-es">→ Diseñado como un sistema único, desde el primer día.</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 8 — PLATFORM INTEGRATION (4-step flow as grid) ── -->
+  <div class="slide layout-grid cols-4">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">08 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">Platform Integration</span>
+        <span class="lang-es">Integración con la plataforma</span>
+      </span>
+      <h2 class="headline-md">
+        <span class="lang-en">Hardware + software,<br><span class="accent">in real time.</span></span>
+        <span class="lang-es">Hardware + software,<br><span class="accent">en tiempo real.</span></span>
+      </h2>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <h4><span class="lang-en">Smart Intercom</span><span class="lang-es">Intercomunicador</span></h4>
+        <p><span class="lang-en">Visitor calls; resident opens via app or NFC.</span><span class="lang-es">El visitante llama; el residente abre vía app o NFC.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <h4><span class="lang-en">IP Cameras</span><span class="lang-es">Cámaras IP</span></h4>
+        <p><span class="lang-en">24/7 recording, AI motion alerts, encrypted cloud.</span><span class="lang-es">Grabación 24/7, alertas IA, nube cifrada.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <h4><span class="lang-en">Mobile App</span><span class="lang-es">App móvil</span></h4>
+        <p><span class="lang-en">Residents manage access, view cameras, receive calls.</span><span class="lang-es">Residentes gestionan acceso, ven cámaras, reciben llamadas.</span></p>
+      </div>
+      <div class="feat-card" style="border-color:var(--accent);background:var(--accent-tint);">
+        <span class="feat-num">04</span>
+        <h4><span class="lang-en">GEO Platform</span><span class="lang-es">Plataforma GEO</span></h4>
+        <p><span class="lang-en">Managers monitor events, analytics and reports across buildings.</span><span class="lang-es">Administradores monitorean eventos, analíticas y reportes.</span></p>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span class="footer-tag">
+        <span class="lang-en">→ One stack, centralized control, real-time data.</span>
+        <span class="lang-es">→ Un stack, control centralizado, datos en tiempo real.</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 9 — WHY EVIMIZ (4 cards) ── -->
+  <div class="slide layout-grid cols-4">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">09 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">Why Evimiz</span>
+        <span class="lang-es">¿Por qué Evimiz?</span>
+      </span>
+      <h2 class="headline-md">
+        <span class="lang-en">Built for <span class="accent">reliability and scale.</span></span>
+        <span class="lang-es">Diseñado para <span class="accent">confiabilidad y escala.</span></span>
+      </h2>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <h4><span class="lang-en">Reliable hardware</span><span class="lang-es">Hardware confiable</span></h4>
+        <p><span class="lang-en">Vandal-proof, weatherproof, ready for outdoor use year-round.</span><span class="lang-es">Antivandalismo, resistente a la intemperie, listo para exteriores.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <h4><span class="lang-en">Secure cloud</span><span class="lang-es">Nube segura</span></h4>
+        <p><span class="lang-en">Encrypted video storage with configurable retention and local backup.</span><span class="lang-es">Video cifrado con retención configurable y respaldo local.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <h4><span class="lang-en">Open API</span><span class="lang-es">API abierta</span></h4>
+        <p><span class="lang-en">Full REST API for custom integrations with access and BMS systems.</span><span class="lang-es">API REST completa para integraciones con acceso y BMS.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">04</span>
+        <h4><span class="lang-en">Fast setup</span><span class="lang-es">Instalación rápida</span></h4>
+        <p><span class="lang-en">Professional install in hours. Compatible with existing networks.</span><span class="lang-es">Instalación profesional en horas. Compatible con redes existentes.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 10 — USE CASES (4 cards) ── -->
+  <div class="slide layout-grid cols-4">
+    <div class="slide-header">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">10 / 11</div>
+    </div>
+    <div class="section-title">
+      <span class="eyebrow">
+        <span class="lang-en">Use Cases</span>
+        <span class="lang-es">Casos de uso</span>
+      </span>
+      <h2 class="headline-md">
+        <span class="lang-en">Designed for <span class="accent">modern projects.</span></span>
+        <span class="lang-es">Diseñado para <span class="accent">proyectos modernos.</span></span>
+      </h2>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <h4><span class="lang-en">Residential complexes</span><span class="lang-es">Edificios residenciales</span></h4>
+        <p><span class="lang-en">Secure entry, visitor management, resident mobile app.</span><span class="lang-es">Acceso seguro, gestión de visitas, app para residentes.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <h4><span class="lang-en">Offices & co-working</span><span class="lang-es">Oficinas y coworks</span></h4>
+        <p><span class="lang-en">Access control, attendance tracking, visitor log.</span><span class="lang-es">Control de acceso, registro de asistencia y visitas.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <h4><span class="lang-en">Shopping centers</span><span class="lang-es">Centros comerciales</span></h4>
+        <p><span class="lang-en">Perimeter cameras, PTZ coverage, AI intrusion alerts.</span><span class="lang-es">Cámaras perimetrales, PTZ, alertas de intrusión con IA.</span></p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">04</span>
+        <h4><span class="lang-en">Parking lots</span><span class="lang-es">Estacionamientos</span></h4>
+        <p><span class="lang-en">Strobe cameras, active deterrence, 24/7 recording.</span><span class="lang-es">Cámaras Strobe, disuasión activa, grabación 24/7.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDE 11 — CTA ── -->
+  <div class="slide layout-cta">
+    <div class="slide-header" style="position:absolute;top:96px;left:120px;right:120px;">
+      <div class="logo"><span class="logo-dot"></span><span class="logo-text">Evimiz</span></div>
+      <div class="slide-id">11 / 11</div>
+    </div>
+    <div class="cta-content">
+      <span class="eyebrow">
+        <span class="lang-en">Get Started</span>
+        <span class="lang-es">Empezá ahora</span>
+      </span>
+      <h2 class="headline">
+        <span class="lang-en">Ready to upgrade<br>your <span class="accent">building's security?</span></span>
+        <span class="lang-es">¿Listo para mejorar la<br><span class="accent">seguridad de tu edificio?</span></span>
+      </h2>
+      <p class="lede" style="text-align:center;">
+        <span class="lang-en">Reliable hardware. Real-world deployment. Complete and scalable infrastructure.</span>
+        <span class="lang-es">Hardware confiable. Entornos reales. Infraestructura completa y escalable.</span>
+      </p>
+      <a href="https://evimiz.ai" class="cta-btn" target="_blank">
+        <span class="lang-en">Request a demo</span>
+        <span class="lang-es">Pedí una demo</span>
+        <span class="arrow">→</span>
+      </a>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-val">1.000+</span>
+          <span class="stat-lbl"><span class="lang-en">Buildings</span><span class="lang-es">Edificios</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-val">6</span>
+          <span class="stat-lbl"><span class="lang-en">Camera series</span><span class="lang-es">Series de cámaras</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-val">24/7</span>
+          <span class="stat-lbl"><span class="lang-en">Support</span><span class="lang-es">Soporte</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /slides -->
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const nav = document.getElementById('nav');
+const langBar = document.getElementById('lang-bar');
+const slideNum = document.getElementById('slide-num');
+let current = 0;
+let hideTimer;
+
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.onclick = () => goTo(i);
+  nav.appendChild(dot);
+});
+
+function updateProgress(){
+  const pct = ((current + 1) / slides.length) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
+  slideNum.textContent = String(current + 1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
+}
+
+function goTo(n){
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(n, slides.length - 1));
+  slides[current].classList.add('active');
+  updateProgress();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' '){ e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); goTo(current - 1); }
+});
+
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1));
+});
+
+function setLang(lang){
+  document.body.classList.toggle('show-en', lang === 'en');
+  document.body.classList.toggle('show-es', lang === 'es');
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.querySelectorAll('img[data-img-en]').forEach(img => {
+    img.src = lang === 'en' ? img.dataset.imgEn : img.dataset.imgEs;
+  });
+}
+
+function showUI(){
+  [nav, langBar, slideNum].forEach(el => el.style.opacity = '1');
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => {
+    [nav, langBar, slideNum].forEach(el => el.style.opacity = '0');
+  }, 2500);
+}
+function keepUI(){
+  clearTimeout(hideTimer);
+  [nav, langBar, slideNum].forEach(el => el.style.opacity = '1');
+}
+
+document.addEventListener('mousemove', showUI);
+document.addEventListener('touchstart', showUI);
+[nav, langBar].forEach(el => {
+  el.addEventListener('mouseenter', keepUI);
+  el.addEventListener('mouseleave', showUI);
+});
+
+updateProgress();
+showUI();
+</script>
+</body>
+</html>
