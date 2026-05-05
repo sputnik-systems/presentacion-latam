@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evimiz Hardware — Smart Security for Modern Buildings</title>
+<meta name="description" content="Smart intercoms, IP cameras and access systems — fully integrated for B2B integrators and distributors.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  /* ========== RESET ========== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ========== TOKENS (v4) ========== */
+  :root {
+    --bg-dark: #080818;
+    --bg-section: #0d0d22;
+    --bg-card: #14143a;
+    --accent: #7C6FFF;
+    --accent2: #4FC3F7;
+    --accent-hover: #6558ee;
+    --green: #3ecf8e;
+    --red: #ff6b6b;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: rgba(124,111,255,0.2);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    --max-width: 1200px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.18), transparent 50%),
+      radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.10), transparent 50%),
+      var(--bg-dark);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* ========== TOP NAVBAR (glassmorphism) ========== */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(124,111,255,0.12);
+    transition: background 0.3s ease, opacity 0.4s ease;
+  }
+  .navbar.hidden { opacity: 0; pointer-events: none; }
+  .nav-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    padding: 3px 10px;
+    opacity: 0.85;
+    letter-spacing: 0.04em;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .nav-tagline {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .lang-toggle {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s ease;
+  }
+  .lang-toggle:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ========== SLIDES VIEWPORT ========== */
+  #slides-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding-top: 70px;
+    padding-bottom: 90px;
+  }
+
+  .slide {
+    position: absolute;
+    top: 70px;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: 100%;
+    max-width: 1120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 24px 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    z-index: 0;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+    z-index: 1;
+  }
+
+  /* ========== TEXT ELEMENTS ========== */
+  .s-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(124,111,255,0.4);
+    background: rgba(124,111,255,0.1);
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .s-h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .s-h1.lg { font-size: 52px; }
+  .s-h2 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .hl {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .s-body {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 620px;
+    margin-bottom: 8px;
+  }
+  .micro {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+  .value-line {
+    margin-top: 12px;
+    font-size: 0.92rem;
+    color: var(--accent2);
+    font-style: italic;
+    opacity: 0.95;
+  }
+
+  /* ========== HERO PILLS ========== */
+  .s-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .s-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+  .s-pill .card-icon-svg { width: 14px; height: 14px; }
+  .s-pill.purple { color: var(--accent);  border-color: rgba(124,111,255,0.4);  background: rgba(124,111,255,0.1); }
+  .s-pill.blue   { color: var(--accent2); border-color: rgba(79,195,247,0.4);   background: rgba(79,195,247,0.08); }
+  .s-pill.green  { color: var(--green);   border-color: rgba(62,207,142,0.4);   background: rgba(62,207,142,0.08); }
+
+  /* ========== COMPARISON (slide 2) ========== */
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 28px;
+    align-items: stretch;
+    width: 100%;
+    max-width: 980px;
+    margin-top: 8px;
+  }
+  .compare-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+  }
+  .compare-card.old {
+    border-color: rgba(255,107,107,0.25);
+    background: rgba(255,107,107,0.04);
+  }
+  .compare-card.new {
+    border-color: rgba(124,111,255,0.5);
+    background: rgba(124,111,255,0.06);
+  }
+  .compare-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 50px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+  .compare-card.old .compare-tag {
+    background: rgba(255,107,107,0.15);
+    color: var(--red);
+  }
+  .compare-card.new .compare-tag {
+    background: rgba(124,111,255,0.2);
+    color: var(--accent);
+  }
+  .compare-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .compare-card.old h3 { color: var(--text-muted); }
+  .compare-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 4px;
+  }
+  .compare-list li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    padding-left: 22px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .compare-card.old .compare-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+  }
+  .compare-card.new .compare-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .compare-card.new .compare-list li { color: var(--text); }
+  .compare-divider {
+    align-self: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    opacity: 0.4;
+  }
+
+  /* ========== PRODUCT DETAIL (slide 3) ========== */
+  .product-row {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 56px;
+    align-items: center;
+    width: 100%;
+    max-width: 1080px;
+    text-align: left;
+    margin-top: 4px;
+  }
+  .product-image {
+    background: #44739F;
+    border-radius: var(--radius);
+    aspect-ratio: 1.05/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 60px rgba(124,111,255,0.18), 0 24px 60px rgba(0,0,0,0.45);
+  }
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  .product-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .product-content .s-tag { margin-bottom: 4px; }
+
+  /* ========== INTERCOM PRICING BANNER (Slide 4) ========== */
+  .pricing-banner-slide {
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  .pricing-banner-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    max-width: 960px;
+    width: 100%;
+  }
+  .pricing-banner-img {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: var(--radius);
+    box-shadow: 0 0 80px rgba(124,111,255,0.20), 0 30px 80px rgba(0,0,0,0.55);
+  }
+  .pricing-banner-cta {
+    display: flex;
+    justify-content: center;
+  }
+  @media (max-width: 768px) {
+    .pricing-banner-img { max-height: 55vh; }
+  }
+  .product-content .s-h2 { font-size: 32px; }
+  .product-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--border);
+    margin-top: 6px;
+  }
+  .product-specs .spec {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+    width: 28px;
+  }
+  .spec-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  /* ========== PAIR GRID (camera slides 4–6) ========== */
+  .pair-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 1040px;
+    margin-top: 4px;
+  }
+  .pair-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .pair-card:hover {
+    border-color: rgba(124,111,255,0.55);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .pair-image {
+    background: #44739F;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 14px;
+  }
+  .pair-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .pair-body {
+    padding: 22px 26px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    text-align: left;
+  }
+  .pair-body h3 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .pair-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+  .pair-list li {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .pair-list li::before {
+    content: "·";
+    position: absolute;
+    left: 4px;
+    color: var(--accent2);
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 14px;
+  }
+  .pair-value {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.01em;
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ========== FEATURE GRID (cols-3 / cols-4) ========== */
+  .grid-wrap {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+    max-width: 1080px;
+    margin-top: 6px;
+  }
+  .cols-3 .grid-wrap { grid-template-columns: repeat(3, 1fr); }
+  .cols-4 .grid-wrap { grid-template-columns: repeat(4, 1fr); }
+
+  .feat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+    transition: border-color 0.3s, transform 0.3s;
+    min-height: 200px;
+  }
+  .feat-card:hover {
+    border-color: rgba(124,111,255,0.55);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .feat-card.highlight {
+    border-color: var(--accent);
+    background: rgba(124,111,255,0.1);
+  }
+  .feat-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(124,111,255,0.12);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+  .feat-icon .card-icon-svg {
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+  }
+  .feat-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .feat-card h4 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .feat-card p {
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+
+  /* ========== SECTION HEAD (above grids/pairs) ========== */
+  .section-head {
+    text-align: center;
+    margin-bottom: 22px;
+    max-width: 760px;
+  }
+  .section-head .s-h2 { margin-bottom: 8px; }
+  .section-head .s-body { margin: 0 auto; }
+
+  /* ========== BRIDGE GRID (slide 11) ========== */
+  .bridge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    width: 100%;
+    max-width: 920px;
+    margin-top: 14px;
+  }
+  .bridge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 22px 20px;
+    text-align: left;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .bridge-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(124,111,255,0.55);
+    box-shadow: var(--shadow);
+    color: var(--text);
+  }
+  .bridge-card-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(124,111,255,0.12);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bridge-card-icon .card-icon-svg {
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+  }
+  .bridge-card-role {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .bridge-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .bridge-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .bridge-card-link {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== CONTACT SLIDE (slide 12) ========== */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 40px;
+    align-items: center;
+    max-width: 760px;
+    margin: 12px auto 0;
+    text-align: left;
+  }
+  .contact-qr {
+    background: #fff;
+    padding: 12px;
+    border-radius: var(--radius);
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .contact-qr img { width: 100%; height: 100%; }
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .contact-tagline {
+    font-size: 1.05rem;
+    color: var(--text);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .contact-item .card-icon-svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .contact-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px 26px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(124,111,255,0.35);
+    color: #fff;
+  }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 11px 24px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    text-decoration: none;
+  }
+  .btn-outline:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary .card-icon-svg,
+  .btn-outline .card-icon-svg {
+    width: 16px;
+    height: 16px;
+  }
+  .contact-footer {
+    margin-top: 22px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    opacity: 0.65;
+    text-align: center;
+  }
+
+  /* ========== BOTTOM SLIDE NAV ========== */
+  .slide-nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(13,13,34,0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: 999px;
+    padding: 10px 16px;
+    z-index: 99;
+    user-select: none;
+    transition: opacity 0.4s ease;
+  }
+  .slide-nav.hidden { opacity: 0; pointer-events: none; }
+  .slide-nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .slide-nav-btn:hover:not(:disabled) {
+    color: var(--text);
+    background: rgba(124,111,255,0.18);
+  }
+  .slide-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .slide-nav-dots { display: flex; gap: 6px; align-items: center; }
+  .slide-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    cursor: pointer;
+    transition: background 0.25s ease, width 0.25s ease, border-radius 0.25s ease;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .slide-dot.active {
+    background: var(--accent);
+    width: 20px;
+    border-radius: 4px;
+  }
+  .slide-nav-counter {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    min-width: 56px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== ICONS (Lucide) ========== */
+  .card-icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    flex-shrink: 0;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 920px) {
+    .compare-row { grid-template-columns: 1fr; }
+    .compare-divider { display: none; }
+    .product-row { grid-template-columns: 1fr; gap: 28px; }
+    .pair-grid { grid-template-columns: 1fr; }
+    .cols-3 .grid-wrap, .cols-4 .grid-wrap { grid-template-columns: repeat(2, 1fr); }
+    .bridge-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; text-align: center; }
+    .contact-qr { margin: 0 auto; }
+    .nav-tagline { display: none; }
+    .s-h1 { font-size: 36px; }
+    .s-h1.lg { font-size: 38px; }
+    .s-h2 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SVG SPRITE (Lucide icons) ========== -->
+<svg style="display:none;" aria-hidden="true">
+  <symbol id="icon-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="icon-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="icon-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="icon-cloud" viewBox="0 0 24 24"><path d="M17.5 19a4.5 4.5 0 1 0 0-9h-1.8A7 7 0 1 0 4 16.9"/></symbol>
+  <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="icon-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol>
+  <symbol id="icon-building-2" viewBox="0 0 24 24"><path d="M6 22V2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v20"/><path d="M6 12h12"/><path d="M6 7h12"/><path d="M6 17h12"/><path d="M2 22h20"/></symbol>
+  <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+  <symbol id="icon-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="icon-unlock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol>
+  <symbol id="icon-wifi" viewBox="0 0 24 24"><path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.82a15 15 0 0 1 20 0"/><line x1="12" x2="12.01" y1="20" y2="20"/></symbol>
+  <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="icon-store" viewBox="0 0 24 24"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></symbol>
+  <symbol id="icon-car" viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></symbol>
+  <symbol id="icon-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+  <symbol id="icon-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="icon-flashlight" viewBox="0 0 24 24"><path d="M18 6c0 2-2 2-2 4v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V10c0-2-2-2-2-4V2h12z"/><line x1="6" y1="6" x2="18" y2="6"/><line x1="12" y1="12" x2="12" y2="12.01"/></symbol>
+  <symbol id="icon-zoom-in" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></symbol>
+  <symbol id="icon-rotate-3d" viewBox="0 0 24 24"><path d="M16.466 7.5C15.643 4.237 13.952 2 12 2 9.239 2 7 6.477 7 12s2.239 10 5 10c.342 0 .677-.069 1-.2"/><path d="m15.194 13.707 3.814 1.86-1.86 3.814"/><path d="M19 15.57c-1.804.885-4.274 1.43-7 1.43-5.523 0-10-2.239-10-5s4.477-5 10-5c4.838 0 8.873 1.718 9.8 4"/></symbol>
+</svg>
+
+<!-- ========== TOP NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-left">
+      <span class="nav-logo">Evimiz</span>
+      <span class="nav-badge" data-i18n="nav-badge">Hardware</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-tagline" data-i18n="nav-tagline">Smart security hardware for modern buildings</span>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== SLIDES ========== -->
+<div id="slides-viewport">
+
+  <!-- ── 1 — HERO ── -->
+  <div class="slide active">
+    <div class="s-tag" data-i18n="s1-tag">Smart Security Hardware</div>
+    <h1 class="s-h1 lg" data-i18n-html="s1-h1">Digital infrastructure<br>for <span class="hl">modern buildings</span></h1>
+    <p class="s-body" data-i18n="s1-body">Intercoms, cameras and access systems — fully integrated in a single platform built for B2B.</p>
+    <div class="s-pills">
+      <div class="s-pill purple">
+        <svg class="card-icon-svg"><use href="#icon-smartphone"/></svg>
+        <span data-i18n="s1-p1">Mobile App</span>
+      </div>
+      <div class="s-pill purple">
+        <svg class="card-icon-svg"><use href="#icon-key"/></svg>
+        <span>NFC · BLE · PIN</span>
+      </div>
+      <div class="s-pill blue">
+        <svg class="card-icon-svg"><use href="#icon-camera"/></svg>
+        <span data-i18n="s1-p3">Full HD video</span>
+      </div>
+      <div class="s-pill blue">
+        <svg class="card-icon-svg"><use href="#icon-cloud"/></svg>
+        <span data-i18n="s1-p4">Cloud storage</span>
+      </div>
+      <div class="s-pill green">
+        <svg class="card-icon-svg"><use href="#icon-zap"/></svg>
+        <span data-i18n="s1-p5">AI motion alerts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2 — COMPARISON ── -->
+  <div class="slide">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s2-tag">Why upgrade</div>
+      <h2 class="s-h2" data-i18n-html="s2-h1">From legacy hardware to a <span class="hl">connected stack</span></h2>
+    </div>
+    <div class="compare-row">
+      <div class="compare-card old">
+        <span class="compare-tag" data-i18n="s2-old-tag">Old intercom</span>
+        <h3 data-i18n="s2-old-title">Closed, manual, offline.</h3>
+        <ul class="compare-list">
+          <li data-i18n="s2-old-1">Physical keys only</li>
+          <li data-i18n="s2-old-2">No remote access</li>
+          <li data-i18n="s2-old-3">No video archive</li>
+          <li data-i18n="s2-old-4">Vendor-locked maintenance</li>
+        </ul>
+      </div>
+      <div class="compare-divider" data-i18n="s2-vs">VS</div>
+      <div class="compare-card new">
+        <span class="compare-tag">Evimiz</span>
+        <h3 data-i18n="s2-new-title">Open, mobile, real-time.</h3>
+        <ul class="compare-list">
+          <li data-i18n="s2-new-1">NFC, BLE, PIN, mobile app</li>
+          <li data-i18n="s2-new-2">Remote control from anywhere</li>
+          <li data-i18n="s2-new-3">24/7 cloud video archive</li>
+          <li data-i18n="s2-new-4">Open API · Vendor-agnostic</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3 — SMART INTERCOM ── -->
+  <div class="slide">
+    <div class="product-row">
+      <div class="product-image">
+        <img src="assets/evimiz-intercom-crop.jpg"
+             id="intercom-img"
+             alt="Evimiz Smart Intercom — close-up">
+      </div>
+      <div class="product-content">
+        <div class="s-tag" data-i18n="s3-tag">Smart Intercom</div>
+        <h2 class="s-h2" data-i18n-html="s3-h1">A doorbell with a <span class="hl">platform</span></h2>
+        <div class="product-specs">
+          <div class="spec">
+            <span class="spec-num">01</span>
+            <span class="spec-text" data-i18n="s3-spec1">HD video calls to mobile app</span>
+          </div>
+          <div class="spec">
+            <span class="spec-num">02</span>
+            <span class="spec-text" data-i18n="s3-spec2">Remote door access from anywhere</span>
+          </div>
+          <div class="spec">
+            <span class="spec-num">03</span>
+            <span class="spec-text" data-i18n="s3-spec3">Native sync with Evimiz platform</span>
+          </div>
+        </div>
+        <p class="value-line" data-i18n="s3-value">→ Seamless entry experience for residents.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4 — INTERCOM PRICING ANCHOR (banner) ── -->
+  <div class="slide pricing-banner-slide">
+    <div class="pricing-banner-wrap">
+      <img class="pricing-banner-img"
+           src="assets/intercom-banner-en.jpg"
+           data-img-en="assets/intercom-banner-en.jpg"
+           data-img-es="assets/intercom-banner-es.jpg"
+           alt="Smart Intercom — starting at 250 USD">
+      <div class="pricing-banner-cta">
+        <a href="https://wa.me/5493512336420" target="_blank" class="btn-primary" data-i18n="s4-cta">Schedule Demo · 30 min</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5 — CAMERAS: BASIC + DUAL LIGHT ── -->
+  <div class="slide">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s5-tag">IP Cameras · Series 1 of 3</div>
+      <h2 class="s-h2" data-i18n-html="s5-h1"><span class="hl">Basic</span> &amp; Dual Light</h2>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-basic-series.png" alt="Basic Series Camera"></div>
+        <div class="pair-body">
+          <h3 data-i18n="s5-c1-title">Basic Series</h3>
+          <ul class="pair-list">
+            <li data-i18n="s5-c1-1">Full HD resolution</li>
+            <li data-i18n="s5-c1-2">Cloud &amp; local recording</li>
+            <li data-i18n="s5-c1-3">Native platform integration</li>
+          </ul>
+          <span class="pair-value" data-i18n="s5-c1-value">→ Real-time visibility &amp; control</span>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-dual-light.png" alt="Dual Light Camera"></div>
+        <div class="pair-body">
+          <h3>Dual Light</h3>
+          <ul class="pair-list">
+            <li data-i18n="s5-c2-1">Full HD color at night</li>
+            <li data-i18n="s5-c2-2">AI motion detection</li>
+            <li data-i18n="s5-c2-3">Native platform integration</li>
+          </ul>
+          <span class="pair-value" data-i18n="s5-c2-value">→ See in color, even in darkness</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 6 — CAMERAS: ZOOM + STROBE ── -->
+  <div class="slide">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s6-tag">IP Cameras · Series 2 of 3</div>
+      <h2 class="s-h2" data-i18n-html="s6-h1"><span class="hl">ZOOM</span> &amp; Strobe</h2>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-zoom-series.png" alt="ZOOM Series Camera"></div>
+        <div class="pair-body">
+          <h3 data-i18n="s6-c1-title">ZOOM Series</h3>
+          <ul class="pair-list">
+            <li data-i18n="s6-c1-1">10× optical zoom</li>
+            <li data-i18n="s6-c1-2">Wide-angle perimeter coverage</li>
+            <li data-i18n="s6-c1-3">Native platform integration</li>
+          </ul>
+          <span class="pair-value" data-i18n="s6-c1-value">→ Cover the whole perimeter, in detail</span>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-strobe.png" alt="Strobe Camera"></div>
+        <div class="pair-body">
+          <h3>Strobe</h3>
+          <ul class="pair-list">
+            <li data-i18n="s6-c2-1">LED alarm deterrent lights</li>
+            <li data-i18n="s6-c2-2">AI motion detection</li>
+            <li data-i18n="s6-c2-3">Native platform integration</li>
+          </ul>
+          <span class="pair-value" data-i18n="s6-c2-value">→ Active deterrence, not just recording</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 7 — CAMERAS: PTZ + MOTORIZED IR ── -->
+  <div class="slide">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s7-tag">IP Cameras · Series 3 of 3</div>
+      <h2 class="s-h2" data-i18n-html="s7-h1"><span class="hl">PTZ</span> &amp; Motorized IR</h2>
+    </div>
+    <div class="pair-grid">
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-ptz-with-zoom.png" alt="PTZ Camera"></div>
+        <div class="pair-body">
+          <h3>PTZ Power ZOOM</h3>
+          <ul class="pair-list">
+            <li data-i18n="s7-c1-1">20× optical zoom</li>
+            <li data-i18n="s7-c1-2">360° pan &amp; tilt</li>
+            <li data-i18n="s7-c1-3">Native platform integration</li>
+          </ul>
+          <span class="pair-value" data-i18n="s7-c1-value">→ Track and inspect from one camera</span>
+        </div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-image"><img src="assets/cam-motorized-ir-series.png" alt="Motorized IR Camera"></div>
+        <div class="pair-body">
+          <h3>Motorized IR</h3>
+          <ul class="pair-list">
+            <li data-i18n="s7-c2-1">Auto lens adjustment</li>
+            <li data-i18n="s7-c2-2">Long-range infrared vision</li>
+            <li data-i18n="s7-c2-3">Native platform integration</li>
+          </ul>
+          <span class="pair-value" data-i18n="s7-c2-value">→ Total clarity at any distance, day or night</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 8 — HARDWARE ECOSYSTEM (3 cards) ── -->
+  <div class="slide cols-3">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s8-tag">Hardware Ecosystem</div>
+      <h2 class="s-h2" data-i18n-html="s8-h1">Every device, built to <span class="hl">work as one</span></h2>
+      <p class="s-body" data-i18n="s8-body">Every device is designed to work together from day one.</p>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-bell"/></svg></div>
+        <span class="feat-num">01</span>
+        <h4 data-i18n="s8-c1-title">Smart Intercoms</h4>
+        <p data-i18n="s8-c1-desc">HD video, mobile access, NFC and BLE keys for residents and visitors.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-camera"/></svg></div>
+        <span class="feat-num">02</span>
+        <h4 data-i18n="s8-c2-title">IP Cameras</h4>
+        <p data-i18n="s8-c2-desc">6 series, 24/7 recording, AI alerts and encrypted cloud archive.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-key"/></svg></div>
+        <span class="feat-num">03</span>
+        <h4 data-i18n="s8-c3-title">Access devices</h4>
+        <p data-i18n="s8-c3-desc">Fully synchronized with the platform and resident mobile app.</p>
+      </div>
+    </div>
+    <p class="value-line" data-i18n="s8-value">→ Designed to work as a single system, from day one.</p>
+  </div>
+
+  <!-- ── 9 — PLATFORM INTEGRATION (4 cards) ── -->
+  <div class="slide cols-4">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s9-tag">Platform Integration</div>
+      <h2 class="s-h2" data-i18n-html="s9-h1">Hardware + software, <span class="hl">in real time</span></h2>
+      <p class="s-body" data-i18n="s9-body">Intercom, cameras, mobile app and GEO Platform — all in sync.</p>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-bell"/></svg></div>
+        <span class="feat-num">01</span>
+        <h4 data-i18n="s9-c1-title">Smart Intercom</h4>
+        <p data-i18n="s9-c1-desc">Visitor calls; resident opens via app or NFC.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-camera"/></svg></div>
+        <span class="feat-num">02</span>
+        <h4 data-i18n="s9-c2-title">IP Cameras</h4>
+        <p data-i18n="s9-c2-desc">24/7 recording, AI motion alerts, encrypted cloud.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-smartphone"/></svg></div>
+        <span class="feat-num">03</span>
+        <h4 data-i18n="s9-c3-title">Mobile App</h4>
+        <p data-i18n="s9-c3-desc">Residents manage access, view cameras, receive calls.</p>
+      </div>
+      <div class="feat-card highlight">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-globe"/></svg></div>
+        <span class="feat-num">04</span>
+        <h4 data-i18n="s9-c4-title">GEO Platform</h4>
+        <p data-i18n="s9-c4-desc">Managers monitor events, analytics and reports across buildings.</p>
+      </div>
+    </div>
+    <p class="value-line" data-i18n="s9-value">→ One stack, centralized control, real-time data.</p>
+  </div>
+
+  <!-- ── 10 — WHY EVIMIZ (4 cards) ── -->
+  <div class="slide cols-4">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s10-tag">Why Evimiz</div>
+      <h2 class="s-h2" data-i18n-html="s10-h1">Built for <span class="hl">reliability and scale</span></h2>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-shield"/></svg></div>
+        <span class="feat-num">01</span>
+        <h4 data-i18n="s10-c1-title">Reliable hardware</h4>
+        <p data-i18n="s10-c1-desc">Vandal-proof, weatherproof, ready for outdoor use year-round.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-cloud"/></svg></div>
+        <span class="feat-num">02</span>
+        <h4 data-i18n="s10-c2-title">Secure cloud</h4>
+        <p data-i18n="s10-c2-desc">Encrypted video storage with configurable retention and local backup.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-link"/></svg></div>
+        <span class="feat-num">03</span>
+        <h4 data-i18n="s10-c3-title">Open API</h4>
+        <p data-i18n="s10-c3-desc">Full REST API for custom integrations with access and BMS systems.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-zap"/></svg></div>
+        <span class="feat-num">04</span>
+        <h4 data-i18n="s10-c4-title">Fast setup</h4>
+        <p data-i18n="s10-c4-desc">Professional install in hours. Compatible with existing networks.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 11 — USE CASES (4 cards) ── -->
+  <div class="slide cols-4">
+    <div class="section-head">
+      <div class="s-tag" data-i18n="s11-tag">Use Cases</div>
+      <h2 class="s-h2" data-i18n-html="s11-h1">Designed for <span class="hl">modern projects</span></h2>
+    </div>
+    <div class="grid-wrap">
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-building"/></svg></div>
+        <span class="feat-num">01</span>
+        <h4 data-i18n="s11-c1-title">Residential complexes</h4>
+        <p data-i18n="s11-c1-desc">Secure entry, visitor management, resident mobile app.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-briefcase"/></svg></div>
+        <span class="feat-num">02</span>
+        <h4 data-i18n="s11-c2-title">Offices &amp; co-working</h4>
+        <p data-i18n="s11-c2-desc">Access control, attendance tracking, visitor log.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-store"/></svg></div>
+        <span class="feat-num">03</span>
+        <h4 data-i18n="s11-c3-title">Shopping centers</h4>
+        <p data-i18n="s11-c3-desc">Perimeter cameras, PTZ coverage, AI intrusion alerts.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><svg class="card-icon-svg"><use href="#icon-car"/></svg></div>
+        <span class="feat-num">04</span>
+        <h4 data-i18n="s11-c4-title">Parking lots</h4>
+        <p data-i18n="s11-c4-desc">Strobe cameras, active deterrence, 24/7 recording.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 12 — BRIDGE (cross-link to other pitches) ── -->
+  <div class="slide">
+    <div class="s-tag" data-i18n="s12-tag">Connected Ecosystem</div>
+    <h1 class="s-h1" data-i18n-html="s12-h1">One <span class="hl">unified platform</span> for the whole ecosystem</h1>
+    <p class="s-body" data-i18n="s12-body">Hardware is one piece. See how it fits with the rest.</p>
+    <div class="bridge-grid">
+      <a class="bridge-card" href="Evimiz-Developers-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-building"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s12-c1-role">For Developers</div>
+        <div class="bridge-card-title" data-i18n="s12-c1-title">Increase property value with smart access</div>
+        <div class="bridge-card-desc" data-i18n="s12-c1-desc">Integrate at design phase. Higher resale, faster lease-up.</div>
+        <div class="bridge-card-link" data-i18n="s12-c1-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-Admins-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-briefcase"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s12-c2-role">For Admins</div>
+        <div class="bridge-card-title" data-i18n="s12-c2-title">Run buildings without headaches</div>
+        <div class="bridge-card-desc" data-i18n="s12-c2-desc">Less routine work, fewer calls, full audit trail.</div>
+        <div class="bridge-card-link" data-i18n="s12-c2-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-Integrators-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-wrench"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s12-c3-role">For Integrators</div>
+        <div class="bridge-card-title" data-i18n="s12-c3-title">Turn installations into recurring revenue</div>
+        <div class="bridge-card-desc" data-i18n="s12-c3-desc">Wholesale pricing, white-label option, partner support.</div>
+        <div class="bridge-card-link" data-i18n="s12-c3-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-GEO-Platform-v3.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-target"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s12-c4-role">For Tech / Portfolio Owners</div>
+        <div class="bridge-card-title" data-i18n="s12-c4-title">Control &amp; monitoring at scale</div>
+        <div class="bridge-card-desc" data-i18n="s12-c4-desc">Unified view across every building. ROI math included.</div>
+        <div class="bridge-card-link" data-i18n="s12-c4-link">Open pitch →</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── 13 — CONTACT ── -->
+  <div class="slide">
+    <div class="s-tag" data-i18n="s13-tag">Let's Talk</div>
+    <h1 class="s-h1" data-i18n-html="s13-h1">Ready to <span class="hl">scale your hardware portfolio</span>?</h1>
+    <p class="s-body" data-i18n="s13-body">Schedule a 30-minute walkthrough — equipment specs, integration plan, partner program.</p>
+
+    <div class="contact-grid">
+      <div class="contact-qr">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&amp;data=https://geo.evimiz.ai" alt="QR geo.evimiz.ai">
+      </div>
+      <div class="contact-info">
+        <p class="contact-tagline" data-i18n="s13-tagline">30 minutes is all it takes to walk through your project.</p>
+        <div class="contact-list">
+          <div class="contact-item">
+            <svg class="card-icon-svg"><use href="#icon-mail"/></svg>
+            <span>support@evimiz.ai</span>
+          </div>
+          <div class="contact-item">
+            <svg class="card-icon-svg"><use href="#icon-message-circle"/></svg>
+            <span>WhatsApp: +54 9 351 233 64 20</span>
+          </div>
+          <div class="contact-item">
+            <svg class="card-icon-svg"><use href="#icon-globe"/></svg>
+            <span>geo.evimiz.ai</span>
+          </div>
+        </div>
+        <div class="contact-buttons">
+          <a class="btn-primary" href="mailto:demo@evimiz.ai">
+            <svg class="card-icon-svg"><use href="#icon-calendar"/></svg>
+            <span data-i18n="s13-btn1">Schedule Demo · 30 min</span>
+          </a>
+          <a class="btn-outline" href="https://wa.me/5493512336420" target="_blank">
+            <svg class="card-icon-svg"><use href="#icon-message-circle"/></svg>
+            <span data-i18n="s13-btn2">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="contact-footer" data-i18n="s13-footer">© 2026 Evimiz · geo.evimiz.ai · support@evimiz.ai</p>
+  </div>
+
+</div>
+
+<!-- ========== BOTTOM SLIDE NAV ========== -->
+<div class="slide-nav" id="slideNav">
+  <button class="slide-nav-btn" id="prevBtn" aria-label="Previous">←</button>
+  <div class="slide-nav-dots" id="slideDots"></div>
+  <span class="slide-nav-counter" id="slideCounter">1 / 13</span>
+  <button class="slide-nav-btn" id="nextBtn" aria-label="Next">→</button>
+</div>
+
+<script>
+  // ========== TRANSLATIONS ==========
+  const translations = {
+    en: {
+      'nav-badge': 'Hardware',
+      'nav-tagline': 'Smart security hardware for modern buildings',
+
+      's1-tag': 'Smart Security Hardware',
+      's1-h1': 'Digital infrastructure<br>for <span class="hl">modern buildings</span>',
+      's1-body': 'Intercoms, cameras and access systems — fully integrated in a single platform built for B2B.',
+      's1-p1': 'Mobile App',
+      's1-p3': 'Full HD video',
+      's1-p4': 'Cloud storage',
+      's1-p5': 'AI motion alerts',
+
+      's2-tag': 'Why upgrade',
+      's2-h1': 'From legacy hardware to a <span class="hl">connected stack</span>',
+      's2-vs': 'VS',
+      's2-old-tag': 'Old intercom',
+      's2-old-title': 'Closed, manual, offline.',
+      's2-old-1': 'Physical keys only',
+      's2-old-2': 'No remote access',
+      's2-old-3': 'No video archive',
+      's2-old-4': 'Vendor-locked maintenance',
+      's2-new-title': 'Open, mobile, real-time.',
+      's2-new-1': 'NFC, BLE, PIN, mobile app',
+      's2-new-2': 'Remote control from anywhere',
+      's2-new-3': '24/7 cloud video archive',
+      's2-new-4': 'Open API · Vendor-agnostic',
+
+      's3-tag': 'Smart Intercom',
+      's3-h1': 'A doorbell with a <span class="hl">platform</span>',
+      's3-spec1': 'HD video calls to mobile app',
+      's3-spec2': 'Remote door access from anywhere',
+      's3-spec3': 'Native sync with Evimiz platform',
+      's3-value': '→ Seamless entry experience for residents.',
+
+      's4-cta': 'Schedule Demo · 30 min',
+
+      's5-tag': 'IP Cameras · Series 1 of 3',
+      's5-h1': '<span class="hl">Basic</span> &amp; Dual Light',
+      's5-c1-title': 'Basic Series',
+      's5-c1-1': 'Full HD resolution',
+      's5-c1-2': 'Cloud & local recording',
+      's5-c1-3': 'Native platform integration',
+      's5-c1-value': '→ Real-time visibility & control',
+      's5-c2-1': 'Full HD color at night',
+      's5-c2-2': 'AI motion detection',
+      's5-c2-3': 'Native platform integration',
+      's5-c2-value': '→ See in color, even in darkness',
+
+      's6-tag': 'IP Cameras · Series 2 of 3',
+      's6-h1': '<span class="hl">ZOOM</span> &amp; Strobe',
+      's6-c1-title': 'ZOOM Series',
+      's6-c1-1': '10× optical zoom',
+      's6-c1-2': 'Wide-angle perimeter coverage',
+      's6-c1-3': 'Native platform integration',
+      's6-c1-value': '→ Cover the whole perimeter, in detail',
+      's6-c2-1': 'LED alarm deterrent lights',
+      's6-c2-2': 'AI motion detection',
+      's6-c2-3': 'Native platform integration',
+      's6-c2-value': '→ Active deterrence, not just recording',
+
+      's7-tag': 'IP Cameras · Series 3 of 3',
+      's7-h1': '<span class="hl">PTZ</span> &amp; Motorized IR',
+      's7-c1-1': '20× optical zoom',
+      's7-c1-2': '360° pan & tilt',
+      's7-c1-3': 'Native platform integration',
+      's7-c1-value': '→ Track and inspect from one camera',
+      's7-c2-1': 'Auto lens adjustment',
+      's7-c2-2': 'Long-range infrared vision',
+      's7-c2-3': 'Native platform integration',
+      's7-c2-value': '→ Total clarity at any distance, day or night',
+
+      's8-tag': 'Hardware Ecosystem',
+      's8-h1': 'Every device, built to <span class="hl">work as one</span>',
+      's8-body': 'Every device is designed to work together from day one.',
+      's8-c1-title': 'Smart Intercoms',
+      's8-c1-desc': 'HD video, mobile access, NFC and BLE keys for residents and visitors.',
+      's8-c2-title': 'IP Cameras',
+      's8-c2-desc': '6 series, 24/7 recording, AI alerts and encrypted cloud archive.',
+      's8-c3-title': 'Access devices',
+      's8-c3-desc': 'Fully synchronized with the platform and resident mobile app.',
+      's8-value': '→ Designed to work as a single system, from day one.',
+
+      's9-tag': 'Platform Integration',
+      's9-h1': 'Hardware + software, <span class="hl">in real time</span>',
+      's9-body': 'Intercom, cameras, mobile app and GEO Platform — all in sync.',
+      's9-c1-title': 'Smart Intercom',
+      's9-c1-desc': 'Visitor calls; resident opens via app or NFC.',
+      's9-c2-title': 'IP Cameras',
+      's9-c2-desc': '24/7 recording, AI motion alerts, encrypted cloud.',
+      's9-c3-title': 'Mobile App',
+      's9-c3-desc': 'Residents manage access, view cameras, receive calls.',
+      's9-c4-title': 'GEO Platform',
+      's9-c4-desc': 'Managers monitor events, analytics and reports across buildings.',
+      's9-value': '→ One stack, centralized control, real-time data.',
+
+      's10-tag': 'Why Evimiz',
+      's10-h1': 'Built for <span class="hl">reliability and scale</span>',
+      's10-c1-title': 'Reliable hardware',
+      's10-c1-desc': 'Vandal-proof, weatherproof, ready for outdoor use year-round.',
+      's10-c2-title': 'Secure cloud',
+      's10-c2-desc': 'Encrypted video storage with configurable retention and local backup.',
+      's10-c3-title': 'Open API',
+      's10-c3-desc': 'Full REST API for custom integrations with access and BMS systems.',
+      's10-c4-title': 'Fast setup',
+      's10-c4-desc': 'Professional install in hours. Compatible with existing networks.',
+
+      's11-tag': 'Use Cases',
+      's11-h1': 'Designed for <span class="hl">modern projects</span>',
+      's11-c1-title': 'Residential complexes',
+      's11-c1-desc': 'Secure entry, visitor management, resident mobile app.',
+      's11-c2-title': 'Offices & co-working',
+      's11-c2-desc': 'Access control, attendance tracking, visitor log.',
+      's11-c3-title': 'Shopping centers',
+      's11-c3-desc': 'Perimeter cameras, PTZ coverage, AI intrusion alerts.',
+      's11-c4-title': 'Parking lots',
+      's11-c4-desc': 'Strobe cameras, active deterrence, 24/7 recording.',
+
+      's12-tag': 'Connected Ecosystem',
+      's12-h1': 'One <span class="hl">unified platform</span> for the whole ecosystem',
+      's12-body': 'Hardware is one piece. See how it fits with the rest.',
+      's12-c1-role': 'For Developers',
+      's12-c1-title': 'Increase property value with smart access',
+      's12-c1-desc': 'Integrate at design phase. Higher resale, faster lease-up.',
+      's12-c1-link': 'Open pitch →',
+      's12-c2-role': 'For Admins',
+      's12-c2-title': 'Run buildings without headaches',
+      's12-c2-desc': 'Less routine work, fewer calls, full audit trail.',
+      's12-c2-link': 'Open pitch →',
+      's12-c3-role': 'For Integrators',
+      's12-c3-title': 'Turn installations into recurring revenue',
+      's12-c3-desc': 'Wholesale pricing, white-label option, partner support.',
+      's12-c3-link': 'Open pitch →',
+      's12-c4-role': 'For Tech / Portfolio Owners',
+      's12-c4-title': 'Control & monitoring at scale',
+      's12-c4-desc': 'Unified view across every building. ROI math included.',
+      's12-c4-link': 'Open pitch →',
+
+      's13-tag': "Let's Talk",
+      's13-h1': 'Ready to <span class="hl">scale your hardware portfolio</span>?',
+      's13-body': 'Schedule a 30-minute walkthrough — equipment specs, integration plan, partner program.',
+      's13-tagline': '30 minutes is all it takes to walk through your project.',
+      's13-btn1': 'Schedule Demo · 30 min',
+      's13-btn2': 'WhatsApp',
+      's13-footer': '© 2026 Evimiz · geo.evimiz.ai · support@evimiz.ai'
+    },
+
+    es: {
+      'nav-badge': 'Hardware',
+      'nav-tagline': 'Hardware de seguridad inteligente para edificios modernos',
+
+      's1-tag': 'Hardware de Seguridad Inteligente',
+      's1-h1': 'Infraestructura digital<br>para <span class="hl">edificios modernos</span>',
+      's1-body': 'Intercomunicadores, cámaras y accesos — totalmente integrados en una sola plataforma B2B.',
+      's1-p1': 'App móvil',
+      's1-p3': 'Video Full HD',
+      's1-p4': 'Almacenamiento en nube',
+      's1-p5': 'Alertas IA',
+
+      's2-tag': 'Por qué actualizar',
+      's2-h1': 'Del hardware tradicional al <span class="hl">stack conectado</span>',
+      's2-vs': 'VS',
+      's2-old-tag': 'Intercomunicador antiguo',
+      's2-old-title': 'Cerrado, manual, offline.',
+      's2-old-1': 'Solo llaves físicas',
+      's2-old-2': 'Sin acceso remoto',
+      's2-old-3': 'Sin archivo de video',
+      's2-old-4': 'Mantenimiento cerrado',
+      's2-new-title': 'Abierto, móvil, en tiempo real.',
+      's2-new-1': 'NFC, BLE, PIN, app móvil',
+      's2-new-2': 'Control remoto desde cualquier lugar',
+      's2-new-3': 'Archivo de video 24/7 en nube',
+      's2-new-4': 'API abierta · Sin lock-in',
+
+      's3-tag': 'Intercomunicador inteligente',
+      's3-h1': 'Un timbre con <span class="hl">plataforma</span>',
+      's3-spec1': 'Videollamadas HD a la app móvil',
+      's3-spec2': 'Acceso remoto desde cualquier lugar',
+      's3-spec3': 'Sincronización nativa con plataforma Evimiz',
+      's3-value': '→ Acceso simple y sin fricción para residentes.',
+
+      's4-cta': 'Reservar Demo · 30 min',
+
+      's5-tag': 'Cámaras IP · Serie 1 de 3',
+      's5-h1': 'Serie <span class="hl">Basic</span> y Dual Light',
+      's5-c1-title': 'Serie Basic',
+      's5-c1-1': 'Resolución Full HD',
+      's5-c1-2': 'Grabación en nube y local',
+      's5-c1-3': 'Integración nativa con plataforma',
+      's5-c1-value': '→ Visibilidad y control en tiempo real',
+      's5-c2-1': 'Full HD color de noche',
+      's5-c2-2': 'Detección de movimiento con IA',
+      's5-c2-3': 'Integración nativa con plataforma',
+      's5-c2-value': '→ Ve en color, incluso en oscuridad',
+
+      's6-tag': 'Cámaras IP · Serie 2 de 3',
+      's6-h1': 'Serie <span class="hl">ZOOM</span> y Strobe',
+      's6-c1-title': 'Serie ZOOM',
+      's6-c1-1': 'Zoom óptico 10×',
+      's6-c1-2': 'Cobertura perimetral gran angular',
+      's6-c1-3': 'Integración nativa con plataforma',
+      's6-c1-value': '→ Cubre todo el perímetro, en detalle',
+      's6-c2-1': 'Luces LED de disuasión',
+      's6-c2-2': 'Detección de movimiento con IA',
+      's6-c2-3': 'Integración nativa con plataforma',
+      's6-c2-value': '→ Disuasión activa, no solo grabación',
+
+      's7-tag': 'Cámaras IP · Serie 3 de 3',
+      's7-h1': 'Serie <span class="hl">PTZ</span> y Motorized IR',
+      's7-c1-1': 'Zoom óptico 20×',
+      's7-c1-2': 'Rotación 360° pan y tilt',
+      's7-c1-3': 'Integración nativa con plataforma',
+      's7-c1-value': '→ Sigue e inspecciona con una sola cámara',
+      's7-c2-1': 'Ajuste automático del lente',
+      's7-c2-2': 'Visión infrarroja de largo alcance',
+      's7-c2-3': 'Integración nativa con plataforma',
+      's7-c2-value': '→ Claridad total a cualquier distancia, día o noche',
+
+      's8-tag': 'Ecosistema de Hardware',
+      's8-h1': 'Cada dispositivo, creado para <span class="hl">funcionar como uno</span>',
+      's8-body': 'Cada dispositivo está diseñado para funcionar en conjunto desde el primer día.',
+      's8-c1-title': 'Intercomunicadores inteligentes',
+      's8-c1-desc': 'Video HD, acceso móvil, llaves NFC y BLE para residentes y visitas.',
+      's8-c2-title': 'Cámaras IP',
+      's8-c2-desc': '6 series, grabación 24/7, alertas IA y archivo en nube cifrado.',
+      's8-c3-title': 'Dispositivos de acceso',
+      's8-c3-desc': 'Totalmente sincronizados con la plataforma y la app móvil.',
+      's8-value': '→ Diseñado como un sistema único, desde el primer día.',
+
+      's9-tag': 'Integración con la plataforma',
+      's9-h1': 'Hardware + software, <span class="hl">en tiempo real</span>',
+      's9-body': 'Intercomunicador, cámaras, app móvil y Plataforma GEO — todo sincronizado.',
+      's9-c1-title': 'Intercomunicador',
+      's9-c1-desc': 'El visitante llama; el residente abre vía app o NFC.',
+      's9-c2-title': 'Cámaras IP',
+      's9-c2-desc': 'Grabación 24/7, alertas IA, nube cifrada.',
+      's9-c3-title': 'App móvil',
+      's9-c3-desc': 'Los residentes gestionan accesos, ven cámaras y reciben llamadas.',
+      's9-c4-title': 'Plataforma GEO',
+      's9-c4-desc': 'Los administradores monitorean eventos, analíticas y reportes.',
+      's9-value': '→ Un stack, control centralizado, datos en tiempo real.',
+
+      's10-tag': '¿Por qué Evimiz?',
+      's10-h1': 'Diseñado para <span class="hl">confiabilidad y escala</span>',
+      's10-c1-title': 'Hardware confiable',
+      's10-c1-desc': 'Antivandalismo, resistente a la intemperie, listo para exteriores.',
+      's10-c2-title': 'Nube segura',
+      's10-c2-desc': 'Video cifrado con retención configurable y respaldo local.',
+      's10-c3-title': 'API abierta',
+      's10-c3-desc': 'API REST completa para integraciones con acceso y BMS.',
+      's10-c4-title': 'Instalación rápida',
+      's10-c4-desc': 'Instalación profesional en horas. Compatible con redes existentes.',
+
+      's11-tag': 'Casos de uso',
+      's11-h1': 'Diseñado para <span class="hl">proyectos modernos</span>',
+      's11-c1-title': 'Edificios residenciales',
+      's11-c1-desc': 'Acceso seguro, gestión de visitas, app para residentes.',
+      's11-c2-title': 'Oficinas y coworks',
+      's11-c2-desc': 'Control de acceso, registro de asistencia y visitas.',
+      's11-c3-title': 'Centros comerciales',
+      's11-c3-desc': 'Cámaras perimetrales, PTZ, alertas de intrusión con IA.',
+      's11-c4-title': 'Estacionamientos',
+      's11-c4-desc': 'Cámaras Strobe, disuasión activa, grabación 24/7.',
+
+      's12-tag': 'Ecosistema Conectado',
+      's12-h1': 'Una <span class="hl">plataforma unificada</span> para todo el ecosistema',
+      's12-body': 'El hardware es una pieza. Vea cómo encaja con el resto.',
+      's12-c1-role': 'Para Desarrolladores',
+      's12-c1-title': 'Aumentar el valor con acceso inteligente',
+      's12-c1-desc': 'Integrar desde el diseño. Mayor reventa, alquiler más rápido.',
+      's12-c1-link': 'Abrir pitch →',
+      's12-c2-role': 'Para Administradoras',
+      's12-c2-title': 'Gestionar edificios sin dolores de cabeza',
+      's12-c2-desc': 'Menos trabajo de rutina, menos llamados, audit trail completo.',
+      's12-c2-link': 'Abrir pitch →',
+      's12-c3-role': 'Para Integradores',
+      's12-c3-title': 'Convertir instalaciones en ingresos recurrentes',
+      's12-c3-desc': 'Precios mayoristas, opción white-label, soporte para partners.',
+      's12-c3-link': 'Abrir pitch →',
+      's12-c4-role': 'Para Equipo Técnico / Portfolio',
+      's12-c4-title': 'Control y monitoreo a escala',
+      's12-c4-desc': 'Vista unificada de cada edificio. ROI incluido.',
+      's12-c4-link': 'Abrir pitch →',
+
+      's13-tag': 'Hablemos',
+      's13-h1': '¿Listo para <span class="hl">escalar tu portfolio de hardware</span>?',
+      's13-body': 'Reserve un walkthrough de 30 minutos — specs de equipos, plan de integración, programa de partners.',
+      's13-tagline': '30 minutos alcanzan para recorrer tu proyecto.',
+      's13-btn1': 'Reservar Demo · 30 min',
+      's13-btn2': 'WhatsApp',
+      's13-footer': '© 2026 Evimiz · geo.evimiz.ai · support@evimiz.ai'
+    }
+  };
+
+  let currentLang = 'en';
+
+  function setLanguage(lang) {
+    const t = translations[lang];
+    if (!t) return;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+    document.querySelectorAll('img[data-img-en]').forEach(el => {
+      const src = el.getAttribute(lang === 'es' ? 'data-img-es' : 'data-img-en');
+      if (src) el.setAttribute('src', src);
+    });
+    document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+    document.documentElement.lang = lang;
+    currentLang = lang;
+  }
+
+  function toggleLang() {
+    setLanguage(currentLang === 'en' ? 'es' : 'en');
+    showNav();
+  }
+
+  // ========== CAROUSEL ENGINE ==========
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    slides[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    updateUI();
+    showNav();
+  }
+  function go(dir) { goTo(current + dir); }
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    document.querySelectorAll('.slide-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current)
+    );
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  function buildDots() {
+    const dotsEl = document.getElementById('slideDots');
+    dotsEl.innerHTML = '';
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+  }
+
+  // ========== AUTO-HIDE NAV ==========
+  let hideNavTimer;
+  function showNav() {
+    const sn = document.getElementById('slideNav');
+    const navbar = document.getElementById('navbar');
+    sn.classList.remove('hidden');
+    navbar.classList.remove('hidden');
+    clearTimeout(hideNavTimer);
+    hideNavTimer = setTimeout(() => {
+      sn.classList.add('hidden');
+      navbar.classList.add('hidden');
+    }, 2500);
+  }
+
+  document.addEventListener('mousemove', showNav);
+  document.addEventListener('keydown', e => {
+    showNav();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   || e.key === 'PageUp')   go(-1);
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End')  goTo(slides.length - 1);
+  });
+  document.addEventListener('click', showNav);
+  document.addEventListener('touchstart', showNav, { passive: true });
+
+  // Touch swipe
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  });
+
+  // ========== INIT ==========
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('prevBtn').addEventListener('click', () => go(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => go(1));
+    buildDots();
+    setLanguage('en');
+    updateUI();
+    showNav();
+  });
+</script>
+</body>
+</html>
