@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evimiz App Demo — Resident Walkthrough</title>
+<meta name="description" content="A guided walkthrough of the Evimiz mobile app for residents: door calls, remote access, cameras, guest codes, family management.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+  /* ========== RESET ========== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ========== TOKENS (v4) ========== */
+  :root {
+    --bg-dark: #080818;
+    --bg-section: #0d0d22;
+    --bg-card: #14143a;
+    --accent: #7C6FFF;
+    --accent2: #4FC3F7;
+    --accent-hover: #6558ee;
+    --green: #3ecf8e;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: rgba(124,111,255,0.2);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.3);
+    --max-width: 1200px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(124,111,255,0.18), transparent 50%),
+      radial-gradient(ellipse at 75% 70%, rgba(79,195,247,0.10), transparent 50%),
+      var(--bg-dark);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-hover); }
+  img { max-width: 100%; height: auto; display: block; }
+
+  /* ========== TOP NAVBAR (glassmorphism) ========== */
+  .navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(124,111,255,0.12);
+    transition: background 0.3s ease, opacity 0.4s ease;
+  }
+  .navbar.hidden { opacity: 0; pointer-events: none; }
+  .nav-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 100px;
+    padding: 3px 10px;
+    opacity: 0.85;
+    letter-spacing: 0.04em;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .nav-tagline {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .lang-toggle {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s ease;
+  }
+  .lang-toggle:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ========== SLIDES VIEWPORT ========== */
+  #slides-viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding-top: 70px;
+    padding-bottom: 90px;
+  }
+
+  .slide {
+    position: absolute;
+    top: 70px;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    width: 100%;
+    max-width: 1080px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 28px 48px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    z-index: 0;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: all;
+    z-index: 1;
+  }
+
+  /* ========== TEXT ELEMENTS ========== */
+  .s-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(124,111,255,0.4);
+    background: rgba(124,111,255,0.1);
+    padding: 5px 16px;
+    border-radius: 50px;
+    margin-bottom: 18px;
+  }
+  .s-h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .s-h1 .hl {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .s-body {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 560px;
+    margin-bottom: 24px;
+  }
+  .micro {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+  .demo-tagline {
+    margin-top: 18px;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  /* ========== SPLIT LAYOUT ========== */
+  .demo-split {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    width: 100%;
+    max-width: 1080px;
+    text-align: left;
+  }
+  .demo-text { flex: 1; text-align: left; }
+  .demo-text .s-tag { margin-bottom: 14px; }
+  .demo-text .s-h1 { font-size: 32px; margin-bottom: 12px; line-height: 1.18; }
+  .demo-text .s-body { font-size: 15px; margin-bottom: 0; max-width: 100%; }
+
+  /* ========== FEATURE LIST ========== */
+  .demo-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .demo-feature {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .demo-feature-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .demo-feature-icon .card-icon-svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+  }
+  .demo-feature-name {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .demo-feature-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* ========== PHONE MOCKUP ========== */
+  .demo-phone {
+    flex-shrink: 0;
+    width: 240px;
+    height: 488px;
+    border-radius: 40px;
+    background: linear-gradient(145deg, #0a0a1c, #14143a);
+    border: 2px solid rgba(255,255,255,0.08);
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.5),
+      0 0 70px rgba(124,111,255,0.28),
+      0 24px 60px rgba(0,0,0,0.45),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+    transform: rotate(1.5deg);
+  }
+  .demo-phone img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top;
+    border-radius: 38px;
+  }
+  .phone-notch-bar {
+    position: absolute; top: 10px; left: 50%;
+    transform: translateX(-50%);
+    width: 70px; height: 5px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 4px;
+    z-index: 2;
+  }
+  .phone-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 18px;
+    padding: 36px 22px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(124,111,255,0.12), transparent 60%),
+      linear-gradient(160deg, rgba(124,111,255,0.06), rgba(79,195,247,0.04));
+  }
+  .phone-placeholder-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(124,111,255,0.14);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .phone-placeholder-icon .card-icon-svg {
+    width: 28px;
+    height: 28px;
+    color: var(--accent);
+  }
+  .phone-placeholder-label {
+    font-size: 0.72rem; color: var(--text-muted);
+    opacity: 0.72; line-height: 1.5;
+    border: 1px dashed rgba(124,111,255,0.25);
+    border-radius: 10px;
+    padding: 10px 14px;
+    width: 100%;
+  }
+
+  /* ========== PILLS ========== */
+  .s-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    justify-content: center;
+  }
+  .s-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+  .s-pill.purple { color: var(--accent);  border-color: rgba(124,111,255,0.4);  background: rgba(124,111,255,0.1); }
+  .s-pill.blue   { color: var(--accent2); border-color: rgba(79,195,247,0.4);   background: rgba(79,195,247,0.08); }
+  .s-pill.green  { color: var(--green);   border-color: rgba(62,207,142,0.4);   background: rgba(62,207,142,0.08); }
+
+  /* ========== KEY MESSAGE (Closing) ========== */
+  .key-contrast {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 760px;
+    text-align: center;
+  }
+  .key-line {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+  }
+  .key-line.dim { opacity: 0.32; }
+  .key-line.bright {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .key-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    margin: 18px auto;
+    opacity: 0.7;
+  }
+
+  /* ========== BRIDGE GRID ========== */
+  .bridge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    width: 100%;
+    max-width: 920px;
+    margin-top: 14px;
+  }
+  .bridge-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 22px 20px;
+    text-align: left;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .bridge-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(124,111,255,0.55);
+    box-shadow: var(--shadow);
+    color: var(--text);
+  }
+  .bridge-card-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(124,111,255,0.12);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bridge-card-icon .card-icon-svg {
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+  }
+  .bridge-card-role {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .bridge-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .bridge-card-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+  .bridge-card-link {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== CLOSING CTA + QR ========== */
+  .closing-cta {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .btn-primary, .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: 1px solid transparent;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124,111,255,0.4);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    background: rgba(124,111,255,0.06);
+  }
+  .closing-qr {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+  }
+  .closing-qr img {
+    width: 130px;
+    height: 130px;
+    border-radius: 10px;
+    background: #fff;
+    padding: 6px;
+  }
+
+  /* ========== BOTTOM SLIDE NAV ========== */
+  .slide-nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(13,13,34,0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(124,111,255,0.25);
+    border-radius: 999px;
+    padding: 10px 16px;
+    z-index: 99;
+    user-select: none;
+    transition: opacity 0.4s ease;
+  }
+  .slide-nav.hidden { opacity: 0; pointer-events: none; }
+  .slide-nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .slide-nav-btn:hover:not(:disabled) {
+    color: var(--text);
+    background: rgba(124,111,255,0.18);
+  }
+  .slide-nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .slide-nav-dots { display: flex; gap: 6px; align-items: center; }
+  .slide-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    cursor: pointer;
+    transition: background 0.25s ease, width 0.25s ease, border-radius 0.25s ease;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .slide-dot.active {
+    background: var(--accent);
+    width: 20px;
+    border-radius: 4px;
+  }
+  .slide-nav-counter {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    min-width: 50px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+  }
+
+  /* ========== ICONS (Lucide) ========== */
+  .card-icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    flex-shrink: 0;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 920px) {
+    .demo-split { flex-direction: column; gap: 24px; }
+    .demo-phone { width: 220px; height: 446px; }
+    .demo-text { text-align: center; }
+    .demo-text .s-h1 br { display: none; }
+    .bridge-grid { grid-template-columns: 1fr; }
+    .nav-tagline { display: none; }
+    .s-h1 { font-size: 36px; }
+    .key-line { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== SVG SPRITE (Lucide icons) ========== -->
+<svg style="display:none;" aria-hidden="true">
+  <symbol id="icon-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="icon-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="icon-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="icon-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="icon-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="icon-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+  <symbol id="icon-video" viewBox="0 0 24 24"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></symbol>
+  <symbol id="icon-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="icon-building" viewBox="0 0 24 24"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></symbol>
+  <symbol id="icon-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="icon-briefcase" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+  <symbol id="icon-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="icon-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="icon-unlock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></symbol>
+  <symbol id="icon-door-open" viewBox="0 0 24 24"><path d="M13 4h3a2 2 0 0 1 2 2v14"/><path d="M2 20h3"/><path d="M13 20h9"/><path d="M10 12v.01"/><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"/></symbol>
+  <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></symbol>
+  <symbol id="icon-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" ry="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></symbol>
+  <symbol id="icon-mic" viewBox="0 0 24 24"><rect width="6" height="13" x="9" y="2" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></symbol>
+  <symbol id="icon-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="icon-radio" viewBox="0 0 24 24"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></symbol>
+  <symbol id="icon-zoom-in" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></symbol>
+  <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="icon-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+  <symbol id="icon-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+  <symbol id="icon-hash" viewBox="0 0 24 24"><line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/></symbol>
+  <symbol id="icon-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+</svg>
+
+<!-- ========== TOP NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-left">
+      <span class="nav-logo">Evimiz</span>
+      <span class="nav-badge" data-i18n="nav-badge">App Demo</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-tagline" data-i18n="nav-tagline">Your building in your pocket</span>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">ES</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== SLIDES ========== -->
+<div id="slides-viewport">
+
+  <!-- 1 — Overview -->
+  <div class="slide active">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s1-tag">Evimiz App</div>
+        <h1 class="s-h1" data-i18n-html="s1-h1">Everything<br><span class="hl">in one app</span></h1>
+        <p class="s-body" data-i18n="s1-body">Your building — always in your pocket.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-door-open"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s1-f1-name">Access</div>
+              <div class="demo-feature-desc" data-i18n="s1-f1-desc">Open any entrance instantly</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-camera"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s1-f2-name">Cameras</div>
+              <div class="demo-feature-desc" data-i18n="s1-f2-desc">Live view from any camera</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-user"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s1-f3-name">Guests</div>
+              <div class="demo-feature-desc" data-i18n="s1-f3-desc">Share access in seconds</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-users"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s1-f4-name">Family</div>
+              <div class="demo-feature-desc" data-i18n="s1-f4-desc">One system for the whole household</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s1-tagline">Your building — in your pocket</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <img src="assets/app-live.jpg" alt="Evimiz App"
+             onerror="this.onerror=null;this.outerHTML='<div class=\'phone-placeholder\'><div class=\'phone-placeholder-icon\'><svg class=\'card-icon-svg\'><use href=&quot;#icon-smartphone&quot;/></svg></div><div class=\'phone-placeholder-label\'>Evimiz App home screen</div></div>'">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 — Door Scenario / Incoming Call -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s2-tag">Incoming Call</div>
+        <h1 class="s-h1" data-i18n-html="s2-h1">Someone is<br><span class="hl">at your door</span></h1>
+        <p class="s-body" data-i18n="s2-body">The intercom rings. Your phone shows live video instantly — see, talk, and decide before you open.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-monitor"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f1-name">See live video instantly</div>
+              <div class="demo-feature-desc" data-i18n="s2-f1-desc">The entrance appears the moment they ring</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-eye"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f2-name">Know who is there</div>
+              <div class="demo-feature-desc" data-i18n="s2-f2-desc">Clear picture before you act</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-mic"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s2-f3-name">Talk before opening</div>
+              <div class="demo-feature-desc" data-i18n="s2-f3-desc">Two-way audio right from the app</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s2-tagline">Stay in control before you act</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-phone"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s2-ph">Screenshot: Incoming call screen with live video preview + Answer / Decline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 — Remote Access -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s3-tag">Remote Control</div>
+        <h1 class="s-h1" data-i18n-html="s3-h1">Not at home?<br><span class="hl">No problem.</span></h1>
+        <p class="s-body" data-i18n="s3-body">Travelling, at work, or just out — you still answer the door and let people in from wherever you are.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-globe"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s3-f1-name">Answer from anywhere</div>
+              <div class="demo-feature-desc" data-i18n="s3-f1-desc">Pick up the call from any device</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-unlock"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s3-f2-name">Open the door remotely</div>
+              <div class="demo-feature-desc" data-i18n="s3-f2-desc">Unlock with one tap, wherever you are</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s3-tagline">Distance is no longer a limitation</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-radio"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s3-ph">Screenshot: Incoming call answered remotely — map or location indicator visible</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 — Instant Access -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s4-tag">Quick Access</div>
+        <h1 class="s-h1" data-i18n-html="s4-h1">Open the door<br><span class="hl">in one tap</span></h1>
+        <p class="s-body" data-i18n="s4-body">Hands full? Gloves on? One tap on the app — or use the lock screen widget. The door opens instantly.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-key"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s4-f1-name">No keys</div>
+              <div class="demo-feature-desc" data-i18n="s4-f1-desc">Leave them behind for good</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-hash"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s4-f2-name">No codes</div>
+              <div class="demo-feature-desc" data-i18n="s4-f2-desc">Nothing to remember or type</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-zap"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s4-f3-name">No waiting</div>
+              <div class="demo-feature-desc" data-i18n="s4-f3-desc">Instant response, every time</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s4-tagline">Fast, simple, frictionless</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-unlock"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s4-ph">Screenshot: Lock screen widget or large Open Door button — minimal UI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 — Cameras / Live View -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s5-tag">Cameras</div>
+        <h1 class="s-h1" data-i18n-html="s5-h1">See what's happening<br><span class="hl">in real time</span></h1>
+        <p class="s-body" data-i18n="s5-body">Live feeds from all building entrances — always on, always available. Tap any camera to go full screen.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-radio"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s5-f1-name">Live video</div>
+              <div class="demo-feature-desc" data-i18n="s5-f1-desc">Stream any entrance camera right now</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-monitor"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s5-f2-name">Full-screen view</div>
+              <div class="demo-feature-desc" data-i18n="s5-f2-desc">Tap any feed to expand it</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-zoom-in"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s5-f3-name">Zoom in when needed</div>
+              <div class="demo-feature-desc" data-i18n="s5-f3-desc">Get a closer look at any moment</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s5-tagline">Stay aware at any moment</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-camera"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s5-ph">Screenshot: Camera grid with live thumbnails + tap-to-fullscreen view</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 — Video History / Archive -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s6-tag">Archive</div>
+        <h1 class="s-h1" data-i18n-html="s6-h1">Go back in time<br><span class="hl">when needed</span></h1>
+        <p class="s-body" data-i18n="s6-body">Something happened while you were away? The archive is always there — scroll back and find the exact moment.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-calendar"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s6-f1-name">Easy timeline navigation</div>
+              <div class="demo-feature-desc" data-i18n="s6-f1-desc">Browse the archive by day or hour</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-target"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s6-f2-name">Find specific moments</div>
+              <div class="demo-feature-desc" data-i18n="s6-f2-desc">Scrub to the exact second you need</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s6-tagline">Nothing gets missed</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-video"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s6-ph">Screenshot: Video archive timeline — scrubber bar + recorded clips list</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 — Guest Access -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s7-tag">Guest Access</div>
+        <h1 class="s-h1" data-i18n-html="s7-h1">Give access<br><span class="hl">in seconds</span></h1>
+        <p class="s-body" data-i18n="s7-body">Create a temporary code or a link — send it via any messenger. Set how long it lasts. Done.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-hash"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s7-f1-name">Create temporary access codes</div>
+              <div class="demo-feature-desc" data-i18n="s7-f1-desc">Single-use or time-limited entry</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-share"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s7-f2-name">Share instantly</div>
+              <div class="demo-feature-desc" data-i18n="s7-f2-desc">Via WhatsApp, SMS, or any app</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s7-tagline">No need to meet in person</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-key"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s7-ph">Screenshot: Guest access flow — set duration → generate code → share link</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 — Family Management -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s8-tag">Family Access</div>
+        <h1 class="s-h1" data-i18n-html="s8-h1">Keep everyone<br><span class="hl">connected</span></h1>
+        <p class="s-body" data-i18n="s8-body">Add family members by phone number — they get immediate access to cameras, calls, and doors. No invites, no setup.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-users"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s8-f1-name">Add family members</div>
+              <div class="demo-feature-desc" data-i18n="s8-f1-desc">By phone number, instantly active</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-lock"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s8-f2-name">Shared access</div>
+              <div class="demo-feature-desc" data-i18n="s8-f2-desc">Cameras, calls, keys — for everyone</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-edit"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s8-f3-name">Full control</div>
+              <div class="demo-feature-desc" data-i18n="s8-f3-desc">Edit or remove members any time</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s8-tagline">One system for the whole household</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-users"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s8-ph">Screenshot: Family members list — user avatars with access status indicators</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 — Security & Audit -->
+  <div class="slide">
+    <div class="demo-split">
+      <div class="demo-text">
+        <div class="s-tag" data-i18n="s9-tag">Security</div>
+        <h1 class="s-h1" data-i18n-html="s9-h1">Everything<br><span class="hl">is tracked</span></h1>
+        <p class="s-body" data-i18n="s9-body">Every entry. Every door open. Every guest visit. A full log is always available — clear, timestamped, and searchable.</p>
+        <div class="demo-features">
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-user"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s9-f1-name">Who entered</div>
+              <div class="demo-feature-desc" data-i18n="s9-f1-desc">Name or code linked to every event</div>
+            </div>
+          </div>
+          <div class="demo-feature">
+            <div class="demo-feature-icon"><svg class="card-icon-svg"><use href="#icon-clock"/></svg></div>
+            <div>
+              <div class="demo-feature-name" data-i18n="s9-f2-name">When and how</div>
+              <div class="demo-feature-desc" data-i18n="s9-f2-desc">Exact time, method, and which door</div>
+            </div>
+          </div>
+        </div>
+        <p class="demo-tagline" data-i18n="s9-tagline">Full transparency and control</p>
+      </div>
+      <div class="demo-phone">
+        <div class="phone-notch-bar"></div>
+        <div class="phone-placeholder">
+          <div class="phone-placeholder-icon"><svg class="card-icon-svg"><use href="#icon-list-checks"/></svg></div>
+          <div class="phone-placeholder-label" data-i18n="s9-ph">Screenshot: Access log — entry list with timestamps, names, and door icons</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 — Bridge -->
+  <div class="slide">
+    <div class="s-tag" data-i18n="s10-tag">Connected Ecosystem</div>
+    <h1 class="s-h1" data-i18n-html="s10-h1">One <span class="hl">unified platform</span> for the whole building team</h1>
+    <p class="s-body" data-i18n="s10-body">This app is one piece of a bigger ecosystem. See how it fits.</p>
+    <div class="bridge-grid">
+      <a class="bridge-card" href="Evimiz-Developers-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-building"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s10-c1-role">For Developers</div>
+        <div class="bridge-card-title" data-i18n="s10-c1-title">Increase property value with smart access</div>
+        <div class="bridge-card-desc" data-i18n="s10-c1-desc">Integrate at design phase. Higher resale, faster lease-up.</div>
+        <div class="bridge-card-link" data-i18n="s10-c1-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-Admins-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-briefcase"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s10-c2-role">For Admins</div>
+        <div class="bridge-card-title" data-i18n="s10-c2-title">Run buildings without headaches</div>
+        <div class="bridge-card-desc" data-i18n="s10-c2-desc">Less routine work, fewer calls, full audit trail.</div>
+        <div class="bridge-card-link" data-i18n="s10-c2-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-Integrators-v4.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-wrench"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s10-c3-role">For Integrators</div>
+        <div class="bridge-card-title" data-i18n="s10-c3-title">Turn installations into recurring revenue</div>
+        <div class="bridge-card-desc" data-i18n="s10-c3-desc">Wholesale pricing, white-label option, partner support.</div>
+        <div class="bridge-card-link" data-i18n="s10-c3-link">Open pitch →</div>
+      </a>
+      <a class="bridge-card" href="Evimiz-GEO-Platform-v3.html">
+        <div class="bridge-card-icon"><svg class="card-icon-svg"><use href="#icon-target"/></svg></div>
+        <div class="bridge-card-role" data-i18n="s10-c4-role">For Tech / Portfolio Owners</div>
+        <div class="bridge-card-title" data-i18n="s10-c4-title">Control & monitoring at scale</div>
+        <div class="bridge-card-desc" data-i18n="s10-c4-desc">Unified view across every building. ROI math included.</div>
+        <div class="bridge-card-link" data-i18n="s10-c4-link">Open pitch →</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 11 — Closing + Contact -->
+  <div class="slide">
+    <div class="key-contrast">
+      <div class="key-line dim" data-i18n="s11-l1">Simple. Secure.</div>
+      <div class="key-divider"></div>
+      <div class="key-line bright" data-i18n="s11-l2">Always with you.</div>
+    </div>
+    <div class="s-pills" style="margin-top:28px;">
+      <div class="s-pill purple" data-i18n="s11-p1">Instant access</div>
+      <div class="s-pill blue" data-i18n="s11-p2">Full visibility</div>
+      <div class="s-pill green" data-i18n="s11-p3">Total control</div>
+    </div>
+    <div class="closing-cta">
+      <a href="https://wa.me/5493512336420" target="_blank" class="btn-primary" data-i18n="s11-cta1">Schedule Demo</a>
+      <a href="https://wa.me/5493512336420" target="_blank" class="btn-outline" data-i18n="s11-cta2">
+        <svg class="icon" style="width:16px;height:16px;"><use href="#icon-message-circle"/></svg>
+        <span>WhatsApp</span>
+      </a>
+    </div>
+    <div class="closing-qr">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://geo.evimiz.ai" alt="QR geo.evimiz.ai">
+    </div>
+    <p class="micro" style="margin-top:18px;font-size:14px;opacity:0.55;" data-i18n="s11-micro">Evimiz makes everyday living smarter</p>
+    <p class="micro" style="margin-top:6px;" data-i18n="s11-contact">geo.evimiz.ai · support@evimiz.ai</p>
+  </div>
+
+</div>
+
+<!-- ========== BOTTOM SLIDE NAV ========== -->
+<div class="slide-nav" id="slideNav">
+  <button class="slide-nav-btn" id="prevBtn" aria-label="Previous">←</button>
+  <div class="slide-nav-dots" id="slideDots"></div>
+  <span class="slide-nav-counter" id="slideCounter">1 / 11</span>
+  <button class="slide-nav-btn" id="nextBtn" aria-label="Next">→</button>
+</div>
+
+<script>
+  // ========== TRANSLATIONS ==========
+  const translations = {
+    en: {
+      'nav-badge': 'App Demo',
+      'nav-tagline': 'Your building in your pocket',
+
+      's1-tag': 'Evimiz App',
+      's1-h1': 'Everything<br><span class="hl">in one app</span>',
+      's1-body': 'Your building — always in your pocket.',
+      's1-f1-name': 'Access', 's1-f1-desc': 'Open any entrance instantly',
+      's1-f2-name': 'Cameras', 's1-f2-desc': 'Live view from any camera',
+      's1-f3-name': 'Guests', 's1-f3-desc': 'Share access in seconds',
+      's1-f4-name': 'Family', 's1-f4-desc': 'One system for the whole household',
+      's1-tagline': 'Your building — in your pocket',
+
+      's2-tag': 'Incoming Call',
+      's2-h1': 'Someone is<br><span class="hl">at your door</span>',
+      's2-body': 'The intercom rings. Your phone shows live video instantly — see, talk, and decide before you open.',
+      's2-f1-name': 'See live video instantly', 's2-f1-desc': 'The entrance appears the moment they ring',
+      's2-f2-name': 'Know who is there', 's2-f2-desc': 'Clear picture before you act',
+      's2-f3-name': 'Talk before opening', 's2-f3-desc': 'Two-way audio right from the app',
+      's2-tagline': 'Stay in control before you act',
+      's2-ph': 'Screenshot: Incoming call screen with live video preview + Answer / Decline',
+
+      's3-tag': 'Remote Control',
+      's3-h1': 'Not at home?<br><span class="hl">No problem.</span>',
+      's3-body': 'Travelling, at work, or just out — you still answer the door and let people in from wherever you are.',
+      's3-f1-name': 'Answer from anywhere', 's3-f1-desc': 'Pick up the call from any device',
+      's3-f2-name': 'Open the door remotely', 's3-f2-desc': 'Unlock with one tap, wherever you are',
+      's3-tagline': 'Distance is no longer a limitation',
+      's3-ph': 'Screenshot: Incoming call answered remotely — map or location indicator visible',
+
+      's4-tag': 'Quick Access',
+      's4-h1': 'Open the door<br><span class="hl">in one tap</span>',
+      's4-body': 'Hands full? Gloves on? One tap on the app — or use the lock screen widget. The door opens instantly.',
+      's4-f1-name': 'No keys', 's4-f1-desc': 'Leave them behind for good',
+      's4-f2-name': 'No codes', 's4-f2-desc': 'Nothing to remember or type',
+      's4-f3-name': 'No waiting', 's4-f3-desc': 'Instant response, every time',
+      's4-tagline': 'Fast, simple, frictionless',
+      's4-ph': 'Screenshot: Lock screen widget or large Open Door button — minimal UI',
+
+      's5-tag': 'Cameras',
+      's5-h1': 'See what\'s happening<br><span class="hl">in real time</span>',
+      's5-body': 'Live feeds from all building entrances — always on, always available. Tap any camera to go full screen.',
+      's5-f1-name': 'Live video', 's5-f1-desc': 'Stream any entrance camera right now',
+      's5-f2-name': 'Full-screen view', 's5-f2-desc': 'Tap any feed to expand it',
+      's5-f3-name': 'Zoom in when needed', 's5-f3-desc': 'Get a closer look at any moment',
+      's5-tagline': 'Stay aware at any moment',
+      's5-ph': 'Screenshot: Camera grid with live thumbnails + tap-to-fullscreen view',
+
+      's6-tag': 'Archive',
+      's6-h1': 'Go back in time<br><span class="hl">when needed</span>',
+      's6-body': 'Something happened while you were away? The archive is always there — scroll back and find the exact moment.',
+      's6-f1-name': 'Easy timeline navigation', 's6-f1-desc': 'Browse the archive by day or hour',
+      's6-f2-name': 'Find specific moments', 's6-f2-desc': 'Scrub to the exact second you need',
+      's6-tagline': 'Nothing gets missed',
+      's6-ph': 'Screenshot: Video archive timeline — scrubber bar + recorded clips list',
+
+      's7-tag': 'Guest Access',
+      's7-h1': 'Give access<br><span class="hl">in seconds</span>',
+      's7-body': 'Create a temporary code or a link — send it via any messenger. Set how long it lasts. Done.',
+      's7-f1-name': 'Create temporary access codes', 's7-f1-desc': 'Single-use or time-limited entry',
+      's7-f2-name': 'Share instantly', 's7-f2-desc': 'Via WhatsApp, SMS, or any app',
+      's7-tagline': 'No need to meet in person',
+      's7-ph': 'Screenshot: Guest access flow — set duration → generate code → share link',
+
+      's8-tag': 'Family Access',
+      's8-h1': 'Keep everyone<br><span class="hl">connected</span>',
+      's8-body': 'Add family members by phone number — they get immediate access to cameras, calls, and doors. No invites, no setup.',
+      's8-f1-name': 'Add family members', 's8-f1-desc': 'By phone number, instantly active',
+      's8-f2-name': 'Shared access', 's8-f2-desc': 'Cameras, calls, keys — for everyone',
+      's8-f3-name': 'Full control', 's8-f3-desc': 'Edit or remove members any time',
+      's8-tagline': 'One system for the whole household',
+      's8-ph': 'Screenshot: Family members list — user avatars with access status indicators',
+
+      's9-tag': 'Security',
+      's9-h1': 'Everything<br><span class="hl">is tracked</span>',
+      's9-body': 'Every entry. Every door open. Every guest visit. A full log is always available — clear, timestamped, and searchable.',
+      's9-f1-name': 'Who entered', 's9-f1-desc': 'Name or code linked to every event',
+      's9-f2-name': 'When and how', 's9-f2-desc': 'Exact time, method, and which door',
+      's9-tagline': 'Full transparency and control',
+      's9-ph': 'Screenshot: Access log — entry list with timestamps, names, and door icons',
+
+      's10-tag': 'Connected Ecosystem',
+      's10-h1': 'One <span class="hl">unified platform</span> for the whole building team',
+      's10-body': 'This app is one piece of a bigger ecosystem. See how it fits.',
+      's10-c1-role': 'For Developers',
+      's10-c1-title': 'Increase property value with smart access',
+      's10-c1-desc': 'Integrate at design phase. Higher resale, faster lease-up.',
+      's10-c1-link': 'Open pitch →',
+      's10-c2-role': 'For Admins',
+      's10-c2-title': 'Run buildings without headaches',
+      's10-c2-desc': 'Less routine work, fewer calls, full audit trail.',
+      's10-c2-link': 'Open pitch →',
+      's10-c3-role': 'For Integrators',
+      's10-c3-title': 'Turn installations into recurring revenue',
+      's10-c3-desc': 'Wholesale pricing, white-label option, partner support.',
+      's10-c3-link': 'Open pitch →',
+      's10-c4-role': 'For Tech / Portfolio Owners',
+      's10-c4-title': 'Control & monitoring at scale',
+      's10-c4-desc': 'Unified view across every building. ROI math included.',
+      's10-c4-link': 'Open pitch →',
+
+      's11-l1': 'Simple. Secure.',
+      's11-l2': 'Always with you.',
+      's11-p1': 'Instant access',
+      's11-p2': 'Full visibility',
+      's11-p3': 'Total control',
+      's11-cta1': 'Schedule Demo',
+      's11-cta2': 'WhatsApp',
+      's11-micro': 'Evimiz makes everyday living smarter',
+      's11-contact': 'geo.evimiz.ai · support@evimiz.ai'
+    },
+
+    es: {
+      'nav-badge': 'Demo de la App',
+      'nav-tagline': 'Tu edificio en tu bolsillo',
+
+      's1-tag': 'Evimiz App',
+      's1-h1': 'Todo<br><span class="hl">en una app</span>',
+      's1-body': 'Tu edificio — siempre en tu bolsillo.',
+      's1-f1-name': 'Accesos', 's1-f1-desc': 'Abrí cualquier entrada al instante',
+      's1-f2-name': 'Cámaras', 's1-f2-desc': 'Video en vivo desde cualquier entrada',
+      's1-f3-name': 'Invitados', 's1-f3-desc': 'Compartí el acceso en segundos',
+      's1-f4-name': 'Familia', 's1-f4-desc': 'Un solo sistema para toda la casa',
+      's1-tagline': 'Tu edificio en tu bolsillo',
+
+      's2-tag': 'Llamada Entrante',
+      's2-h1': 'Alguien está<br><span class="hl">en tu puerta</span>',
+      's2-body': 'El portero suena y tu celular responde — con video en vivo, audio y un solo botón para abrir.',
+      's2-f1-name': 'Video en vivo al instante', 's2-f1-desc': 'Ves la entrada en cuanto tocan',
+      's2-f2-name': 'Mirá quién está ahí', 's2-f2-desc': 'Imagen completa antes de decidir',
+      's2-f3-name': 'Hablá antes de abrir', 's2-f3-desc': 'Audio bidireccional desde la app',
+      's2-tagline': 'Control total antes de actuar',
+      's2-ph': 'Captura: Pantalla de llamada entrante con video en vivo + Atender / Rechazar',
+
+      's3-tag': 'Control Remoto',
+      's3-h1': '¿No estás en casa?<br><span class="hl">No hay problema.</span>',
+      's3-body': 'En la oficina, de viaje o caminando — igual respondés la puerta y dejás entrar a quien quieras.',
+      's3-f1-name': 'Respondé desde cualquier lugar', 's3-f1-desc': 'Atendé la llamada desde cualquier dispositivo',
+      's3-f2-name': 'Abrí la puerta desde tu teléfono', 's3-f2-desc': 'Un toque, desde donde estés',
+      's3-tagline': 'La distancia deja de ser un límite',
+      's3-ph': 'Captura: Llamada atendida de forma remota — indicador de ubicación visible',
+
+      's4-tag': 'Acceso Inmediato',
+      's4-h1': 'Abrí la puerta<br><span class="hl">en un solo toque</span>',
+      's4-body': '¿Manos ocupadas? Un toque en la app o en el widget de pantalla de bloqueo — la puerta se abre al instante.',
+      's4-f1-name': 'Sin llaves', 's4-f1-desc': 'Dejalas en casa para siempre',
+      's4-f2-name': 'Sin códigos', 's4-f2-desc': 'Nada que recordar ni escribir',
+      's4-f3-name': 'Sin esperas', 's4-f3-desc': 'Respuesta instantánea, siempre',
+      's4-tagline': 'Rápido, simple y sin fricción',
+      's4-ph': 'Captura: Widget en pantalla de bloqueo o botón grande de Abrir Puerta',
+
+      's5-tag': 'Cámaras',
+      's5-h1': 'Mirá lo que pasa<br><span class="hl">en tiempo real</span>',
+      's5-body': 'Video en vivo de todas las entradas del edificio — siempre activo, siempre disponible. Tocá cualquier cámara para pantalla completa.',
+      's5-f1-name': 'Video en vivo', 's5-f1-desc': 'Transmisión de cualquier cámara ahora mismo',
+      's5-f2-name': 'Pantalla completa', 's5-f2-desc': 'Tocá cualquier cámara para expandir',
+      's5-f3-name': 'Hacé zoom cuando lo necesites', 's5-f3-desc': 'Acercate al detalle que importa',
+      's5-tagline': 'Mantenete al tanto en todo momento',
+      's5-ph': 'Captura: Grilla de cámaras con miniaturas en vivo + vista en pantalla completa',
+
+      's6-tag': 'Archivo',
+      's6-h1': 'Volvé atrás<br><span class="hl">cuando lo necesites</span>',
+      's6-body': '¿Pasó algo mientras no estabas? El archivo siempre está ahí — navegá y encontrá el momento exacto.',
+      's6-f1-name': 'Línea de tiempo fácil de navegar', 's6-f1-desc': 'Explorá el archivo por día u hora',
+      's6-f2-name': 'Encontrá momentos específicos', 's6-f2-desc': 'Mové el cursor al segundo exacto que necesitás',
+      's6-tagline': 'Nada se pierde',
+      's6-ph': 'Captura: Línea de tiempo del archivo — barra de desplazamiento + lista de clips',
+
+      's7-tag': 'Acceso para Invitados',
+      's7-h1': 'Dá acceso<br><span class="hl">en segundos</span>',
+      's7-body': 'Creá un código temporal o un link — enviálo por cualquier mensajero. Definí cuánto dura. Listo.',
+      's7-f1-name': 'Códigos temporales', 's7-f1-desc': 'De uso único o con tiempo limitado',
+      's7-f2-name': 'Compartilo al instante', 's7-f2-desc': 'Por WhatsApp, SMS o cualquier app',
+      's7-tagline': 'No necesitás quedar en persona',
+      's7-ph': 'Captura: Flujo de visitas — definir duración → generar código → compartir link',
+
+      's8-tag': 'Gestión Familiar',
+      's8-h1': 'Mantené a todos<br><span class="hl">conectados</span>',
+      's8-body': 'Agregá miembros de la familia por número de teléfono — acceden a cámaras, llamadas y puertas de inmediato. Sin invitaciones, sin configuración.',
+      's8-f1-name': 'Agregá miembros de la familia', 's8-f1-desc': 'Por número, activo de inmediato',
+      's8-f2-name': 'Acceso compartido', 's8-f2-desc': 'Cámaras, llamadas, llaves — para todos',
+      's8-f3-name': 'Control total', 's8-f3-desc': 'Editá o quitá miembros cuando quieras',
+      's8-tagline': 'Un solo sistema para toda la casa',
+      's8-ph': 'Captura: Lista de miembros de la familia — avatares con indicadores de estado',
+
+      's9-tag': 'Seguridad',
+      's9-h1': 'Todo<br><span class="hl">queda registrado</span>',
+      's9-body': 'Cada entrada. Cada apertura. Cada visita. Un registro completo, siempre disponible — claro y con hora exacta.',
+      's9-f1-name': 'Quién ingresó', 's9-f1-desc': 'Nombre o código vinculado a cada evento',
+      's9-f2-name': 'Cuándo y cómo', 's9-f2-desc': 'Hora exacta, método y puerta',
+      's9-tagline': 'Transparencia y control total',
+      's9-ph': 'Captura: Log de acceso — lista de entradas con timestamps, nombres e íconos de puerta',
+
+      's10-tag': 'Ecosistema Conectado',
+      's10-h1': 'Una <span class="hl">plataforma unificada</span> para todo el equipo del edificio',
+      's10-body': 'Esta app es una pieza de un ecosistema más grande. Vea cómo encaja.',
+      's10-c1-role': 'Para Desarrolladores',
+      's10-c1-title': 'Aumentar el valor con acceso inteligente',
+      's10-c1-desc': 'Integrar desde el diseño. Mayor reventa, alquiler más rápido.',
+      's10-c1-link': 'Abrir pitch →',
+      's10-c2-role': 'Para Administradoras',
+      's10-c2-title': 'Gestionar edificios sin dolores de cabeza',
+      's10-c2-desc': 'Menos trabajo de rutina, menos llamados, audit trail completo.',
+      's10-c2-link': 'Abrir pitch →',
+      's10-c3-role': 'Para Integradores',
+      's10-c3-title': 'Convertir instalaciones en ingresos recurrentes',
+      's10-c3-desc': 'Precios mayoristas, opción white-label, soporte para partners.',
+      's10-c3-link': 'Abrir pitch →',
+      's10-c4-role': 'Para Equipo Técnico / Portfolio',
+      's10-c4-title': 'Control y monitoreo a escala',
+      's10-c4-desc': 'Vista unificada de cada edificio. ROI incluido.',
+      's10-c4-link': 'Abrir pitch →',
+
+      's11-l1': 'Simple. Seguro.',
+      's11-l2': 'Siempre contigo.',
+      's11-p1': 'Acceso inmediato',
+      's11-p2': 'Visibilidad completa',
+      's11-p3': 'Control total',
+      's11-cta1': 'Reservar Demo',
+      's11-cta2': 'WhatsApp',
+      's11-micro': 'Evimiz hace tu día a día más simple y seguro',
+      's11-contact': 'geo.evimiz.ai · support@evimiz.ai'
+    }
+  };
+
+  let currentLang = 'en';
+
+  function setLanguage(lang) {
+    const t = translations[lang];
+    if (!t) return;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+    document.getElementById('langToggle').textContent = lang === 'en' ? 'ES' : 'EN';
+    document.documentElement.lang = lang;
+    currentLang = lang;
+  }
+
+  function toggleLang() {
+    setLanguage(currentLang === 'en' ? 'es' : 'en');
+    showNav();
+  }
+
+  // ========== CAROUSEL ENGINE ==========
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    slides[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    updateUI();
+    showNav();
+  }
+  function go(dir) { goTo(current + dir); }
+
+  function updateUI() {
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    document.querySelectorAll('.slide-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === current)
+    );
+    document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + slides.length;
+  }
+
+  function buildDots() {
+    const dotsEl = document.getElementById('slideDots');
+    dotsEl.innerHTML = '';
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+  }
+
+  // ========== AUTO-HIDE NAV ==========
+  let hideNavTimer;
+  function showNav() {
+    const sn = document.getElementById('slideNav');
+    const navbar = document.getElementById('navbar');
+    sn.classList.remove('hidden');
+    navbar.classList.remove('hidden');
+    clearTimeout(hideNavTimer);
+    hideNavTimer = setTimeout(() => {
+      sn.classList.add('hidden');
+      navbar.classList.add('hidden');
+    }, 2500);
+  }
+
+  document.addEventListener('mousemove', showNav);
+  document.addEventListener('keydown', e => {
+    showNav();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') go(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   || e.key === 'PageUp')   go(-1);
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End')  goTo(slides.length - 1);
+  });
+  document.addEventListener('click', showNav);
+  document.addEventListener('touchstart', showNav, { passive: true });
+
+  // ========== INIT ==========
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('prevBtn').addEventListener('click', () => go(-1));
+    document.getElementById('nextBtn').addEventListener('click', () => go(1));
+    buildDots();
+    setLanguage('en');
+    updateUI();
+    showNav();
+  });
+</script>
+</body>
+</html>
