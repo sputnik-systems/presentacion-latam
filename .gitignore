@@ -1,0 +1,21 @@
+# Local IDE / tooling settings
+.claude/
+.cursor/
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Internal documents — kept locally, never published
+# (sales playbooks, market research with internal pricing math, financial stubs)
+*.docx
+
+# Local archives / backups
+*.tar.gz
+*.zip
+
+# Node / build artifacts (если когда-нибудь появятся)
+node_modules/
+dist/
+.cache/
