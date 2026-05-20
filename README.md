@@ -330,7 +330,36 @@ Positioning-документ. Заполнена только Секция 10 �
 
 Секции 1–9 (UX, app, dashboard, AI, hardware build, cloud, integrations, support, brand) — TODO, ждут product-team interview + benchmarks.
 
-#### `Evimiz_Cloud_Pricing_Model_v3.docx` — **актуальный (20.05.2026, поздняя версия)**
+#### `Evimiz_Cloud_Pricing_Model_v4.docx` — **актуальный (20.05.2026, финальная)**
+**INTERNAL ONLY.** Operational pricing-инструмент:
+- Reseller-архитектура, MAP-policy (three borders)
+- Wholesale base tiers (Starter $3, Pro $5.5, Enterprise $11, 1y motion-only $6, ARS-Basic $2)
+- AI add-ons (Alerts вшит в Pro, Analytics в Enterprise, LPR/FR — modular)
+- Hard ceilings по сегментам (cross-sell consorcios $9/$15, barrios $11/$18, enterprise $15/$25)
+- Partner volume tiers, bundle prepay (1y/3y/HW+1y)
+- Bundle по зданию (S/M/L/XL wholesale: $25/$75/$200/custom)
+- Any-camera open platform (ONVIF/RTSP, одинаковый pricing)
+- Custom Enterprise Quotes (1y 24/7, AR-residency)
+- Cost model (coefficient-based, anchor $2 + retention/motion/resolution coefficients + AI add-ons)
+- Sales scripts (vs Hikvision/Verisure/Hipcam, 30d market standard)
+- **Раздел 7 сокращён до 1-страничного executive summary** — полная research в companion-документе
+
+#### `Облачное_хранение_видео_Аргентина_v2.docx` — **актуальный research (20.05.2026)**
+Полный market research по AR cloud-archive рынку с прямым сравнением Evimiz vs конкуренты по сегментам:
+- B2C consumer cloud (EZVIZ, Ring LATAM, TP-Link, IMOU, Hik-Connect)
+- B2B platform providers (Videoloft, Angelcam, Axis, HikCentral Connect 2-SKU breakdown, Hanwha SKY, Eagle Eye, Ivideon, CameraFTP, Claro AR)
+- AR-local monitoring services (Verisure, Prosegur, USS — Prosegur acquired, Hipcam analysis)
+- Provider availability в AR (Google Nest/Arlo не работают)
+- 30 дней = market standard (доминирующий retention)
+- Resolution × codec impact (H.265 vs H.264 = 2× экономия)
+- Регуляторика AR (Disposición 10/2015, vertical-specific 1y+ mandates)
+- TAM AR cloud-archive ≈ $15-100M USD/год, SAM Evimiz $5-15M
+- **Прямые сравнения Evimiz vs market по сегментам** (разделы 3.2, 4.3, 4.4, 5.3, 6.4, 7.3, 11.3)
+- Главные insights: 1y motion-only — unique position, mid-tier −15-30% vs HikCentral, Hipcam не закрывает archive
+
+#### `Архив_Облачное_хранение_видео_Аргентина_2026_Claude.docx` — апрельская research baseline (заменён v2)
+
+#### `Evimiz_Cloud_Pricing_Model_v3.docx` — устарел (20.05.2026, поздняя версия)
 **INTERNAL ONLY.** v3 = v2 + интеграция апрельской research + два структурных нововведения:
 - **Раздел 7 расширен** реальными ставками 15+ провайдеров (Videoloft $8.99, Hanwha SKY HD2 $26.55, Eagle Eye $15-45, Angelcam $13.99, Ivideon $19, Hik-Connect $13.1 full pack)
 - **Раздел 7.5** — provider availability в AR (Google Nest и Arlo НЕ работают)
@@ -455,6 +484,13 @@ Coefficient-based COGS, 1y motion-only mass-market, 1y 24/7 в Custom Enterprise
 ## Changelog
 
 История изменений README. Обновляется после каждой работы над проектом.
+
+### 2026-05-20 (final) — Split: Pricing Model v4 + Research v2 (parallel documents)
+- **Главная архитектурная перестройка:** разделение pricing-модели и market research на два separate, синхронизированных документа (по аналогии с Mercado_Domofonos_FULL/SUMMARY pair).
+- **`Evimiz_Cloud_Pricing_Model_v4.docx`** — operational pricing-инструмент. Раздел 7 (конкурентная разведка) сокращён до 1-страничного executive summary с главными anchors. Все остальные разделы (reseller architecture, base tiers, ceilings, bundles, any-camera, AI add-ons, custom enterprise, P&L, cost model) — сохранены из v3.
+- **`Облачное_хранение_видео_Аргентина_v2.docx`** — полная market research по AR cloud-archive. Берёт за baseline апрельский Архив + добавляет майские находки (Hipcam analysis, Verisure/Prosegur/USS monitoring, HikCentral Connect 2-SKU breakdown, market consolidation, Hipcam НЕ закрывает archive). Содержит **прямые сравнения Evimiz wholesale/retail vs конкуренты по сегментам** (разделы 3.2, 4.3, 4.4, 5.3, 6.4, 7.3, 11.3).
+- Логика разделения: pricing-документ — для sales/operations (actionable цены, sales scripts). Research-документ — для стратегии (анализ рынка, positioning, TAM, регуляторика).
+- v3 → архив.
 
 ### 2026-05-20 (late) — Cloud Pricing Model v3 (research + bundle + any-camera)
 - Создан `Evimiz_Cloud_Pricing_Model_v3.docx` — интеграция апрельской research (Google Doc «Облачное_хранение_видео_Аргентина_2026_Claude») + два структурных нововведения.
