@@ -330,8 +330,30 @@ Positioning-документ. Заполнена только Секция 10 �
 
 Секции 1–9 (UX, app, dashboard, AI, hardware build, cloud, integrations, support, brand) — TODO, ждут product-team interview + benchmarks.
 
-#### `Evimiz_Cloud_Pricing_Model_v1.docx` — **новый, актуальный (19.05.2026)**
-**INTERNAL ONLY.** Полная reseller-модель для cloud-архива:
+#### `Evimiz_Cloud_Pricing_Model_v3.docx` — **актуальный (20.05.2026, поздняя версия)**
+**INTERNAL ONLY.** v3 = v2 + интеграция апрельской research + два структурных нововведения:
+- **Раздел 7 расширен** реальными ставками 15+ провайдеров (Videoloft $8.99, Hanwha SKY HD2 $26.55, Eagle Eye $15-45, Angelcam $13.99, Ivideon $19, Hik-Connect $13.1 full pack)
+- **Раздел 7.5** — provider availability в AR (Google Nest и Arlo НЕ работают)
+- **Раздел 11.4** — H.265 codec story (2× storage экономия vs H.264)
+- **NEW Раздел 13** — Bundle по зданию (S/M/L/XL wholesale партнёру: $25/$75/$200/custom, 9% discount vs per-camera)
+- **NEW Раздел 14** — Any-camera support (open platform для ONVIF/RTSP, одинаковый pricing для Evimiz/Hikvision/Dahua/Axis, marketing-pitch на Evimiz hardware преимуществах)
+- Sales-scripts 8.6-8.8: 30-day market standard, bundle pitch, open platform pitch
+
+#### `Evimiz_Cloud_Pricing_Model_v2.docx` — устарел (20.05.2026, ранняя версия)
+Coefficient-based COGS, 1y motion-only mass-market, 1y 24/7 в Custom Enterprise Quote. Заменён v3 (интеграция research + bundle + any-camera).
+**INTERNAL ONLY.** v2 заменяет v1 (assumption-driven COGS → coefficient-based с реальным anchor от Артура):
+- Anchor: 7d 24/7 1080p = $2 / cam / мес (от Артура)
+- Полная формула COGS: `$2 × retention_coef × motion_modifier × resolution_coef + AI_add_ons` (см. раздел 11)
+- 1y motion-only стал mass-market SKU: wholesale $6 (was $15), ceiling $12-18 по сегментам
+- 1y motion-only впервые доступен для cross-sell consorcios (ceiling $12) и barrios privados (ceiling $14)
+- 1y 24/7 переведён в **Custom Enterprise Quote** (раздел 12) — niche compliance-driven (банки, gov, critical infra), ~5-15 deals Y1
+- Pro tier GM 44% Y1 — принято как стратегическое решение (priority — market share)
+- Все остальные wholesale-tiers, partner volumes, MAP-policy, ceilings cross-sell/barrios/enterprise, AR-residency, AI add-ons, bundle prepay, sales scripts — сохранены из v1
+
+#### `Evimiz_Cloud_Pricing_Model_v1.docx` — устарел (19.05.2026)
+Первая версия reseller-модели с assumption-driven COGS. Заменена v2 после получения $2 anchor от Артура. Структура и большинство решений (reseller-architecture, hard ceilings cross-sell/barrios/enterprise/Pro/Enterprise, AI add-ons, AR-residency, bundle prepay, ARS-Basic, sales scripts) — сохранены в v2. Можно отправить в архив.
+
+**Общее (для обоих версий):** Полная reseller-модель для cloud-архива включает:
 - Архитектура: partner резеллит cloud (мы не биллим жителя напрямую)
 - Three-tier pricing: COGS → wholesale → retail (ceiling по сегментам)
 - Wholesale tiers: Starter $3 / Pro $5.5 / Enterprise $11 / 1y motion-only $15 / 1y 24/7 $80 / ARS-Basic ~$2
@@ -433,6 +455,27 @@ Positioning-документ. Заполнена только Секция 10 �
 ## Changelog
 
 История изменений README. Обновляется после каждой работы над проектом.
+
+### 2026-05-20 (late) — Cloud Pricing Model v3 (research + bundle + any-camera)
+- Создан `Evimiz_Cloud_Pricing_Model_v3.docx` — интеграция апрельской research (Google Doc «Облачное_хранение_видео_Аргентина_2026_Claude») + два структурных нововведения.
+- Раздел 7 (Competitive benchmarks) расширен с реальными ставками 15+ провайдеров: Videoloft $8.99, Hanwha SKY HD2 $26.55, Eagle Eye $15-45, Angelcam $13.99, Ivideon $19, CameraFTP, Axis Camera Station.
+- Раздел 7.5 — provider availability в AR: Google Nest Aware, Arlo Secure НЕ доступны в AR (важно для positioning, убирает 2 потенциальных конкурента из sales-discussion).
+- Раздел 11.4 — H.265 codec story в Cost model (2× storage экономия vs H.264, sales-talking-point).
+- NEW Раздел 13 — Bundle по зданию (S=$25, M=$75, L=$200, XL=custom). Партнёр платит fixed wholesale за пакет, 9% discount vs per-camera. Только для Pro 30d 24/7.
+- NEW Раздел 14 — Any-camera support: открытая платформа для ONVIF/RTSP сторонних камер (Hikvision/Dahua/Axis). Одинаковый pricing для всех. Marketing pitch фокусируется на Evimiz hardware преимуществах (unified SLA, factory-direct, native intercom integration). Tech-assumption — нужно подтвердить с Артуром, что cloud принимает произвольные ONVIF feeds.
+- Sales-scripts: 8.6 (30 days = market standard), 8.7 (bundle pitch для admins), 8.8 (open platform pitch).
+- v2 → архив.
+
+### 2026-05-20 — Cloud Pricing Model v2 (coefficient-based COGS)
+- Создан `Evimiz_Cloud_Pricing_Model_v2.docx` — обновление v1 после получения $2 anchor (7d 24/7) от Артура.
+- COGS-модель: coefficient-based scaling (retention × motion × resolution + AI absolutes). Полная формула в разделе 11.
+- 1y motion-only стал mass-market: wholesale $15→$6. TAM expansion 2.5×, новый product-market fit.
+- 1y motion-only впервые для cross-sell consorcios (ceiling $12) и barrios privados (ceiling $14, было $28).
+- 1y 24/7 переведён из default catalog в **Custom Enterprise Quote** (раздел 12 документа) — niche compliance market (банки, gov, critical), ~5-15 deals Y1. Sales-process: vertical + camera count → quote через 1-2 дня.
+- Pro tier GM 44% Y1 — стратегическое решение принято (market share priority vs SaaS-стандарт 60-75%).
+- Новый sales-script 8.4: «1y motion-only retention теперь mass-market» — unique market position (никто из конкурентов не предлагает affordable legal-grade motion-only retention).
+- Новый sales-script 8.5: что отвечать когда prospect спрашивает про 1y 24/7 (custom quote process).
+- v1 → архив, документация обновлена.
 
 ### 2026-05-19 — Cloud Pricing Model v1
 - Создан `Evimiz_Cloud_Pricing_Model_v1.docx` — полная reseller-модель для cloud-архива (INTERNAL ONLY).
