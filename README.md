@@ -330,13 +330,18 @@ Positioning-документ. Заполнена только Секция 10 �
 
 Секции 1–9 (UX, app, dashboard, AI, hardware build, cloud, integrations, support, brand) — TODO, ждут product-team interview + benchmarks.
 
-#### `Evimiz_Partner_PriceList_v2.pdf` / `.docx` — **partner-facing АКТУАЛЬНЫЙ (25.05.2026, late)**
-v2 — критический rebuild v1 после введения двухкомпонентной архитектуры. **Confidential** — не для прямого распространения.
-- **NEW Раздел 2 — License $2.50/intercom/мес** (fixed wholesale, обязательно для каждого активного домофона, включает ВСЕ AI features)
-- **Убран AI add-ons раздел** — все AI в License
-- Archive переименован: Cloud Subscriptions → Cloud Archive (только storage без AI markup)
-- Combined examples обновлены: явное разделение License + Archive в bundles
-- Section 6 (MAP-policy): License — partner-choice без hard ceiling, MAP только для archive
+#### `Evimiz_Partner_PriceList_v2_1.pdf` / `.docx` — **partner-facing АКТУАЛЬНЫЙ (25.05.2026, latest)**
+v2.1 — minor update v2 с завуализацией discount-механизмов для market entry flexibility. **Confidential** — не для прямого распространения. Файлname без точки (`v2_1`) из-за ограничения Word AppleScript на конверсию.
+- **Раздел 1.5** — Volume & prepay discounts: убраны конкретные % (−15%, −20%, −10% и т.д.), заменены на "обсуждаем индивидуально". License $2.50 остаётся fixed.
+- **Раздел 1.6** — Combined example: убраны конкретные numbers, оставлена только структура расчёта с disclaimer "illustrative, не fixed quote"
+- **Раздел 5.3** — Bundle prepay options: убраны −10% / −18% / −12%, заменены на directional text
+- **Раздел 6.1** — Hardware volume tiers: убрана таблица 1-9/.../200+, заменено на "по запросу для каждого quote"
+- **Раздел 6.2** — Archive Partner tier program: оставлены tier names (Starter/Growth/Strategic) и criteria (cam-base), но убраны конкретные % discount'ов
+- Базовая структура (license $2.50, base wholesale tiers, hard ceilings по сегментам) — остаётся прозрачной
+- Логика: на market entry stage не создавать price-anchor'ы, работать кейс-by-кейс. Pricing Model v5 (internal) сохраняет конкретные guidelines для нашей sales-команды.
+
+#### `Evimiz_Partner_PriceList_v2.pdf` / `.docx` — **устарел (25.05.2026, замёнен v2.1)**
+v2 — первая two-component версия с конкретными discount-таблицами. Заменён v2.1 после решения завуализировать discount-механизмы для market entry.
 
 #### `Evimiz_Cloud_Pricing_Model_v5.docx` — **АКТУАЛЬНЫЙ internal (25.05.2026, late)**
 v5 — критический rebuild v4 с двухкомпонентной архитектурой:
@@ -515,6 +520,19 @@ Coefficient-based COGS, 1y motion-only mass-market, 1y 24/7 в Custom Enterprise
 ## Changelog
 
 История изменений README. Обновляется после каждой работы над проектом.
+
+### 2026-05-25 (latest) — Price List v2.1: завуализация discount-механизмов
+- **Логика:** на market entry stage не создавать price-anchor'ы. Партнёру не показывать конкретные % дисконтов — обсуждать каждый кейс индивидуально.
+- **Что завуализировано в Price List v2.1** (5 разделов):
+  - 1.5 Volume & prepay discounts → текстовое описание вместо таблицы
+  - 1.6 Combined example → структура расчёта без точных numbers + disclaimer
+  - 5.3 Bundle prepay options → directional text
+  - 6.1 Hardware volume tiers → "по запросу" вместо таблицы
+  - 6.2 Archive Partner tier program → tier names и criteria без % discount'ов
+- **Что остаётся прозрачным:** License $2.50 fixed, base wholesale tiers ($3/$5.5/$11/$6/$2), hard ceilings по сегментам, soft floor рекомендация, recommended retail license soft.
+- **Pricing Model v5 (internal)** — без изменений. Конкретные discount-tier'ы остаются как internal guidelines для нашей собственной sales-команды.
+- Filename без точки (`v2_1.docx/.pdf`) — из-за ограничения Word AppleScript на конверсию имён с точкой.
+- v2 → deprecated.
 
 ### 2026-05-25 (late) — КРИТИЧЕСКИЙ rebuild: двухкомпонентная архитектура (License + Archive)
 - **Открыто:** Вадим уточнил что pricing двухкомпонентный. License $2.50/intercom/мес (FIXED, no discounts) включает ВСЕ AI features. Архив — отдельно (только storage).
