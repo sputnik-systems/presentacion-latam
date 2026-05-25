@@ -330,6 +330,18 @@ Positioning-документ. Заполнена только Секция 10 �
 
 Секции 1–9 (UX, app, dashboard, AI, hardware build, cloud, integrations, support, brand) — TODO, ждут product-team interview + benchmarks.
 
+#### `Evimiz_Partner_PriceList_v1.pdf` / `.docx` — **partner-facing (25.05.2026)**
+Прайс-лист для авторизованных партнёров (administradores, installers, monitoring firms). **Confidential** — не для прямого распространения. Combined Hardware + Cloud + Bundles в одном документе. Структура: 1-page Quick Reference + детальный catalog (7 разделов, 8 страниц).
+- Раздел 1 — Quick Reference (one-page summary всех wholesale цен и terms)
+- Раздел 2 — Hardware Catalog (все 6 серий камер + NVR + intercom)
+- Раздел 3 — Cloud Subscriptions (Starter / Pro / Enterprise / 1y motion / ARS-Basic / Custom Enterprise)
+- Раздел 4 — Bundles (cloud-only S/M/L/XL + combined HW+cloud bundles + prepay options)
+- Раздел 5 — Volume discounts & Partner tier program (Tier 1/2/3 по active cam-base)
+- Раздел 6 — MAP-policy и recommended retail ceilings по сегментам
+- Раздел 7 — Order process & support (lead times, RMA, contacts)
+- PDF — для distribution партнёрам, .docx — editable master
+- Валидно до 31 июля 2026, контакт: vadbaz1357@gmail.com
+
 #### `Evimiz_Cloud_Pricing_Model_v4.docx` — **актуальный (20.05.2026, финальная)**
 **INTERNAL ONLY.** Operational pricing-инструмент:
 - Reseller-архитектура, MAP-policy (three borders)
@@ -484,6 +496,15 @@ Coefficient-based COGS, 1y motion-only mass-market, 1y 24/7 в Custom Enterprise
 ## Changelog
 
 История изменений README. Обновляется после каждой работы над проектом.
+
+### 2026-05-25 — Partner Price List v1 (PDF + DOCX)
+- Создан `Evimiz_Partner_PriceList_v1.pdf` (381 KB) и `.docx` (47.4 KB editable master) — первый partner-facing документ для quoting.
+- Combined Hardware + Cloud + Bundles в одном документе, 8 страниц.
+- Структура: 1-page Quick Reference + детальный 7-разделовый catalog.
+- Included: hardware wholesale (6 серий) + recommended retail, cloud subscriptions wholesale + recommended retail by segment, AI add-ons, bundle по зданию (S/M/L/XL), combined HW+cloud bundles, volume discounts, partner tier program (1/2/3), MAP-policy, order process, support channels.
+- Excluded (internal-only): factory cost, COGS breakdown, AR sales 5% commission механика, coefficient model, sales scripts.
+- Валидно до 31 июля 2026. PDF — для distribution партнёрам, DOCX — editable master.
+- Связь с другими документами: содержание соответствует Cloud_Pricing_Model_v4 (operational pricing) и валидировано research-документом (Облачное_хранение_видео_Аргентина_v2). Recommended retail ceilings выровнены с pricing-моделью.
 
 ### 2026-05-20 (final) — Split: Pricing Model v4 + Research v2 (parallel documents)
 - **Главная архитектурная перестройка:** разделение pricing-модели и market research на два separate, синхронизированных документа (по аналогии с Mercado_Domofonos_FULL/SUMMARY pair).
