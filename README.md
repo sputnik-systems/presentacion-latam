@@ -330,7 +330,26 @@ Positioning-документ. Заполнена только Секция 10 �
 
 Секции 1–9 (UX, app, dashboard, AI, hardware build, cloud, integrations, support, brand) — TODO, ждут product-team interview + benchmarks.
 
-#### `Evimiz_Partner_PriceList_v1.pdf` / `.docx` — **partner-facing (25.05.2026)**
+#### `Evimiz_Partner_PriceList_v2.pdf` / `.docx` — **partner-facing АКТУАЛЬНЫЙ (25.05.2026, late)**
+v2 — критический rebuild v1 после введения двухкомпонентной архитектуры. **Confidential** — не для прямого распространения.
+- **NEW Раздел 2 — License $2.50/intercom/мес** (fixed wholesale, обязательно для каждого активного домофона, включает ВСЕ AI features)
+- **Убран AI add-ons раздел** — все AI в License
+- Archive переименован: Cloud Subscriptions → Cloud Archive (только storage без AI markup)
+- Combined examples обновлены: явное разделение License + Archive в bundles
+- Section 6 (MAP-policy): License — partner-choice без hard ceiling, MAP только для archive
+
+#### `Evimiz_Cloud_Pricing_Model_v5.docx` — **АКТУАЛЬНЫЙ internal (25.05.2026, late)**
+v5 — критический rebuild v4 с двухкомпонентной архитектурой:
+- **License $2.50/intercom/мес FIXED** (no discounts, no MAP, monthly only) — включает все AI features
+- **Archive — отдельно**, только storage (без AI markup в COGS)
+- Pro GM 44% → **53%**, Enterprise 57% → **71%** (AI убрано из archive COGS)
+- License revenue stream ~$150K Y1 (5,000 intercoms × $2.50 × 12)
+- Combined Y1 ARR: $450-750K (vs archive-only $300-600K в v4)
+- Cost model упрощён: формула COGS без AI add-on absolute
+- Все sales scripts обновлены под двухкомпонентную модель
+
+#### `Evimiz_Partner_PriceList_v1.pdf` / `.docx` — **устарел (25.05.2026, early)**
+v1 — первая попытка прайс-листа, single-component модель с AI add-ons. Заменён v2 после введения License компоненты.
 Прайс-лист для авторизованных партнёров (administradores, installers, monitoring firms). **Confidential** — не для прямого распространения. Combined Hardware + Cloud + Bundles в одном документе. Структура: 1-page Quick Reference + детальный catalog (7 разделов, 8 страниц).
 - Раздел 1 — Quick Reference (one-page summary всех wholesale цен и terms)
 - Раздел 2 — Hardware Catalog (все 6 серий камер + NVR + intercom)
@@ -342,7 +361,7 @@ Positioning-документ. Заполнена только Секция 10 �
 - PDF — для distribution партнёрам, .docx — editable master
 - Валидно до 31 июля 2026, контакт: vadbaz1357@gmail.com
 
-#### `Evimiz_Cloud_Pricing_Model_v4.docx` — **актуальный (20.05.2026, финальная)**
+#### `Evimiz_Cloud_Pricing_Model_v4.docx` — устарел (20.05.2026, заменён v5)
 **INTERNAL ONLY.** Operational pricing-инструмент:
 - Reseller-архитектура, MAP-policy (three borders)
 - Wholesale base tiers (Starter $3, Pro $5.5, Enterprise $11, 1y motion-only $6, ARS-Basic $2)
@@ -497,7 +516,16 @@ Coefficient-based COGS, 1y motion-only mass-market, 1y 24/7 в Custom Enterprise
 
 История изменений README. Обновляется после каждой работы над проектом.
 
-### 2026-05-25 — Partner Price List v1 (PDF + DOCX)
+### 2026-05-25 (late) — КРИТИЧЕСКИЙ rebuild: двухкомпонентная архитектура (License + Archive)
+- **Открыто:** Вадим уточнил что pricing двухкомпонентный. License $2.50/intercom/мес (FIXED, no discounts) включает ВСЕ AI features. Архив — отдельно (только storage).
+- **Implications:** AI add-ons (LPR, FR, Analytics, Alerts) убраны из архива. Pro GM 44%→53%, Enterprise 57%→71%. License — новая revenue stream ~$150K Y1.
+- Создан `Evimiz_Cloud_Pricing_Model_v5.docx` (50 KB) — internal source-of-truth, двухкомпонентная.
+- Создан `Evimiz_Partner_PriceList_v2.docx` (49 KB) + `.pdf` (424 KB) — partner-facing artifact, синхронизирован с v5 модели.
+- v4 pricing + v1 price list → deprecated.
+- Combined Y1 ARR target: $450-750K (vs archive-only $300-600K в v4).
+- License retail — partner-choice (нет hard ceiling). MAP применяется только к архиву и hardware.
+
+### 2026-05-25 (early) — Partner Price List v1 (PDF + DOCX)
 - Создан `Evimiz_Partner_PriceList_v1.pdf` (381 KB) и `.docx` (47.4 KB editable master) — первый partner-facing документ для quoting.
 - Combined Hardware + Cloud + Bundles в одном документе, 8 страниц.
 - Структура: 1-page Quick Reference + детальный 7-разделовый catalog.
