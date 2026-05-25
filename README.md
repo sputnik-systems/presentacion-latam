@@ -330,7 +330,15 @@ Positioning-документ. Заполнена только Секция 10 �
 
 Секции 1–9 (UX, app, dashboard, AI, hardware build, cloud, integrations, support, brand) — TODO, ждут product-team interview + benchmarks.
 
-#### `Evimiz_Partner_PriceList_v2_1.pdf` / `.docx` — **partner-facing АКТУАЛЬНЫЙ (25.05.2026, latest)**
+#### `Evimiz_Partner_PriceList_v2_2.pdf` / `.docx` — **partner-facing АКТУАЛЬНЫЙ (25.05.2026, latest)**
+v2.2 — минор обновление v2.1: удалён раздел 5.2 (Combined bundles) для упрощения калькуляции. **Confidential** — не для прямого распространения.
+- **Раздел 5.2** (Combined bundles: Cross-Sell Pack / Country Perimeter / PYME Retail Starter / Pro-Installer Bundle) — **УДАЛЁН**. Mixing of one-off hardware + monthly license + monthly archive в первый год создавал confusion для partner quoting.
+- **5.3 → 5.2** — Bundle prepay options перенумерован
+- Section 5 теперь компактный: только Bundle архива по зданию (5.1) + Bundle prepay options (5.2)
+- Educational value не теряется — дублируется в Quick Reference 1.6 (структура расчёта) и Section 2.4 (License combined examples)
+- Логика: партнёр сам собирает bundles под конкретный deal. Готовые pre-computed bundles = constraint, не помощь.
+
+#### `Evimiz_Partner_PriceList_v2_1.pdf` / `.docx` — **устарел (25.05.2026, замёнен v2.2)**
 v2.1 — minor update v2 с завуализацией discount-механизмов для market entry flexibility. **Confidential** — не для прямого распространения. Файлname без точки (`v2_1`) из-за ограничения Word AppleScript на конверсию.
 - **Раздел 1.5** — Volume & prepay discounts: убраны конкретные % (−15%, −20%, −10% и т.д.), заменены на "обсуждаем индивидуально". License $2.50 остаётся fixed.
 - **Раздел 1.6** — Combined example: убраны конкретные numbers, оставлена только структура расчёта с disclaimer "illustrative, не fixed quote"
@@ -521,7 +529,13 @@ Coefficient-based COGS, 1y motion-only mass-market, 1y 24/7 в Custom Enterprise
 
 История изменений README. Обновляется после каждой работы над проектом.
 
-### 2026-05-25 (latest) — Price List v2.1: завуализация discount-механизмов
+### 2026-05-25 (latest) — Price List v2.2: убран Combined bundles раздел
+- Удалён раздел 5.2 (Combined bundles) в Price List v2.2. Mixing hardware (one-off) + license (monthly) + archive (monthly) в одном bundle создавал confusion для partner quoting. Также конкретные numbers ($1,170, $5,800) создавали anchors, что противоречит философии завуализации discount-механизмов из v2.1.
+- 5.3 → 5.2 (Bundle prepay options перенумерован).
+- Section 5 теперь компактный: 5.1 Bundle архива (S/M/L) + 5.2 Bundle prepay options. Партнёр сам собирает bundle под конкретный deal.
+- v2.1 → deprecated.
+
+### 2026-05-25 — Price List v2.1: завуализация discount-механизмов
 - **Логика:** на market entry stage не создавать price-anchor'ы. Партнёру не показывать конкретные % дисконтов — обсуждать каждый кейс индивидуально.
 - **Что завуализировано в Price List v2.1** (5 разделов):
   - 1.5 Volume & prepay discounts → текстовое описание вместо таблицы
